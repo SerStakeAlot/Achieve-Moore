@@ -126,6 +126,22 @@
     color: rgba(245,240,232,0.7); transition: color 0.2s;
   }
   .nav-links a:hover { color: var(--gold-light); }
+
+  /* HAMBURGER */
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center;
+    gap: 5px; background: none; border: none; cursor: pointer;
+    padding: 8px; z-index: 110;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--cream); border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+  .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
   .nav-donate {
     background: transparent; border: 1.5px solid var(--gold);
     color: var(--gold-light); padding: 10px 26px; font-size: 11px;
@@ -305,6 +321,88 @@
     0%   { background-position: 100% 50%; }
     100% { background-position: -100% 50%; }
   }
+
+  /* ── MOBILE RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav {
+      padding: 0 20px; height: 64px;
+    }
+    .hamburger { display: flex; }
+    .nav-links {
+      position: fixed; top: 0; right: -100%;
+      width: 280px; height: 100vh;
+      flex-direction: column; gap: 0;
+      background: rgba(10,10,10,0.97);
+      backdrop-filter: blur(30px);
+      padding: 90px 32px 40px;
+      transition: right 0.35s ease;
+      z-index: 105;
+      border-left: 1px solid rgba(200,146,10,0.15);
+    }
+    .nav-links.open { right: 0; }
+    .nav-links li { padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .nav-links a { font-size: 13px; letter-spacing: 0.18em; }
+    .nav-donate { display: none; }
+    .nav-logo-text { font-size: 17px; }
+    .nav-logo-text span { font-size: 9px; }
+    .nav-logo img { width: 40px; height: 40px; }
+
+    .hero { padding: 100px 24px 60px; min-height: 90vh; }
+    .hero-title { font-size: clamp(48px, 14vw, 90px); }
+    .hero-subtitle { font-size: clamp(15px, 4vw, 24px); letter-spacing: 0.08em; }
+    .hero-desc { font-size: 13px; padding: 0 8px; }
+    .hero-ctas { flex-direction: column; align-items: center; gap: 14px; }
+    .btn-primary, .btn-outline { width: 100%; max-width: 280px; text-align: center; }
+
+    .mission { padding: 60px 24px; }
+    .mission h2 { font-size: clamp(26px, 7vw, 40px); }
+    .mission p { font-size: 14px; }
+
+    .programs { padding: 60px 20px; }
+    .programs-header h2 { font-size: clamp(26px, 7vw, 40px); }
+    .programs-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .programs-grid .program-card:last-child {
+      grid-column: 1 / -1;
+      max-width: 50%;
+      margin: 0 auto;
+    }
+    .program-card { padding: 30px 22px; }
+    .card-num { font-size: 44px; }
+    .card-title { font-size: 21px; }
+    .card-desc { font-size: 12px; }
+
+    footer { padding: 40px 20px 28px; }
+    .footer-tagline { font-size: 15px; }
+  }
+
+  @media (max-width: 480px) {
+    .programs-grid {
+      grid-template-columns: 1fr;
+    }
+    .programs-grid .program-card:last-child {
+      max-width: 100%;
+    }
+  }
+
+  /* Mobile menu overlay */
+  .nav-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 104;
+  }
+  .nav-overlay.open { display: block; }
+
+  .mobile-donate { display: none; }
+  @media (max-width: 768px) {
+    .mobile-donate { display: block; }
+    .mobile-donate a {
+      color: var(--gold-light) !important;
+      font-size: 13px !important;
+      letter-spacing: 0.18em !important;
+    }
+  }
 </style>
 </head>
 <body>
@@ -325,12 +423,17 @@
       <span>Est. 2015</span>
     </div>
   </a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="navLinks">
     <li><a href="#mission">Mission</a></li>
     <li><a href="#programs">Programs</a></li>
     <li><a href="#">About Us</a></li>
+    <li class="mobile-donate"><a href="#">Donate</a></li>
   </ul>
+  <div class="nav-overlay" id="navOverlay"></div>
   <a href="#" class="nav-donate">Donate</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <!-- HERO -->
@@ -530,6 +633,28 @@ window.addEventListener('scroll', () => {
   navEl.style.background = `rgba(6,6,6,${(0.55 - boost).toFixed(3)})`;
   lastScroll = scrollY;
 }, { passive: true });
+
+// Hamburger menu toggle
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+const navOverlay = document.getElementById('navOverlay');
+
+function toggleMenu() {
+  hamburger.classList.toggle('active');
+  navLinks.classList.toggle('open');
+  navOverlay.classList.toggle('open');
+  document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
+}
+
+hamburger.addEventListener('click', toggleMenu);
+navOverlay.addEventListener('click', toggleMenu);
+
+// Close menu when a nav link is clicked
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    if (navLinks.classList.contains('open')) toggleMenu();
+  });
+});
 </script>
 </body>
 </html>
