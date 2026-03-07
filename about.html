@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The F(A.M)ILY TREE — Achieve M.O.O.R.E</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c8920a;
+    --gold-light: #b8830a;
+    --dark: #ffffff;
+    --maroon: #6b0f1a;
+    --cream: #1a1a1a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: #ffffff;
+    color: #1a1a1a;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV (matches index.html) ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 72px;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+  .nav-logo img {
+    width: 50px; height: 50px; border-radius: 50%;
+    border: none; object-fit: cover;
+  }
+  .nav-logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px; font-weight: 600;
+    color: var(--gold); letter-spacing: 0.06em; line-height: 1.1;
+  }
+  .nav-logo-text span {
+    display: block; font-size: 10px;
+    font-family: 'Montserrat', sans-serif; font-weight: 300;
+    letter-spacing: 0.24em; color: rgba(200,146,10,0.7); text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 34px; list-style: none; }
+  .nav-links a {
+    text-decoration: none; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(26,26,26,0.7); transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+  .nav-donate {
+    background: transparent; border: 1.5px solid var(--gold);
+    color: var(--gold); padding: 10px 26px; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.25s; text-decoration: none;
+  }
+  .nav-donate:hover { background: var(--gold); color: #ffffff; }
+
+  /* HAMBURGER */
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center;
+    gap: 5px; background: none; border: none; cursor: pointer;
+    padding: 8px; z-index: 110;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: #1a1a1a; border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+  .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+  /* ── PAGE HERO ── */
+  .page-hero {
+    position: relative;
+    min-height: 50vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    padding: 140px 40px 60px;
+    background: rgba(245,243,240,0.6);
+    border-bottom: 1px solid rgba(200,146,10,0.15);
+  }
+  .page-hero-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.42em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .page-hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(42px, 8vw, 90px); font-weight: 700;
+    line-height: 1; color: #1a1a1a; margin-bottom: 8px;
+    opacity: 0; animation: fadeUp 0.9s 0.4s forwards;
+  }
+  .page-hero-title .gold { color: var(--gold); }
+  .page-hero-title .fam-highlight {
+    color: var(--maroon);
+    position: relative;
+  }
+  .page-hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(16px, 2.5vw, 22px); font-weight: 400;
+    letter-spacing: 0.1em; color: rgba(26,26,26,0.55);
+    max-width: 600px; margin-top: 16px;
+    opacity: 0; animation: fadeUp 0.9s 0.6s forwards;
+  }
+  .gold-divider { width: 50px; height: 1px; background: var(--gold); margin: 24px auto 0; opacity: 0.55; }
+
+  /* ── FAMILY TREE ── */
+  .tree-section {
+    padding: 80px 40px 100px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .tree-section-header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  .tree-section-header .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.42em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
+  }
+  .tree-section-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 44px); font-weight: 600;
+    color: #1a1a1a;
+  }
+
+  /* ── Tree Layout ── */
+  .family-tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Connector lines */
+  .tree-connector {
+    width: 2px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold), rgba(200,146,10,0.3));
+  }
+  .tree-branch-line {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: 2px;
+    background: rgba(200,146,10,0.25);
+    margin: 0 auto;
+  }
+  .tree-branch-line::before,
+  .tree-branch-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 2px;
+    height: 40px;
+    background: rgba(200,146,10,0.25);
+  }
+  .tree-branch-line::before { left: 0; }
+  .tree-branch-line::after { right: 0; }
+
+  /* Tier rows */
+  .tree-tier {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  /* Individual member card */
+  .member-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 180px;
+    padding: 24px 16px;
+    background: #ffffff;
+    border: 1px solid rgba(200,146,10,0.15);
+    border-radius: 8px;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .member-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0;
+    transition: opacity 0.35s;
+  }
+  .member-card:hover::before { opacity: 1; }
+  .member-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 36px rgba(200,146,10,0.15);
+    border-color: rgba(200,146,10,0.35);
+  }
+
+  /* Founder card (larger) */
+  .member-card.founder {
+    width: 220px;
+    padding: 32px 20px;
+    border-color: rgba(200,146,10,0.3);
+    box-shadow: 0 4px 20px rgba(200,146,10,0.1);
+  }
+  .member-card.founder .member-photo {
+    width: 120px; height: 120px;
+    border: 3px solid var(--gold);
+  }
+  .member-card.founder .member-role {
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* Photo placeholder */
+  .member-photo {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(200,146,10,0.08), rgba(200,146,10,0.2));
+    border: 2px solid rgba(200,146,10,0.2);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .member-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  .member-photo .photo-placeholder {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: rgba(200,146,10,0.35);
+  }
+
+  .member-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  .member-role {
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(26,26,26,0.45);
+    margin-bottom: 8px;
+  }
+  .member-class {
+    font-size: 10px; font-weight: 400;
+    color: rgba(26,26,26,0.35);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── Tier Labels ── */
+  .tier-label {
+    text-align: center;
+    margin-bottom: 24px;
+    margin-top: 20px;
+  }
+  .tier-label h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+  }
+  .tier-label p {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(200,146,10,0.6);
+  }
+
+  /* ── Branch connectors between tiers ── */
+  .tree-branches {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+  }
+  .branch-vertical {
+    width: 2px; height: 36px;
+    background: linear-gradient(to bottom, var(--gold), rgba(200,146,10,0.2));
+  }
+  .branch-horizontal {
+    height: 2px;
+    background: rgba(200,146,10,0.2);
+    position: relative;
+  }
+  .branch-drops {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+  }
+  .branch-drop {
+    width: 2px; height: 28px;
+    background: rgba(200,146,10,0.2);
+  }
+
+  /* ── FOOTER (matches index.html) ── */
+  footer {
+    position: relative; z-index: 10;
+    background: rgba(245,243,240,0.98);
+    border-top: 1px solid rgba(200,146,10,0.2);
+    padding: 60px 40px 36px; text-align: center;
+  }
+  .footer-logo img { width: 58px; height: 58px; border-radius: 50%; margin-bottom: 18px; opacity: 0.8; }
+  .footer-tagline {
+    font-family: 'Cormorant Garamond', serif; font-size: 17px;
+    color: rgba(26,26,26,0.45); margin-bottom: 30px; letter-spacing: 0.05em;
+  }
+  .footer-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+  .footer-btn {
+    background: transparent; border: 1px solid rgba(26,26,26,0.2);
+    color: rgba(26,26,26,0.6); padding: 11px 28px; font-size: 10px;
+    font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    text-decoration: none; border-radius: 999px; transition: all 0.25s;
+  }
+  .footer-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .footer-social { display: flex; gap: 22px; justify-content: center; margin-bottom: 28px; }
+  .footer-social a {
+    color: rgba(26,26,26,0.45); text-decoration: none; font-size: 13px;
+    font-weight: 700; letter-spacing: 0.1em; transition: color 0.2s;
+  }
+  .footer-social a:hover { color: var(--gold); }
+  .footer-nonprofit { font-size: 11px; color: rgba(26,26,26,0.45); letter-spacing: 0.05em; margin-bottom: 10px; }
+  .footer-bottom { font-size: 10px; color: rgba(26,26,26,0.3); letter-spacing: 0.1em; }
+  .footer-bottom a { color: rgba(200,146,10,0.7); text-decoration: underline; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(26px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Staggered card reveal ── */
+  .member-card {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  .member-card.visible {
+    animation: fadeUp 0.7s forwards;
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; height: 64px; }
+    .hamburger { display: flex; }
+    .nav-links {
+      position: fixed; top: 0; right: -100%;
+      width: 280px; height: 100vh;
+      flex-direction: column; gap: 0;
+      background: rgba(255,255,255,0.97);
+      backdrop-filter: blur(30px);
+      padding: 90px 32px 40px;
+      transition: right 0.35s ease;
+      z-index: 105;
+      border-left: 1px solid rgba(200,146,10,0.2);
+    }
+    .nav-links.open { right: 0; }
+    .nav-links li { padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+    .nav-links a { font-size: 13px; letter-spacing: 0.18em; }
+    .nav-donate { display: none; }
+    .nav-logo-text { font-size: 17px; }
+    .nav-logo-text span { font-size: 9px; }
+    .nav-logo img { width: 40px; height: 40px; }
+
+    .page-hero { padding: 110px 24px 40px; min-height: 40vh; }
+    .page-hero-title { font-size: clamp(32px, 10vw, 60px); }
+
+    .tree-section { padding: 50px 20px 70px; }
+    .tree-tier { gap: 16px; }
+    .member-card { width: 150px; padding: 18px 12px; }
+    .member-card.founder { width: 180px; }
+    .member-photo { width: 80px; height: 80px; }
+    .member-card.founder .member-photo { width: 100px; height: 100px; }
+    .member-name { font-size: 17px; }
+
+    .tree-connector, .branch-vertical { height: 28px; }
+
+    footer { padding: 40px 20px 28px; }
+    .footer-tagline { font-size: 15px; }
+  }
+
+  @media (max-width: 480px) {
+    .tree-tier { gap: 12px; }
+    .member-card { width: 140px; padding: 16px 10px; }
+    .member-card.founder { width: 160px; }
+    .member-photo { width: 70px; height: 70px; }
+    .member-card.founder .member-photo { width: 90px; height: 90px; }
+  }
+
+  /* Mobile menu overlay */
+  .nav-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 104;
+  }
+  .nav-overlay.open { display: block; background: rgba(0,0,0,0.3); }
+
+  .mobile-donate { display: none; }
+  @media (max-width: 768px) {
+    .mobile-donate { display: block; }
+    .mobile-donate a {
+      color: var(--gold) !important;
+      font-size: 13px !important;
+      letter-spacing: 0.18em !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="assets/clock_transparent.png" alt="Achieve Moore" />
+    <div class="nav-logo-text">
+      Achieve M.O.O.R.E
+      <span>Est. 2016</span>
+    </div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html#mission">Mission</a></li>
+    <li><a href="index.html#programs">Programs</a></li>
+    <li><a href="about.html" class="active">About Us</a></li>
+    <li class="mobile-donate"><a href="#">Donate</a></li>
+  </ul>
+  <div class="nav-overlay" id="navOverlay"></div>
+  <a href="#" class="nav-donate">Donate</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <p class="page-hero-label">Meet the Team</p>
+  <h1 class="page-hero-title">The F<span class="fam-highlight">(A.M)</span>ILY <span class="gold">TREE</span></h1>
+  <p class="page-hero-subtitle">The roots run deep. Every branch represents a bond forged through service, sacrifice, and shared purpose.</p>
+  <div class="gold-divider"></div>
+</section>
+
+<!-- FAMILY TREE -->
+<section class="tree-section">
+
+  <!-- ═══════════ TIER 1: FOUNDER / PRESIDENT ═══════════ -->
+  <div class="tier-label">
+    <p>The Root</p>
+    <h3>Founder</h3>
+  </div>
+  <div class="family-tree">
+    <div class="tree-tier">
+      <div class="member-card founder">
+        <div class="member-photo">
+          <!-- Replace src with actual photo -->
+          <!-- <img src="assets/team/founder.jpg" alt="Founder Name" /> -->
+          <span class="photo-placeholder">F</span>
+        </div>
+        <div class="member-name">Founder Name</div>
+        <div class="member-role">Founder &amp; President</div>
+        <div class="member-class">Class of 20XX</div>
+      </div>
+    </div>
+
+    <!-- Connector -->
+    <div class="tree-connector"></div>
+
+    <!-- ═══════════ TIER 2: EXECUTIVE BOARD ═══════════ -->
+    <div class="tier-label">
+      <p>The Trunk</p>
+      <h3>Executive Board</h3>
+    </div>
+
+    <div class="tree-tier">
+      <div class="member-card">
+        <div class="member-photo">
+          <!-- <img src="assets/team/vp.jpg" alt="Vice President" /> -->
+          <span class="photo-placeholder">VP</span>
+        </div>
+        <div class="member-name">Member Name</div>
+        <div class="member-role">Vice President</div>
+        <div class="member-class">Class of 20XX</div>
+      </div>
+      <div class="member-card">
+        <div class="member-photo">
+          <!-- <img src="assets/team/treasurer.jpg" alt="Treasurer" /> -->
+          <span class="photo-placeholder">T</span>
+        </div>
+        <div class="member-name">Member Name</div>
+        <div class="member-role">Treasurer</div>
+        <div class="member-class">Class of 20XX</div>
+      </div>
+      <div class="member-card">
+        <div class="member-photo">
+          <!-- <img src="assets/team/secretary.jpg" alt="Secretary" /> -->
+          <span class="photo-placeholder">S</span>
+        </div>
+        <div class="member-name">Member Name</div>
+        <div class="member-role">Secretary</div>
+        <div class="member-class">Class of 20XX</div>
+      </div>
+    </div>
+
+    <!-- Connector -->
+    <div class="tree-connector"></div>
+
+    <!-- ═══════════ TIER 3: DIRECTORS / CHAIRS ═══════════ -->
+    <div class="tier-label">
+      <p>The Branches</p>
+      <h3>Directors &amp; Chairs</h3>
+    </div>
+
+    <div class="tree-tier">
+      <div class="member-card">
+        <div class="member-photo">
+          <span class="photo-placeholder">D</span>
+        </div>
+        <div class="member-name">Member Name</div>
+        <div class="member-role">Dir. of Programs</div>
+        <div class="member-class">Class of 20XX</div>
+      </div>
+      <div class="member-card">
+        <div class="member-photo">
+          <span class="photo-placeholder">D</span>
+        </div>
+        <div class="member-name">Member Name</div>
+        <div class="member-role">Dir. of Outreach</div>
+        <div class="member-class">Class of 20XX</div>
+      </div>
+      <div class="member-card">
+        <div class="member-photo">
+          <span class="photo-placeholder">D</span>
+        </div>
+        <div class="member-name">Member Name</div>
+        <div class="member-role">Dir. of Events</div>
+        <div class="member-class">Class of 20XX</div>
+      </div>
+      <div class="member-card">
+        <div class="member-photo">
+          <span class="photo-placeholder">D</span>
+        </div>
+        <div class="member-name">Member Name</div>
+        <div class="member-role">Dir. of Media</div>
+        <div class="member-class">Class of 20XX</div>
+      </div>
+    </div>
+
+    <!-- Connector -->
+    <div class="tree-connector"></div>
+
+    <!-- ═══════════ TIER 4: MEMBERS ═══════════ -->
+    <div class="tier-label">
+      <p>The Leaves</p>
+      <h3>Members</h3>
+    </div>
+
+    <div class="tree-tier">
+      <div class="member-card">
+        <div class="member-photo">
+          <span class="photo-placeholder">M</span>
+        </div>
+        <div class="member-name">Member Name</div>
+        <div class="member-role">Member</div>
+        <div class="member-class">Class of 20XX</div>
+      </div>
+      <div class="member-card">
+        <div class="member-photo">
+          <span class="photo-placeholder">M</span>
+        </div>
+        <div class="member-name">Member Name</div>
+        <div class="member-role">Member</div>
+        <div class="member-class">Class of 20XX</div>
+      </div>
+      <div class="member-card">
+        <div class="member-photo">
+          <span class="photo-placeholder">M</span>
+        </div>
+        <div class="member-name">Member Name</div>
+        <div class="member-role">Member</div>
+        <div class="member-class">Class of 20XX</div>
+      </div>
+      <div class="member-card">
+        <div class="member-photo">
+          <span class="photo-placeholder">M</span>
+        </div>
+        <div class="member-name">Member Name</div>
+        <div class="member-role">Member</div>
+        <div class="member-class">Class of 20XX</div>
+      </div>
+      <div class="member-card">
+        <div class="member-photo">
+          <span class="photo-placeholder">M</span>
+        </div>
+        <div class="member-name">Member Name</div>
+        <div class="member-role">Member</div>
+        <div class="member-class">Class of 20XX</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <img src="assets/clock_transparent.png" alt="Achieve Moore" />
+  </div>
+  <p class="footer-tagline">The goal is not only to succeed, but as you succeed, bring others with you.</p>
+  <div class="footer-ctas">
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdO-yOqKJMoaOHTGYjnnYGVGJOAA4HOFVvzFRFYbJGN-l0_3A/viewform" target="_blank" class="footer-btn">Global Network</a>
+  </div>
+  <div class="footer-social">
+    <a href="https://www.instagram.com/achievemoore/" target="_blank">Instagram</a>
+    <a href="https://www.linkedin.com/company/achieve-moore-foundation-inc" target="_blank">LinkedIn</a>
+  </div>
+  <p class="footer-nonprofit">Achieve M.O.O.R.E Foundation INC. 501(c)(3) Non Profit Organization</p>
+  <p class="footer-bottom">&copy; 2016 Achieve M.O.O.R.E &mdash; <a href="#">Terms and Conditions</a></p>
+</footer>
+
+<script>
+// Hamburger menu toggle
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+const navOverlay = document.getElementById('navOverlay');
+
+function toggleMenu() {
+  hamburger.classList.toggle('active');
+  navLinks.classList.toggle('open');
+  navOverlay.classList.toggle('open');
+  document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
+}
+
+hamburger.addEventListener('click', toggleMenu);
+navOverlay.addEventListener('click', toggleMenu);
+
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    if (navLinks.classList.contains('open')) toggleMenu();
+  });
+});
+
+// Scroll-reveal for member cards
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      // Stagger the animation per card
+      const card = entry.target;
+      const index = [...card.parentElement.children].indexOf(card);
+      card.style.animationDelay = `${index * 0.12}s`;
+      card.classList.add('visible');
+      observer.unobserve(card);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.member-card').forEach(card => observer.observe(card));
+</script>
+
+</body>
+</html>
