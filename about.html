@@ -238,6 +238,8 @@
     position: relative;
   }
   .member-photo img {
+    position: absolute;
+    inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
     border-radius: 50%;
@@ -474,13 +476,50 @@
     <div class="tree-tier">
       <div class="member-card founder">
         <div class="member-photo">
-          <!-- Replace src with actual photo -->
-          <!-- <img src="assets/team/founder.jpg" alt="Founder Name" /> -->
+          <img src="assets/team/founder.jpg" alt="Founder" onerror="this.remove()" />
           <span class="photo-placeholder">F</span>
         </div>
-        <div class="member-name">Founder Name</div>
+        <div class="member-name">Kareem Moore</div>
         <div class="member-role">Founder &amp; President</div>
-        <div class="member-class">Class of 20XX</div>
+        <div class="member-class">Class of 2020</div>
+      </div>
+    </div>
+
+    <!-- Connector -->
+    <div class="tree-connector"></div>
+
+    <!-- ═══════════ TIER 1.5: CO-FOUNDERS ═══════════ -->
+    <div class="tier-label">
+      <p>The Roots Run Deep</p>
+      <h3>Co-Founders</h3>
+    </div>
+
+    <div class="tree-tier">
+      <div class="member-card">
+        <div class="member-photo">
+          <img src="assets/team/Co- Founder.jpg" alt="Co-Founder" onerror="this.remove()" />
+          <span class="photo-placeholder">CF</span>
+        </div>
+        <div class="member-name">Gerard Harden</div>
+        <div class="member-role">Co-Founder</div>
+        <div class="member-class">Class of 2020</div>
+      </div>
+      <div class="member-card">
+        <div class="member-photo">
+          <img src="assets/team/Co- Founder 2.jpg" alt="Co-Founder" onerror="this.remove()" />
+          <span class="photo-placeholder">CF</span>
+        </div>
+        <div class="member-name">Charles Porch III</div>
+        <div class="member-role">Co-Founder</div>
+        <div class="member-class">Class of 2020</div>
+      </div>
+      <div class="member-card">
+        <div class="member-photo">
+          <img src="assets/team/Co- Founder 3.jpg" alt="Co-Founder" onerror="this.remove()" />
+          <span class="photo-placeholder">CF</span>
+        </div>
+        <div class="member-name">Nicholas Porter</div>
+        <div class="member-role">Co-Founder</div>
       </div>
     </div>
 
@@ -496,12 +535,11 @@
     <div class="tree-tier">
       <div class="member-card">
         <div class="member-photo">
-          <!-- <img src="assets/team/vp.jpg" alt="Vice President" /> -->
+          <img src="assets/team/vp of student affairs.jpg" alt="VP of Student Affairs" onerror="this.remove()" />
           <span class="photo-placeholder">VP</span>
         </div>
-        <div class="member-name">Member Name</div>
-        <div class="member-role">Vice President</div>
-        <div class="member-class">Class of 20XX</div>
+        <div class="member-name">Adam McKinnon</div>
+        <div class="member-role">VP of Student Affairs</div>
       </div>
       <div class="member-card">
         <div class="member-photo">
@@ -510,7 +548,6 @@
         </div>
         <div class="member-name">Member Name</div>
         <div class="member-role">Treasurer</div>
-        <div class="member-class">Class of 20XX</div>
       </div>
       <div class="member-card">
         <div class="member-photo">
@@ -519,7 +556,15 @@
         </div>
         <div class="member-name">Member Name</div>
         <div class="member-role">Secretary</div>
-        <div class="member-class">Class of 20XX</div>
+      </div>
+      <div class="member-card">
+        <div class="member-photo">
+          <img src="assets/team/Board Member.jpg" alt="Jamel D. Chambers" onerror="this.remove()" />
+          <span class="photo-placeholder">BM</span>
+        </div>
+        <div class="member-name">Jamel D. Chambers</div>
+        <div class="member-role">Board Member</div>
+        <div class="member-class">Class of 2020</div>
       </div>
     </div>
 
@@ -539,7 +584,6 @@
         </div>
         <div class="member-name">Member Name</div>
         <div class="member-role">Dir. of Programs</div>
-        <div class="member-class">Class of 20XX</div>
       </div>
       <div class="member-card">
         <div class="member-photo">
@@ -547,7 +591,6 @@
         </div>
         <div class="member-name">Member Name</div>
         <div class="member-role">Dir. of Outreach</div>
-        <div class="member-class">Class of 20XX</div>
       </div>
       <div class="member-card">
         <div class="member-photo">
@@ -555,7 +598,6 @@
         </div>
         <div class="member-name">Member Name</div>
         <div class="member-role">Dir. of Events</div>
-        <div class="member-class">Class of 20XX</div>
       </div>
       <div class="member-card">
         <div class="member-photo">
@@ -563,7 +605,6 @@
         </div>
         <div class="member-name">Member Name</div>
         <div class="member-role">Dir. of Media</div>
-        <div class="member-class">Class of 20XX</div>
       </div>
     </div>
 
@@ -583,7 +624,6 @@
         </div>
         <div class="member-name">Member Name</div>
         <div class="member-role">Member</div>
-        <div class="member-class">Class of 20XX</div>
       </div>
       <div class="member-card">
         <div class="member-photo">
@@ -591,7 +631,6 @@
         </div>
         <div class="member-name">Member Name</div>
         <div class="member-role">Member</div>
-        <div class="member-class">Class of 20XX</div>
       </div>
       <div class="member-card">
         <div class="member-photo">
@@ -599,7 +638,6 @@
         </div>
         <div class="member-name">Member Name</div>
         <div class="member-role">Member</div>
-        <div class="member-class">Class of 20XX</div>
       </div>
       <div class="member-card">
         <div class="member-photo">
@@ -607,7 +645,6 @@
         </div>
         <div class="member-name">Member Name</div>
         <div class="member-role">Member</div>
-        <div class="member-class">Class of 20XX</div>
       </div>
       <div class="member-card">
         <div class="member-photo">
@@ -615,7 +652,6 @@
         </div>
         <div class="member-name">Member Name</div>
         <div class="member-role">Member</div>
-        <div class="member-class">Class of 20XX</div>
       </div>
     </div>
 
