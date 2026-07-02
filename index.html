@@ -371,6 +371,66 @@
   }
   .card-link:hover { border-color: var(--gold); }
 
+  /* MISSION STATEMENT */
+  .mission-statement {
+    position: relative; z-index: 10;
+    background: rgba(255,255,255,0.95);
+    padding: 90px 40px; text-align: center;
+  }
+  .mission-statement h2 {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(30px, 4.5vw, 46px);
+    font-weight: 600; color: #1a1a1a; margin-bottom: 26px;
+  }
+  .mission-statement p {
+    max-width: 720px; margin: 0 auto 18px; font-size: 15px; font-weight: 400;
+    line-height: 1.95; color: #1a1a1a;
+  }
+
+  /* WHO WE SERVE + IMPACT GRIDS */
+  .info-section {
+    position: relative; z-index: 10;
+    padding: 100px 40px; background: rgba(245,243,240,0.95);
+    border-top: 1px solid rgba(200,146,10,0.2);
+    border-bottom: 1px solid rgba(200,146,10,0.2);
+  }
+  .info-header { text-align: center; margin-bottom: 56px; }
+  .info-header h2 {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 5vw, 54px);
+    font-weight: 600; color: #1a1a1a;
+  }
+  .info-grid {
+    display: grid; gap: 2px; max-width: 1180px; margin: 0 auto;
+  }
+  .serve-grid { grid-template-columns: repeat(3, 1fr); }
+  .impact-grid { grid-template-columns: repeat(3, 1fr); }
+  .card-emoji { font-size: 46px; line-height: 1; margin-bottom: 16px; }
+
+  /* SUPPORT / DONATE */
+  .support {
+    position: relative; z-index: 10;
+    background: var(--maroon); color: #ffffff;
+    padding: 100px 40px; text-align: center;
+  }
+  .support .section-label { color: rgba(255,255,255,0.85); }
+  .support .gold-divider { background: rgba(255,255,255,0.6); }
+  .support h2 {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 5vw, 54px);
+    font-weight: 600; color: #ffffff; margin-bottom: 26px;
+  }
+  .support p {
+    max-width: 720px; margin: 0 auto 18px; font-size: 15px; font-weight: 400;
+    line-height: 1.95; color: rgba(255,255,255,0.92);
+  }
+  .support p.support-highlight { font-weight: 700; color: #ffffff; }
+  .support-cta { margin-top: 44px; }
+  .btn-support {
+    background: var(--gold); color: #ffffff; padding: 16px 46px;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.2em;
+    text-transform: uppercase; border: none; cursor: pointer;
+    text-decoration: none; transition: all 0.25s; display: inline-block;
+  }
+  .btn-support:hover { background: var(--gold-light); transform: translateY(-2px); }
+
   /* FOOTER */
   footer {
     position: relative; z-index: 10;
@@ -469,6 +529,18 @@
     .card-title { font-size: 21px; }
     .card-desc { font-size: 12px; }
 
+    .mission-statement { padding: 60px 24px; }
+    .mission-statement h2 { font-size: clamp(24px, 6.5vw, 36px); }
+    .mission-statement p { font-size: 14px; }
+
+    .info-section { padding: 60px 20px; }
+    .info-header h2 { font-size: clamp(26px, 7vw, 40px); }
+    .serve-grid, .impact-grid { grid-template-columns: 1fr; gap: 8px; }
+
+    .support { padding: 60px 24px; }
+    .support h2 { font-size: clamp(26px, 7vw, 40px); }
+    .support p { font-size: 14px; }
+
     footer { padding: 40px 20px 28px; }
     .footer-tagline { font-size: 15px; }
   }
@@ -546,14 +618,24 @@
 
 <!-- MISSION -->
 <section class="mission" id="mission">
-  <p class="section-label">Our Mission</p>
+  <p class="section-label">Who We Are</p>
   <div class="gold-divider"></div>
-  <h2>Community Ascension Through<br>Service &amp; Scholarship</h2>
-  <p>Achieve M.O.O.R.E exists to uplift the AUC through philanthropy, comradery, and altruism. We bridge the gap between students and faculty to improve academic performance at Morehouse, while strengthening the surrounding community through mentorship, youth development, and initiatives that inspire entrepreneurship and unity.</p>
-  <p>Join our Global Network to stay up to date on future events and opportunities.</p>
+  <h2>Developing Leaders. Expanding Opportunity.<br>Strengthening Communities.</h2>
+  <p>Achieve M.O.O.R.E. Foundation, Inc. is a 501(c)(3) nonprofit organization dedicated to developing leaders, expanding opportunity, and strengthening communities through scholarship, mentorship, service, and professional development.</p>
+  <p>We empower individuals at every stage of their journey&mdash;from middle school and high school students exploring their potential, to college students pursuing academic excellence, to young professionals seeking leadership growth and meaningful ways to give back.</p>
+  <p>Through philanthropy, camaraderie, and stewardship, we create pathways that help individuals achieve success while uplifting the communities around them. Our belief is simple, success is not only about what you achieve&mdash;it is about who you bring with you along the way.</p>
   <div class="mission-ctas">
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSf6DUo-dIDM3EpcW2LyW-TEszDbcYLiQFBkntuP0aQCl1yglQ/viewform" target="_blank" class="btn-mission">Global Network</a>
   </div>
+</section>
+
+<!-- OUR MISSION STATEMENT -->
+<section class="mission-statement">
+  <p class="section-label">Our Mission</p>
+  <div class="gold-divider"></div>
+  <h2>Achieve More Together</h2>
+  <p>To develop leaders, expand educational and professional opportunities, and foster community ascension through scholarship, mentorship, service, and leadership development.</p>
+  <p>We inspire individuals to achieve more academically, professionally, and personally while cultivating a lifelong commitment to philanthropy, stewardship, and community impact.</p>
 </section>
 
 <!-- SLIDESHOW -->
@@ -566,6 +648,65 @@
     <div class="slideshow-empty" id="slideshowEmpty">
       <div class="ico">&#9978;</div>
       <p>Drop photos into <code>assets/photos/</code> and list them in <code>photos.json</code> to populate this slideshow.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHO WE SERVE -->
+<section class="info-section serve">
+  <div class="info-header">
+    <p class="section-label">Who We Serve</p>
+    <div class="gold-divider"></div>
+    <h2>Every Stage of the Journey</h2>
+  </div>
+  <div class="info-grid serve-grid">
+    <div class="program-card">
+      <div class="card-title">Middle &amp; High School Students</div>
+      <p class="card-desc">Through mentorship, leadership development, college readiness, and programs like Guide Right, we help students build confidence, character, and a vision for their future.</p>
+    </div>
+    <div class="program-card">
+      <div class="card-title">College Students</div>
+      <p class="card-desc">We provide scholarship opportunities, professional development, networking experiences, and community engagement initiatives that support academic and career success.</p>
+    </div>
+    <div class="program-card">
+      <div class="card-title">Young Professionals &amp; Alumni</div>
+      <p class="card-desc">We cultivate a network of leaders committed to mentorship, service, philanthropy, and creating opportunities for the next generation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- OUR IMPACT -->
+<section class="info-section impact" style="background: rgba(255,255,255,0.95);">
+  <div class="info-header">
+    <p class="section-label">Our Impact</p>
+    <div class="gold-divider"></div>
+    <h2>How We Make a Difference</h2>
+  </div>
+  <div class="info-grid impact-grid">
+    <div class="program-card">
+      <div class="card-emoji">&#127775;</div>
+      <div class="card-title">Leadership Development</div>
+      <p class="card-desc">We equip future leaders with the skills, confidence, and experiences necessary to thrive academically, professionally, and personally.</p>
+    </div>
+    <div class="program-card">
+      <div class="card-emoji">&#127891;</div>
+      <div class="card-title">Scholarship &amp; Educational Access</div>
+      <p class="card-desc">We help remove barriers to success through scholarships, academic support, and opportunities that expand access to higher education.</p>
+    </div>
+    <div class="program-card">
+      <div class="card-emoji">&#129309;</div>
+      <div class="card-title">Mentorship &amp; Community</div>
+      <p class="card-desc">We build meaningful relationships that connect students with mentors, professionals, and peers who inspire growth and achievement.</p>
+    </div>
+    <div class="program-card">
+      <div class="card-emoji">&#128155;</div>
+      <div class="card-title">Philanthropy &amp; Stewardship</div>
+      <p class="card-desc">We create opportunities for individuals to serve their communities, develop a heart for giving, and become leaders who make a lasting difference.</p>
+    </div>
+    <div class="program-card">
+      <div class="card-emoji">&#128640;</div>
+      <div class="card-title">Career &amp; Professional Exposure</div>
+      <p class="card-desc">We connect students and emerging professionals with networks, experiences, and resources that help them explore and pursue meaningful careers.</p>
     </div>
   </div>
 </section>
@@ -603,6 +744,21 @@
       <div class="card-title">Exemplary</div>
       <p class="card-desc">We hold ourselves to the highest standard, striving to be models of excellence in scholarship, service, and character.</p>
     </div>
+  </div>
+</section>
+
+<!-- SUPPORT OUR MISSION -->
+<section class="support" id="support">
+  <p class="section-label">Support Our Mission</p>
+  <div class="gold-divider"></div>
+  <h2>Invest in the Next Generation</h2>
+  <p class="support-highlight">Achieve M.O.O.R.E. Foundation, Inc. is a registered 501(c)(3) nonprofit organization.</p>
+  <p>Your tax-deductible donation directly supports scholarships, mentorship programs, leadership development initiatives, educational experiences, and community service projects that empower the next generation of leaders.</p>
+  <p>Every contribution helps create access, opportunity, and lasting impact for students, families, and communities.</p>
+  <p class="support-highlight">Your donation is more than a gift&mdash;it is an investment in future leaders, stronger communities, and a better tomorrow.</p>
+  <p class="support-highlight">Join us in helping the next generation Achieve M.O.O.R.E.</p>
+  <div class="support-cta">
+    <a href="#" class="btn-support">Donate Now</a>
   </div>
 </section>
 
