@@ -131,6 +131,93 @@
     color: rgba(26,26,26,0.65); max-width: 680px; margin: 0 auto 18px;
   }
 
+  /* ── CONTENT SECTIONS ── */
+  .content-section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 70px 40px;
+  }
+  .content-section + .content-section { padding-top: 0; }
+  .content-section .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.42em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
+    text-align: center;
+  }
+  .content-section h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 44px); font-weight: 600;
+    color: #1a1a1a; margin-bottom: 26px; text-align: center;
+  }
+  .content-section p {
+    font-size: 15px; font-weight: 400; line-height: 1.95;
+    color: rgba(26,26,26,0.68); margin: 0 auto 20px;
+  }
+  .content-section p strong { color: #1a1a1a; font-weight: 600; }
+
+  .section-divider {
+    width: 50px; height: 1px; background: var(--gold);
+    margin: 0 auto 60px; opacity: 0.4;
+  }
+
+  /* MOORE values list */
+  .moore-values {
+    list-style: none; max-width: 560px;
+    margin: 8px auto 26px; padding: 0;
+    display: grid; grid-template-columns: 1fr; gap: 0;
+  }
+  .moore-values li {
+    display: flex; align-items: baseline; gap: 16px;
+    padding: 16px 0; border-bottom: 1px solid rgba(200,146,10,0.14);
+  }
+  .moore-values li:last-child { border-bottom: none; }
+  .moore-values .letter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px; font-weight: 700; color: var(--gold);
+    width: 34px; flex-shrink: 0; line-height: 1;
+  }
+  .moore-values .word {
+    font-size: 14px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #1a1a1a;
+  }
+
+  /* Mission quote block */
+  .mission-quote {
+    max-width: 720px; margin: 40px auto; padding: 44px 40px;
+    background: rgba(245,243,240,0.7);
+    border-left: 3px solid var(--gold);
+    text-align: center;
+  }
+  .mission-quote p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(20px, 3vw, 28px); font-weight: 400;
+    font-style: italic; line-height: 1.5; color: #1a1a1a; margin: 0;
+  }
+
+  /* Logo explanation */
+  .logo-explain {
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center;
+  }
+  .logo-explain img {
+    width: 180px; height: 180px; border-radius: 50%;
+    margin-bottom: 36px; object-fit: cover;
+  }
+  .logo-explain .color-list {
+    list-style: none; max-width: 620px; margin: 10px auto 0;
+    padding: 0; text-align: left;
+  }
+  .logo-explain .color-list li {
+    font-size: 15px; line-height: 1.9; color: rgba(26,26,26,0.68);
+    padding: 8px 0;
+  }
+  .logo-explain .color-list li strong { color: var(--gold); font-weight: 700; }
+
+  @media (max-width: 768px) {
+    .content-section { padding: 50px 24px; }
+    .mission-quote { padding: 32px 24px; }
+    .logo-explain img { width: 140px; height: 140px; }
+  }
+
   /* ── FOOTER ── */
   footer {
     position: relative; z-index: 10;
@@ -246,11 +333,66 @@
   <div class="gold-divider"></div>
 </section>
 
-<!-- HISTORY (content coming soon) -->
-<section class="history-section">
+<!-- ABOUT -->
+<section class="content-section">
+  <p class="section-label">Who We Are</p>
+  <h2>About Achieve M.O.O.R.E</h2>
+  <p>At Achieve MOORE Foundation, Inc., we believe success is not measured by how far you go alone&mdash;but by how many people you bring with you along the way.</p>
+  <p>Founded on the belief that leadership, service, and opportunity have the power to transform communities, Achieve MOORE exists to develop the next generation of leaders through mentorship, scholarship, leadership development, community engagement, and philanthropic initiatives.</p>
+  <p>Our work extends beyond traditional volunteerism. We create pathways for middle school and high school students, college students, young professionals, and alumni to connect, grow, lead, and give back together. Whether through educational programming, career exposure, service projects, scholarships, or leadership experiences, every initiative is designed to help individuals realize their full potential while creating meaningful impact in the lives of others.</p>
+  <p>The name M.O.O.R.E. represents the values that guide everything we do:</p>
+  <ul class="moore-values">
+    <li><span class="letter">M</span><span class="word">Modest</span></li>
+    <li><span class="letter">O</span><span class="word">Open-Minded</span></li>
+    <li><span class="letter">O</span><span class="word">Optimistic</span></li>
+    <li><span class="letter">R</span><span class="word">Resilient</span></li>
+    <li><span class="letter">E</span><span class="word">Exemplary</span></li>
+  </ul>
+  <p>These principles serve as the foundation for how we lead, serve, and empower others.</p>
+  <p>As a registered 501(c)(3) nonprofit organization, Achieve MOORE Foundation is committed to building stronger communities by investing in people. Every donation, partnership, and volunteer effort helps expand opportunities for those we serve and reinforces our mission of creating lasting, generational impact.</p>
+  <p>Our mission remains the same today as it was from the very beginning:</p>
+  <div class="mission-quote">
+    <p>&ldquo;The goal is not only to succeed, but as you succeed, bring others with you. It is one thing to achieve, but one should strive to Achieve MOORE.&rdquo;</p>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- HISTORY -->
+<section class="content-section">
   <p class="section-label">Est. 2016</p>
-  <h2>The History of Achieve M.O.O.R.E</h2>
-  <p>This page will soon share the full story of Achieve M.O.O.R.E Foundation, Inc. &mdash; its founding, its journey, and the milestones along the way.</p>
+  <h2>Our History</h2>
+  <p>The story of Achieve MOORE began long before it became a nonprofit organization.</p>
+  <p>As a senior at Queens Gateway to Health Sciences Secondary School in New York, founder Kareem Moore discovered a passion for community service and philanthropy. Wanting to make a meaningful difference during the holiday season, he partnered with his high school friend Elyssa Bourne to create an initiative called <strong>Bourne to Give MOORE</strong>, organizing a toy drive for pediatric cancer patients at Long Island Jewish Hospital. The response from students, faculty, and the community exceeded expectations, inspiring Queens Gateway to adopt the initiative as an annual tradition that continues today. Kareem has proudly returned each year since graduating to help support the effort and continue giving back to the school that helped shape his vision.</p>
+  <p>In the fall of 2016, Kareem enrolled at Morehouse College with a desire to continue serving others. While he quickly recognized the abundance of opportunities available on campus, he also saw an opportunity to create something different&mdash;an organization centered not simply on community service, but on community ascension through leadership, mentorship, and intentional impact.</p>
+  <p>Together with fellow students Gerard Harden, Charles Porch, and Nicholas Porter, Kareem began developing what would become Achieve M.O.O.R.E. Each founder brought unique strengths to the vision. Gerard Harden helped develop the organization's constitution and introduced the acronym M.O.O.R.E.&mdash;representing Modest, Optimistic, Open-Minded, Resilient, and Exemplary&mdash;which remains the organization's guiding framework today. Charles Porch and Nicholas Porter, both Bonner Scholars with extensive service experience, helped shape the organization's service model and community engagement strategy. Kareem established the mission that continues to define the organization:</p>
+  <div class="mission-quote">
+    <p>&ldquo;The goal is not only to succeed, but as you succeed, bring others with you. It is one thing to achieve, but one should strive to Achieve MOORE.&rdquo;</p>
+  </div>
+  <p>Turning that vision into reality was not without challenges. Finding a faculty advisor proved to be the founders' greatest obstacle, as several faculty members declined to support the idea. With application deadlines quickly approaching, the future of the organization became uncertain.</p>
+  <p>Everything changed when Kareem met Gabrielle Bell. After hearing the founders' vision and recognizing their passion for creating lasting impact, she agreed to serve as the organization's faculty advisor, allowing the application process to move forward just in time.</p>
+  <p>On July 19, 2017, Achieve M.O.O.R.E. was officially chartered at Morehouse College.</p>
+  <p>Since that day, what began as a student-led campus organization has grown into Achieve MOORE Foundation, Inc.&mdash;a nonprofit dedicated to leadership development, scholarships, mentorship, and community impact. Today, the Foundation serves students and young professionals beyond the Atlanta University Center, creating opportunities that empower individuals to lead, serve, and inspire the next generation.</p>
+  <p>The vision that started with four college students continues to grow, proving that one act of service can become a movement capable of changing countless lives.</p>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- LOGO EXPLANATION -->
+<section class="content-section">
+  <p class="section-label">The Symbolism</p>
+  <h2>Logo Explanation</h2>
+  <div class="logo-explain">
+    <img src="assets/clock_transparent.png" alt="Achieve M.O.O.R.E logo" />
+    <p>The founder, Kareem Moore, has always had a fascination with watches. So, he took his favorite watch and modeled the logo after it. Inside, you'll see that there are three circles which encompass each of the organization's objectives: <strong>Philanthropy</strong>, <strong>Comradery</strong>, and <strong>Altruism</strong>. The circle that says &ldquo;Altruism&rdquo; is bold because putting others before ourselves is something we pride ourselves on the most. Hence the term &ldquo;Bring Others With You,&rdquo; from our mission statement.</p>
+    <p>As for the color choices:</p>
+    <ul class="color-list">
+      <li><strong>Gold</strong> &mdash; Adds richness and warmth to everything with which it is associated; it illuminates and enhances other things around it.</li>
+      <li><strong>White</strong> &mdash; Openness, growth, and inclusivity; it amplifies everything in its way.</li>
+      <li><strong>Black</strong> &mdash; To be sophisticated or very dignified.</li>
+    </ul>
+    <p>Then, &ldquo;Achieve M.O.O.R.E.&rdquo; takes up only half of the clock because it shows that as time goes on, one realizes that they can always Achieve M.O.O.R.E. in all aspects of life. The idea of a clock shows the importance of time&mdash;it is the most valuable thing we have that we can give someone.</p>
+  </div>
 </section>
 
 <!-- FOOTER -->
