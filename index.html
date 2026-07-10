@@ -404,6 +404,50 @@
   .serve-grid { grid-template-columns: repeat(3, 1fr); }
   .impact-grid { grid-template-columns: repeat(3, 1fr); }
 
+  /* SCHOLARSHIP SPOTLIGHT */
+  .scholarship {
+    position: relative; z-index: 10;
+    padding: 100px 40px; background: rgba(255,255,255,0.95);
+    border-bottom: 1px solid rgba(200,146,10,0.2);
+  }
+  .scholarship-inner {
+    max-width: 1180px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.05fr 1fr;
+    gap: 60px; align-items: center;
+  }
+  .scholarship-copy .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.42em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
+  }
+  .scholarship-copy h2 {
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(30px, 4.2vw, 48px);
+    font-weight: 600; color: #1a1a1a; line-height: 1.1; margin-bottom: 10px;
+  }
+  .scholarship-copy .partner-line {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    font-family: 'Cormorant Garamond', serif; font-size: clamp(22px, 3vw, 30px);
+    font-weight: 600; color: var(--gold); margin-bottom: 24px;
+  }
+  .scholarship-copy .partner-line .x { color: rgba(26,26,26,0.35); font-size: 0.8em; }
+  .scholarship-amount {
+    font-family: 'Cormorant Garamond', serif; font-weight: 700;
+    font-size: clamp(46px, 8vw, 78px); color: var(--gold); line-height: 1;
+    margin-bottom: 20px;
+  }
+  .scholarship-copy p {
+    font-size: 15px; font-weight: 400; line-height: 1.9;
+    color: rgba(26,26,26,0.72); max-width: 520px;
+  }
+  .scholarship-photos {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  }
+  .scholarship-photos img {
+    width: 100%; height: 320px; object-fit: cover;
+    border-radius: 10px; border: 1px solid rgba(200,146,10,0.25);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  }
+  .scholarship-photos img:nth-child(2) { margin-top: 32px; }
+
   /* SUPPORT / DONATE */
   .support {
     position: relative; z-index: 10;
@@ -514,7 +558,10 @@
 
     .programs { padding: 60px 20px; }
     .programs-header h2 { font-size: clamp(26px, 7vw, 40px); }
-    .programs-grid {
+    .scholarship { padding: 60px 20px; }
+    .scholarship-inner { grid-template-columns: 1fr; gap: 36px; }
+    .scholarship-photos img { height: 240px; }
+    .scholarship-photos img:nth-child(2) { margin-top: 0; }    .programs-grid {
       grid-template-columns: repeat(2, 1fr);
       gap: 8px;
     }
@@ -592,7 +639,8 @@
   <ul class="nav-links" id="navLinks">
     <li><a href="index.html#mission">Mission</a></li>
     <li><a href="index.html#gallery">Gallery</a></li>
-    <li><a href="index.html#programs">Programs</a></li>
+    <li><a href="index.html#programs">Core Values</a></li>
+    <li><a href="events.html">Events</a></li>
     <li><a href="board.html">Meet the Board</a></li>
     <li><a href="about.html">About Us</a></li>
     <li class="mobile-donate"><a href="#">Donate</a></li>
@@ -702,6 +750,23 @@
     <div class="program-card">
       <div class="card-title">Career &amp; Professional Exposure</div>
       <p class="card-desc">We connect students and emerging professionals with networks, experiences, and resources that help them explore and pursue meaningful careers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SCHOLARSHIP SPOTLIGHT -->
+<section class="scholarship" id="scholarship">
+  <div class="scholarship-inner">
+    <div class="scholarship-copy">
+      <p class="section-label">Scholarship Spotlight</p>
+      <h2>Investing in the AUC</h2>
+      <div class="partner-line">Achieve M.O.O.R.E <span class="x">&times;</span> IAMS</div>
+      <div class="scholarship-amount">$10,000</div>
+      <p>Achieve M.O.O.R.E and IAMS partnered to give $10,000 in scholarship support to students across the Atlanta University Center &mdash; expanding access, easing financial barriers, and empowering the next generation of AUC leaders to Achieve M.O.O.R.E.</p>
+    </div>
+    <div class="scholarship-photos">
+      <img src="assets/photos/scholarship 1.jpg" alt="Achieve M.O.O.R.E x IAMS scholarship presentation" loading="lazy" />
+      <img src="assets/photos/scholarship 2.jpg" alt="AUC students receiving Achieve M.O.O.R.E x IAMS scholarship" loading="lazy" />
     </div>
   </div>
 </section>
