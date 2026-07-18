@@ -244,8 +244,15 @@
     border-top-color: #ffffff;
     filter: drop-shadow(0 1px 0 rgba(200,146,10,0.35));
   }
-  .member-card:hover .member-bio,
-  .member-card:focus-within .member-bio {
+  @media (hover: hover) {
+    .member-card:hover .member-bio {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+  .member-card.bio-open .member-bio,
+  .member-card:focus-visible .member-bio {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
@@ -449,7 +456,8 @@
     }
     .member-bio::after { display: none; }
     .member-card:hover .member-bio,
-    .member-card:focus-within .member-bio {
+    .member-card.bio-open .member-bio,
+    .member-card:focus-visible .member-bio {
       transform: translate(-50%, -50%);
     }
 
@@ -653,6 +661,20 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.15 });
 
 document.querySelectorAll('.member-card').forEach(card => observer.observe(card));
+
+// Bio popup: tap to open, tap again or tap anywhere else to close
+const bioCards = document.querySelectorAll('.member-card.has-bio');
+bioCards.forEach(card => {
+  card.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const wasOpen = card.classList.contains('bio-open');
+    bioCards.forEach(c => c.classList.remove('bio-open'));
+    if (!wasOpen) card.classList.add('bio-open');
+  });
+});
+document.addEventListener('click', () => {
+  bioCards.forEach(c => c.classList.remove('bio-open'));
+});
 </script>
 
 </body>
