@@ -206,6 +206,49 @@
     transform: translateY(-6px);
     box-shadow: 0 12px 36px rgba(200,146,10,0.15);
     border-color: rgba(200,146,10,0.35);
+    z-index: 20;
+  }
+  .member-card.has-bio { overflow: visible; }
+
+  /* ── Hover bio popup ── */
+  .member-bio {
+    position: absolute;
+    bottom: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    width: 300px;
+    max-width: 84vw;
+    background: #ffffff;
+    border: 1px solid rgba(200,146,10,0.35);
+    border-radius: 8px;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+    padding: 18px 20px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: rgba(26,26,26,0.75);
+    text-align: left;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    z-index: 30;
+  }
+  .member-bio::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: #ffffff;
+    filter: drop-shadow(0 1px 0 rgba(200,146,10,0.35));
+  }
+  .member-card:hover .member-bio,
+  .member-card:focus-within .member-bio {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
   }
 
   /* Founder card (larger) */
@@ -397,6 +440,19 @@
 
     .tree-connector, .branch-vertical { height: 28px; }
 
+    /* Bio popup: fixed & centered so it never clips off-screen */
+    .member-bio {
+      position: fixed;
+      top: 50%; left: 50%; bottom: auto;
+      transform: translate(-50%, -50%) translateY(8px);
+      width: 320px;
+    }
+    .member-bio::after { display: none; }
+    .member-card:hover .member-bio,
+    .member-card:focus-within .member-bio {
+      transform: translate(-50%, -50%);
+    }
+
     footer { padding: 40px 20px 28px; }
     .footer-tagline { font-size: 15px; }
   }
@@ -510,7 +566,7 @@
           <img src="assets/team/courtney updated.jpg" alt="Courtney T. Epps" onerror="this.remove()" />
           <span class="photo-placeholder">BD</span>
         </div>
-        <div class="member-name">Courtney T. Epps</div>
+        <div class="member-name">Courtney T. Epps, MFA</div>
         <div class="member-role">Board of Director</div>
       </div>
       <div class="member-card">
@@ -521,13 +577,14 @@
         <div class="member-name">Errol Parker II</div>
         <div class="member-role">Board of Director</div>
       </div>
-      <div class="member-card">
+      <div class="member-card has-bio" tabindex="0">
         <div class="member-photo">
           <img src="assets/team/Akenya Rock Board of director.jpg" alt="Akenya Rock" style="transform: scale(1.4); transform-origin: center 44%;" onerror="this.remove()" />
           <span class="photo-placeholder">BD</span>
         </div>
         <div class="member-name">Akenya Rock</div>
         <div class="member-role">Board of Director</div>
+        <div class="member-bio"><strong>Akenya Rock</strong> is an entrepreneur, business leader, and community advocate dedicated to creating opportunities that strengthen individuals, families, and communities. With extensive experience in business operations, strategic planning, and organizational leadership, she is passionate about developing sustainable solutions, fostering meaningful partnerships, and empowering others to achieve lasting success. As a Board Member of Achieve Moore, Akenya is committed to advancing the organization&rsquo;s mission through servant leadership, collaboration, integrity, and a heart for community impact.</div>
       </div>
       <div class="member-card">
         <div class="member-photo">
