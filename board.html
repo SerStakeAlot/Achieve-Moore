@@ -699,7 +699,8 @@ function positionBio(card) {
   bio.style.right = 'auto';
   bio.style.left = left + 'px';
 
-  let top = rect.top + (rect.height - bioH) / 2;
+  // Align popup with the card's top so it reads as directly beside the member.
+  let top = rect.top;
   if (top + bioH > window.innerHeight - margin) top = window.innerHeight - margin - bioH;
   if (top < margin) top = margin;
   bio.style.top = top + 'px';
