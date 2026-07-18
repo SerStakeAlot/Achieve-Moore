@@ -455,12 +455,10 @@
       max-width: 280px;
       max-height: 70vh;
       overflow-y: auto;
-      background: rgba(255,255,255,0.9);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
       transform: translateY(8px);
       font-size: 11px;
       padding: 14px 16px;
+      background: rgba(255,255,255,0.92);
     }
     .member-bio::after { display: none; }
     .member-card:hover .member-bio,
@@ -685,25 +683,26 @@ function positionBio(card) {
   }
   const rect = card.getBoundingClientRect();
   const margin = 10;
-  const gap = 12;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
   const bioW = bio.offsetWidth;
   const bioH = bio.offsetHeight;
-  let left;
-
-  if (rect.left + rect.width / 2 < window.innerWidth / 2) {
-    left = rect.right + gap;
+  if (rect.left + rect.width / 2 < vw / 2) {
+    // Card on left half → bio starts at the card's right edge
+    let left = rect.right + 8;
+    if (left + bioW > vw - margin) left = vw - margin - bioW;
+    bio.style.right = 'auto';
+    bio.style.left = left + 'px';
   } else {
-    left = rect.left - bioW - gap;
+    // Card on right half → bio ends at the card's left edge
+    let left = rect.left - 8 - bioW;
+    if (left < margin) left = margin;
+    bio.style.right = 'auto';
+    bio.style.left = left + 'px';
   }
-
-  if (left + bioW > window.innerWidth - margin) left = window.innerWidth - margin - bioW;
-  if (left < margin) left = margin;
-
-  bio.style.right = 'auto';
-  bio.style.left = left + 'px';
-
-  let top = rect.top + (rect.height - bioH) / 2;
-  if (top + bioH > window.innerHeight - margin) top = window.innerHeight - margin - bioH;
+  // Vertically center the bio on the card, clamped to the viewport
+  let top = rect.top + rect.height / 2 - bioH / 2;
+  if (top + bioH > vh - margin) top = vh - margin - bioH;
   if (top < margin) top = margin;
   bio.style.top = top + 'px';
 }
