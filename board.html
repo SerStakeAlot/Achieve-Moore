@@ -447,24 +447,25 @@
 
     .tree-connector, .branch-vertical { height: 28px; }
 
-    /* Bio popup: fixed, positioned by JS beside the tapped card */
+    /* Bio popup: fixed & centered, translucent so the card shows through */
     .member-bio {
       position: fixed;
-      bottom: auto;
-      width: 62vw;
-      max-width: 280px;
+      top: 50%; left: 50%; bottom: auto;
+      transform: translate(-50%, -50%) translateY(8px);
+      width: 84vw;
+      max-width: 320px;
       max-height: 70vh;
       overflow-y: auto;
-      transform: translateY(8px);
-      font-size: 11px;
-      padding: 14px 16px;
-      background: rgba(255,255,255,0.92);
+      font-size: 12px;
+      padding: 16px 18px;
+      background: rgba(255,255,255,0.88);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.25);
     }
     .member-bio::after { display: none; }
     .member-card:hover .member-bio,
     .member-card.bio-open .member-bio,
     .member-card:focus-visible .member-bio {
-      transform: none;
+      transform: translate(-50%, -50%);
       pointer-events: auto;
     }
 
@@ -671,51 +672,13 @@ document.querySelectorAll('.member-card').forEach(card => observer.observe(card)
 
 // Bio popup: tap to open, tap again or tap anywhere else to close
 const bioCards = document.querySelectorAll('.member-card.has-bio');
-const mobileBio = window.matchMedia('(max-width: 768px)');
-
-// On mobile, place the popup beside the tapped card (over the neighbor,
-// not the person's own photo), clamped to the viewport.
-function positionBio(card) {
-  const bio = card.querySelector('.member-bio');
-  if (!mobileBio.matches) {
-    bio.style.left = bio.style.right = bio.style.top = '';
-    return;
-  }
-  const rect = card.getBoundingClientRect();
-  const margin = 10;
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const bioW = bio.offsetWidth;
-  const bioH = bio.offsetHeight;
-  if (rect.left + rect.width / 2 < vw / 2) {
-    // Card on left half → bio starts at the card's right edge
-    let left = rect.right + 8;
-    if (left + bioW > vw - margin) left = vw - margin - bioW;
-    bio.style.right = 'auto';
-    bio.style.left = left + 'px';
-  } else {
-    // Card on right half → bio ends at the card's left edge
-    let left = rect.left - 8 - bioW;
-    if (left < margin) left = margin;
-    bio.style.right = 'auto';
-    bio.style.left = left + 'px';
-  }
-  // Vertically center the bio on the card, clamped to the viewport
-  let top = rect.top + rect.height / 2 - bioH / 2;
-  if (top + bioH > vh - margin) top = vh - margin - bioH;
-  if (top < margin) top = margin;
-  bio.style.top = top + 'px';
-}
 
 bioCards.forEach(card => {
   card.addEventListener('click', (e) => {
     e.stopPropagation();
     const wasOpen = card.classList.contains('bio-open');
     bioCards.forEach(c => c.classList.remove('bio-open'));
-    if (!wasOpen) {
-      positionBio(card);
-      card.classList.add('bio-open');
-    }
+    if (!wasOpen) card.classList.add('bio-open');
   });
   // Don't close (or re-toggle) when tapping/scrolling the popup itself
   card.querySelector('.member-bio').addEventListener('click', e => e.stopPropagation());
