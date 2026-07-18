@@ -682,17 +682,24 @@ function positionBio(card) {
   }
   const rect = card.getBoundingClientRect();
   const margin = 10;
-  if (rect.left + rect.width / 2 < window.innerWidth / 2) {
-    // Card on left half → bio on the right side
-    bio.style.left = 'auto';
-    bio.style.right = margin + 'px';
-  } else {
-    // Card on right half → bio on the left side
-    bio.style.right = 'auto';
-    bio.style.left = margin + 'px';
-  }
-  let top = rect.top;
+  const gap = 12;
+  const bioW = bio.offsetWidth;
   const bioH = bio.offsetHeight;
+  let left;
+
+  if (rect.left + rect.width / 2 < window.innerWidth / 2) {
+    left = rect.right + gap;
+  } else {
+    left = rect.left - bioW - gap;
+  }
+
+  if (left + bioW > window.innerWidth - margin) left = window.innerWidth - margin - bioW;
+  if (left < margin) left = margin;
+
+  bio.style.right = 'auto';
+  bio.style.left = left + 'px';
+
+  let top = rect.top + (rect.height - bioH) / 2;
   if (top + bioH > window.innerHeight - margin) top = window.innerHeight - margin - bioH;
   if (top < margin) top = margin;
   bio.style.top = top + 'px';
