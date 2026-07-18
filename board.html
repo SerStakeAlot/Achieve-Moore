@@ -455,6 +455,9 @@
       max-width: 280px;
       max-height: 70vh;
       overflow-y: auto;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       transform: translateY(8px);
       font-size: 11px;
       padding: 14px 16px;
@@ -699,8 +702,7 @@ function positionBio(card) {
   bio.style.right = 'auto';
   bio.style.left = left + 'px';
 
-  // Align popup with the card's top so it reads as directly beside the member.
-  let top = rect.top;
+  let top = rect.top + (rect.height - bioH) / 2;
   if (top + bioH > window.innerHeight - margin) top = window.innerHeight - margin - bioH;
   if (top < margin) top = margin;
   bio.style.top = top + 'px';
