@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Times of Hand Gala — Achieve M.O.O.R.E</title>
+<meta name="description" content="The Times of Hand Gala — honoring those who have pushed the hands of time forward: creating history, leaving legacy, and keeping the future in mind.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Achieve M.O.O.R.E Foundation">
+<meta property="og:title" content="Times of Hand Gala — Achieve M.O.O.R.E">
+<meta property="og:description" content="The Times of Hand Gala — honoring those who have pushed the hands of time forward: creating history, leaving legacy, and keeping the future in mind.">
+<meta property="og:url" content="https://achievemoorefoundation.org/gala">
+<meta property="og:image" content="https://achievemoorefoundation.org/assets/og-logo.png">
+<meta property="og:image:width" content="1072">
+<meta property="og:image:height" content="1072">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Times of Hand Gala — Achieve M.O.O.R.E">
+<meta name="twitter:description" content="The Times of Hand Gala — honoring those who have pushed the hands of time forward: creating history, leaving legacy, and keeping the future in mind.">
+<meta name="twitter:image" content="https://achievemoorefoundation.org/assets/og-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c8920a;
+    --gold-light: #b8830a;
+    --maroon: #6b0f1a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: #ffffff;
+    color: #1a1a1a;
+    overflow-x: hidden;
+    display: flex; flex-direction: column; min-height: 100vh;
+  }
+
+  /* ── NAV (matches index.html) ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 72px;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+  .nav-logo img {
+    width: 50px; height: 50px; border-radius: 50%;
+    border: none; object-fit: cover;
+  }
+  .nav-logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px; font-weight: 600;
+    color: var(--gold); letter-spacing: 0.06em; line-height: 1.1;
+  }
+  .nav-logo-text span {
+    display: block; font-size: 10px;
+    font-family: 'Montserrat', sans-serif; font-weight: 300;
+    letter-spacing: 0.24em; color: rgba(200,146,10,0.7); text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 34px; list-style: none; }
+  .nav-links a {
+    text-decoration: none; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(26,26,26,0.7); transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+  .nav-donate {
+    background: transparent; border: 1.5px solid var(--gold);
+    color: var(--gold); padding: 10px 26px; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.25s; text-decoration: none;
+  }
+  .nav-donate:hover { background: var(--gold); color: #ffffff; }
+
+  /* HAMBURGER */
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center;
+    gap: 5px; background: none; border: none; cursor: pointer;
+    padding: 8px; z-index: 110;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: #1a1a1a; border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+  .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+  /* ── PAGE HERO ── */
+  .page-hero {
+    position: relative;
+    min-height: 60vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    padding: 140px 40px 60px;
+    background: rgba(245,243,240,0.6);
+    border-bottom: 1px solid rgba(200,146,10,0.15);
+  }
+  .page-hero-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.42em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .page-hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(42px, 8vw, 90px); font-weight: 700;
+    line-height: 1; color: #1a1a1a; margin-bottom: 8px;
+    opacity: 0; animation: fadeUp 0.9s 0.4s forwards;
+  }
+  .page-hero-title .gold { color: var(--gold); }
+  .page-hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(16px, 2.5vw, 22px); font-weight: 400;
+    letter-spacing: 0.1em; color: rgba(26,26,26,0.55);
+    max-width: 640px; margin-top: 16px;
+    opacity: 0; animation: fadeUp 0.9s 0.6s forwards;
+  }
+  .gold-divider { width: 50px; height: 1px; background: var(--gold); margin: 24px auto 0; opacity: 0.55; }
+
+  /* ── GALA SECTIONS ── */
+  .gala-section {
+    flex: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 40px 100px;
+    width: 100%;
+  }
+  .gala-block {
+    margin-bottom: 72px;
+    text-align: center;
+  }
+  .gala-block:last-child { margin-bottom: 0; }
+  .gala-block .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.42em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 14px;
+  }
+  .gala-block h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 44px); font-weight: 600;
+    color: #1a1a1a; margin-bottom: 18px;
+  }
+  .gala-block p {
+    font-size: 15px; line-height: 1.9; font-weight: 300;
+    color: rgba(26,26,26,0.75);
+    max-width: 680px; margin: 0 auto 16px;
+  }
+
+  /* Placeholder card for drafting */
+  .draft-placeholder {
+    border: 1.5px dashed rgba(200,146,10,0.4);
+    border-radius: 12px;
+    padding: 48px 32px;
+    color: rgba(26,26,26,0.35);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    background: rgba(245,243,240,0.4);
+  }
+
+  /* Detail chips (date / venue / attire) */
+  .gala-details {
+    display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .detail-chip {
+    border: 1px solid rgba(200,146,10,0.3);
+    border-radius: 10px;
+    padding: 22px 30px;
+    min-width: 180px;
+    background: #ffffff;
+  }
+  .detail-chip .chip-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
+  }
+  .detail-chip .chip-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 600; color: #1a1a1a;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 10;
+    background: rgba(245,243,240,0.98);
+    border-top: 1px solid rgba(200,146,10,0.2);
+    padding: 60px 40px 36px; text-align: center;
+  }
+  .footer-logo img { width: 58px; height: 58px; border-radius: 50%; margin-bottom: 18px; opacity: 0.8; }
+  .footer-tagline {
+    font-family: 'Cormorant Garamond', serif; font-size: 17px;
+    color: rgba(26,26,26,0.45); margin-bottom: 30px; letter-spacing: 0.05em;
+  }
+  .footer-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+  .footer-btn {
+    background: transparent; border: 1px solid rgba(26,26,26,0.2);
+    color: rgba(26,26,26,0.6); padding: 11px 28px; font-size: 10px;
+    font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    text-decoration: none; border-radius: 999px; transition: all 0.25s;
+  }
+  .footer-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .footer-social { display: flex; gap: 22px; justify-content: center; margin-bottom: 28px; }
+  .footer-social a {
+    color: rgba(26,26,26,0.45); text-decoration: none; font-size: 13px;
+    font-weight: 700; letter-spacing: 0.1em; transition: color 0.2s;
+  }
+  .footer-social a:hover { color: var(--gold); }
+  .footer-nonprofit { font-size: 11px; color: rgba(26,26,26,0.45); letter-spacing: 0.05em; margin-bottom: 10px; }
+  .footer-bottom { font-size: 10px; color: rgba(26,26,26,0.3); letter-spacing: 0.1em; }
+  .footer-bottom a { color: rgba(200,146,10,0.7); text-decoration: underline; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(26px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .hamburger { display: flex; }
+    .nav-links {
+      position: fixed; top: 72px; right: 0;
+      flex-direction: column; gap: 0;
+      background: rgba(255,255,255,0.98);
+      width: 240px; height: calc(100vh - 72px);
+      padding: 24px 28px;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      border-left: 1px solid rgba(0,0,0,0.08);
+      z-index: 105;
+    }
+    .nav-links.open { transform: translateX(0); }
+    .nav-links li { padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+    .nav-links a { font-size: 13px; letter-spacing: 0.18em; }
+    .nav-donate { display: none; }
+    .nav-logo-text { font-size: 17px; }
+    .nav-logo-text span { font-size: 9px; }
+    .nav-logo img { width: 40px; height: 40px; }
+
+    .page-hero { padding: 110px 24px 40px; min-height: 45vh; }
+    .gala-section { padding: 50px 24px 70px; }
+    .gala-block { margin-bottom: 56px; }
+    .detail-chip { min-width: 140px; padding: 18px 22px; }
+    footer { padding: 40px 20px 28px; }
+    .footer-tagline { font-size: 15px; }
+  }
+
+  /* Mobile menu overlay */
+  .nav-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 104;
+  }
+  .nav-overlay.open { display: block; background: rgba(0,0,0,0.3); }
+
+  .mobile-donate { display: none; }
+  @media (max-width: 768px) {
+    .mobile-donate { display: block; }
+    .mobile-donate a {
+      color: var(--gold) !important;
+      font-size: 13px !important;
+      letter-spacing: 0.18em !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/home" class="nav-logo">
+    <img src="assets/clock_transparent.png" alt="Achieve M.O.O.R.E" />
+    <div class="nav-logo-text">
+      Achieve M.O.O.R.E
+      <span>Est. 2016</span>
+    </div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/home#mission">Mission</a></li>
+    <li><a href="/home#corevalues">Core Values</a></li>
+    <li><a href="/gala" class="active">Times of Hand Gala</a></li>
+    <li><a href="/board">Meet the Board</a></li>
+    <li><a href="/about">About Us</a></li>
+    <li class="mobile-donate"><a href="#">Donate</a></li>
+  </ul>
+  <div class="nav-overlay" id="navOverlay"></div>
+  <a href="#" class="nav-donate">Donate</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <p class="page-hero-label">A Night of Legacy</p>
+  <h1 class="page-hero-title">Times of Hand <span class="gold">Gala</span></h1>
+  <p class="page-hero-subtitle">Honoring those who have pushed the hands of time forward &mdash; creating history, leaving legacy, and keeping the future in mind.</p>
+  <div class="gold-divider"></div>
+</section>
+
+<!-- GALA CONTENT (SHELL — draft sections below) -->
+<section class="gala-section">
+
+  <!-- ABOUT THE GALA -->
+  <div class="gala-block">
+    <p class="section-label">The Occasion</p>
+    <div class="gold-divider" style="margin-bottom: 18px;"></div>
+    <h2>An Evening to Remember</h2>
+    <p>Time moves forward because someone chooses to push it. The Times of Hand Gala is Achieve M.O.O.R.E's signature evening celebrating the history-makers, the legacy-leavers, and the future-keepers in our community.</p>
+    <div class="draft-placeholder">Draft: full gala description, program overview, and story behind the theme goes here.</div>
+  </div>
+
+  <!-- EVENT DETAILS -->
+  <div class="gala-block">
+    <p class="section-label">The Details</p>
+    <div class="gold-divider" style="margin-bottom: 18px;"></div>
+    <h2>When &amp; Where</h2>
+    <div class="gala-details">
+      <div class="detail-chip">
+        <div class="chip-label">Date</div>
+        <div class="chip-value">TBA</div>
+      </div>
+      <div class="detail-chip">
+        <div class="chip-label">Time</div>
+        <div class="chip-value">TBA</div>
+      </div>
+      <div class="detail-chip">
+        <div class="chip-label">Venue</div>
+        <div class="chip-value">TBA</div>
+      </div>
+      <div class="detail-chip">
+        <div class="chip-label">Attire</div>
+        <div class="chip-value">TBA</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HONOREES -->
+  <div class="gala-block">
+    <p class="section-label">The Honorees</p>
+    <div class="gold-divider" style="margin-bottom: 18px;"></div>
+    <h2>Pushing the Hands of Time Forward</h2>
+    <div class="draft-placeholder">Draft: honoree names, photos, and award categories go here.</div>
+  </div>
+
+  <!-- TICKETS & SPONSORSHIP -->
+  <div class="gala-block">
+    <p class="section-label">Join Us</p>
+    <div class="gold-divider" style="margin-bottom: 18px;"></div>
+    <h2>Tickets &amp; Sponsorship</h2>
+    <div class="draft-placeholder">Draft: ticket tiers, sponsorship packages, and purchase/RSVP links go here.</div>
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <img src="assets/clock_transparent.png" alt="Achieve M.O.O.R.E" />
+  </div>
+  <p class="footer-tagline">The goal is not only to succeed, but as you succeed, bring others with you.</p>
+  <div class="footer-ctas">
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdO-yOqKJMoaOHTGYjnnYGVGJOAA4HOFVvzFRFYbJGN-l0_3A/viewform" target="_blank" class="footer-btn">Global Network</a>
+  </div>
+  <div class="footer-social">
+    <a href="https://www.instagram.com/achievemoore/" target="_blank">Instagram</a>
+    <a href="https://www.linkedin.com/company/achieve-moore-foundation-inc" target="_blank">LinkedIn</a>
+  </div>
+  <p class="footer-nonprofit">Achieve M.O.O.R.E Foundation INC. 501(c)(3) Non Profit Organization</p>
+  <p class="footer-bottom">&copy; 2016 Achieve M.O.O.R.E &mdash; <a href="#">Terms and Conditions</a></p>
+</footer>
+
+<script>
+// Hamburger menu toggle
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+const navOverlay = document.getElementById('navOverlay');
+
+function toggleMenu() {
+  hamburger.classList.toggle('active');
+  navLinks.classList.toggle('open');
+  navOverlay.classList.toggle('open');
+  document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
+}
+
+hamburger.addEventListener('click', toggleMenu);
+navOverlay.addEventListener('click', toggleMenu);
+
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    if (navLinks.classList.contains('open')) toggleMenu();
+  });
+});
+</script>
+
+</body>
+</html>
