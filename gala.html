@@ -194,6 +194,46 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 20px; font-weight: 600; color: #1a1a1a;
   }
+
+  /* Ticket tiers */
+  .ticket-tiers {
+    display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .ticket-card {
+    position: relative;
+    border: 1px solid rgba(200,146,10,0.4);
+    border-radius: 14px;
+    padding: 40px 48px 36px;
+    min-width: 260px;
+    background: #ffffff;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.12);
+  }
+  .ticket-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--gold); color: #ffffff;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+    padding: 6px 16px; border-radius: 999px; white-space: nowrap;
+  }
+  .ticket-tier {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+  }
+  .ticket-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px; font-weight: 700; color: #1a1a1a; line-height: 1;
+    margin-bottom: 12px;
+  }
+  .ticket-desc {
+    font-size: 12px; color: rgba(26,26,26,0.55); letter-spacing: 0.04em;
+    max-width: 240px; margin: 0 auto 22px; line-height: 1.6;
+  }
+  .ticket-cta {
+    display: inline-block;
+    border: 1px solid rgba(200,146,10,0.5); color: var(--gold);
+    font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 12px 30px; border-radius: 999px;
+  }
   .detail-chip .chip-value .venue-link {
     color: #1a1a1a; text-decoration: none;
     border-bottom: 1px solid rgba(200,146,10,0.5);
@@ -391,7 +431,16 @@
     <p class="section-label">Join Us</p>
     <div class="gold-divider" style="margin-bottom: 18px;"></div>
     <h2>Tickets &amp; Sponsorship</h2>
-    <div class="draft-placeholder">Draft: ticket tiers, sponsorship packages, and purchase/RSVP links go here.</div>
+    <div class="ticket-tiers">
+      <div class="ticket-card">
+        <div class="ticket-badge">Limited Time</div>
+        <div class="ticket-tier">Early Bird</div>
+        <div class="ticket-price">$275</div>
+        <div class="ticket-desc">Per guest &middot; Black tie evening of dinner, celebration &amp; purpose</div>
+        <span class="ticket-cta">Tickets On Sale Soon</span>
+      </div>
+    </div>
+    <div class="draft-placeholder" style="margin-top: 24px;">Draft: additional ticket tiers, sponsorship packages, and purchase/RSVP links go here.</div>
   </div>
 
 </section>
