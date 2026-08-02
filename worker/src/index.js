@@ -90,6 +90,7 @@ async function addToWaitlist(request, env, cors) {
     return json({ error: 'Invalid request' }, 400, cors);
   }
 
+  const name = (body.name || '').toString().trim().slice(0, 120);
   const email = (body.email || '').toString().trim().toLowerCase();
   const phone = (body.phone || '').toString().trim();
   const source = (body.source || 'gala-early-bird').toString().slice(0, 64);
@@ -106,10 +107,10 @@ async function addToWaitlist(request, env, cors) {
 
   try {
     await env.DB.prepare(
-      `INSERT INTO waitlist (email, phone, source, created_at)
-       VALUES (?, ?, ?, ?)
-       ON CONFLICT(email) DO UPDATE SET phone = excluded.phone`
-    ).bind(email || null, phone || null, source, new Date().toISOString()).run();
+      `INSERT INTO waitlist (name, email, phone, source, created_at)
+       VALUES (?, ?, ?, ?, ?)
+       ON CONFLICT(email) DO UPDATE SET name = excluded.name, phone = excluded.phone`
+    ).bind(name || null, email || null, phone || null, source, new Date().toISOString()).run();
   } catch (err) {
     return json({ error: 'Could not save. Please try again.' }, 500, cors);
   }

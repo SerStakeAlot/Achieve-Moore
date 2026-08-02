@@ -543,7 +543,7 @@
   </div>
 
   <!-- TICKETS & SPONSORSHIP -->
-  <div class="gala-block">
+  <div class="gala-block" id="tickets">
     <p class="section-label">Join Us</p>
     <div class="gold-divider" style="margin-bottom: 18px;"></div>
     <h2>Tickets &amp; Sponsorship</h2>
@@ -560,7 +560,8 @@
 
         <form class="notify-form" id="notifyForm" novalidate>
           <p class="notify-heading">Get the early bird link first</p>
-          <p class="notify-copy">Leave your email or phone and we&rsquo;ll send you the purchase link the moment tickets are available.</p>
+          <p class="notify-copy">Leave your name and email or phone and we&rsquo;ll send you the purchase link the moment tickets are available.</p>
+          <input type="text" id="notifyName" class="notify-input" placeholder="Full name" autocomplete="name" />
           <input type="email" id="notifyEmail" class="notify-input" placeholder="Email address" autocomplete="email" />
           <input type="tel" id="notifyPhone" class="notify-input" placeholder="Phone (optional)" autocomplete="tel" />
           <button type="submit" class="ticket-cta notify-submit" id="notifySubmit">Notify Me</button>
@@ -770,6 +771,7 @@ function initPayPal() {
 // ─────────────────────────────────────────────────────────────
 const notifyForm = document.getElementById('notifyForm');
 if (notifyForm) {
+  const nameEl = document.getElementById('notifyName');
   const emailEl = document.getElementById('notifyEmail');
   const phoneEl = document.getElementById('notifyPhone');
   const statusEl = document.getElementById('notifyStatus');
@@ -782,9 +784,14 @@ if (notifyForm) {
 
   notifyForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const name = nameEl.value.trim();
     const email = emailEl.value.trim();
     const phone = phoneEl.value.trim();
 
+    if (!name) {
+      setStatus('Please enter your name.', 'error');
+      return;
+    }
     if (!email && !phone) {
       setStatus('Please enter an email or phone number.', 'error');
       return;
@@ -801,7 +808,7 @@ if (notifyForm) {
       const res = await fetch(CHECKOUT_CONFIG.notifyEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, phone, source: 'gala-early-bird' })
+        body: JSON.stringify({ name, email, phone, source: 'gala-early-bird' })
       });
       if (!res.ok) throw new Error('Request failed');
       notifyForm.reset();
