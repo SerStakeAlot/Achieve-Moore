@@ -1,0 +1,14 @@
+name = "gala-checkout"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+
+# Non-secret configuration. The Stripe SECRET key is NOT here —
+# set it with:  wrangler secret put STRIPE_SECRET_KEY
+[vars]
+# Comma-separated list of sites allowed to call this Worker.
+ALLOWED_ORIGIN = "https://achievemoorefoundation.org,https://www.achievemoorefoundation.org"
+
+# Ticket price in the smallest currency unit (cents). 27500 = $275.00
+TICKET_AMOUNT = "27500"
+CURRENCY = "usd"
+TICKET_NAME = "Hands of Time Gala — Early Bird Ticket"

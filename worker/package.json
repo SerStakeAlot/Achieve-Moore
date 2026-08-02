@@ -1,0 +1,13 @@
+{
+  "name": "gala-checkout",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cloudflare Worker that creates Stripe Embedded Checkout sessions for the Hands of Time Gala.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3.78.0"
+  }
+}
