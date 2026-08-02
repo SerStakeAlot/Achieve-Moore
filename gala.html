@@ -245,6 +245,7 @@
   }
 
   /* Notify-me form (early bird waitlist) */
+  #tickets { scroll-margin-top: 90px; }
   .notify-form { margin-top: 8px; }
   .notify-heading {
     font-family: 'Cormorant Garamond', serif;
@@ -551,7 +552,6 @@
       <div class="ticket-card">
         <div class="ticket-badge">Coming Soon</div>
         <div class="ticket-tier">Early Bird</div>
-        <div class="ticket-price">$275</div>
         <div class="ticket-desc">Per guest &middot; Black tie evening of dinner, celebration &amp; purpose</div>
 
         <!-- Purchase flow hidden until tickets go live.
@@ -787,7 +787,6 @@ if (notifyForm) {
     const name = nameEl.value.trim();
     const email = emailEl.value.trim();
     const phone = phoneEl.value.trim();
-
     if (!name) {
       setStatus('Please enter your name.', 'error');
       return;
@@ -818,6 +817,16 @@ if (notifyForm) {
     } finally {
       submitEl.disabled = false;
     }
+  });
+}
+
+// Re-scroll to #tickets after images/map load shift the layout
+// (fixes newsletter links landing above the signup form).
+if (location.hash === '#tickets') {
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('tickets')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 300);
   });
 }
 </script>
