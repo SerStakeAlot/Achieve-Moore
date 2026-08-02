@@ -12,3 +12,11 @@ ALLOWED_ORIGIN = "https://achievemoorefoundation.org,https://www.achievemoorefou
 TICKET_AMOUNT = "27500"
 CURRENCY = "usd"
 TICKET_NAME = "Hands of Time Gala — Early Bird Ticket"
+
+# D1 database for the early-bird waitlist (notify-me form).
+# Create it once with:  npx wrangler d1 create gala-waitlist
+# then paste the printed database_id below.
+[[d1_databases]]
+binding = "DB"
+database_name = "gala-waitlist"
+database_id = "06ca729c-40ff-4928-894d-d97890a87022"

@@ -244,6 +244,37 @@
     box-shadow: 0 8px 22px rgba(200,146,10,0.35);
   }
 
+  /* Notify-me form (early bird waitlist) */
+  .notify-form { margin-top: 8px; }
+  .notify-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px;
+  }
+  .notify-copy {
+    font-size: 12px; color: rgba(26,26,26,0.55); line-height: 1.6;
+    max-width: 260px; margin: 0 auto 16px;
+  }
+  .notify-input {
+    display: block; width: 100%; box-sizing: border-box;
+    padding: 12px 16px; margin-bottom: 10px;
+    border: 1px solid rgba(26,26,26,0.18); border-radius: 10px;
+    font-size: 13px; font-family: inherit; color: #1a1a1a;
+    background: #fff; transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .notify-input:focus {
+    outline: none; border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(200,146,10,0.15);
+  }
+  button.notify-submit {
+    width: 100%; border: none; margin-top: 4px;
+  }
+  button.notify-submit:disabled { opacity: 0.6; cursor: default; transform: none; box-shadow: none; }
+  .notify-status {
+    font-size: 12px; margin-top: 12px; min-height: 16px; line-height: 1.5;
+  }
+  .notify-status.success { color: #2e7d32; }
+  .notify-status.error { color: #c0392b; }
+
   /* ── Checkout modal ── */
   .checkout-overlay {
     position: fixed; inset: 0; z-index: 1000;
@@ -518,11 +549,23 @@
     <h2>Tickets &amp; Sponsorship</h2>
     <div class="ticket-tiers">
       <div class="ticket-card">
-        <div class="ticket-badge">Limited Time</div>
+        <div class="ticket-badge">Coming Soon</div>
         <div class="ticket-tier">Early Bird</div>
         <div class="ticket-price">$275</div>
         <div class="ticket-desc">Per guest &middot; Black tie evening of dinner, celebration &amp; purpose</div>
+
+        <!-- Purchase flow hidden until tickets go live.
         <button type="button" class="ticket-cta" id="buyEarlyBird" data-tier="Early Bird" data-price="275">Purchase Ticket</button>
+        -->
+
+        <form class="notify-form" id="notifyForm" novalidate>
+          <p class="notify-heading">Get the early bird link first</p>
+          <p class="notify-copy">Leave your email or phone and we&rsquo;ll send you the purchase link the moment tickets are available.</p>
+          <input type="email" id="notifyEmail" class="notify-input" placeholder="Email address" autocomplete="email" />
+          <input type="tel" id="notifyPhone" class="notify-input" placeholder="Phone (optional)" autocomplete="tel" />
+          <button type="submit" class="ticket-cta notify-submit" id="notifySubmit">Notify Me</button>
+          <p class="notify-status" id="notifyStatus" role="status" aria-live="polite"></p>
+        </form>
       </div>
     </div>
     <div class="draft-placeholder" style="margin-top: 24px;">Draft: additional ticket tiers, sponsorship packages, and purchase/RSVP links go here.</div>
@@ -626,7 +669,7 @@ const CHECKOUT_CONFIG = {
   // Requires a tiny serverless endpoint that creates a Checkout Session
   // and returns its clientSecret. See setup notes.
   stripePublishableKey: 'YOUR_STRIPE_PUBLISHABLE_KEY',   // pk_live_...
-  stripeSessionEndpoint: '/api/create-checkout-session', // your serverless function URL
+  stripeSessionEndpoint: 'https://gala-checkout.achievemoore.workers.dev/api/create-checkout-session',
 
   // --- PayPal (Smart Buttons, no backend required) ---
   paypalClientId: 'YOUR_PAYPAL_CLIENT_ID',
@@ -634,7 +677,11 @@ const CHECKOUT_CONFIG = {
   // --- Ticket ---
   amount: '275.00',
   currency: 'USD',
-  itemName: 'Hands of Time Gala — Early Bird Ticket'
+  itemName: 'Hands of Time Gala — Early Bird Ticket',
+
+  // --- Early-bird waitlist (notify-me form) ---
+  // Your Cloudflare Worker URL + /api/notify
+  notifyEndpoint: 'https://gala-checkout.achievemoore.workers.dev/api/notify'
 };
 
 const checkoutOverlay = document.getElementById('checkoutOverlay');
@@ -662,7 +709,7 @@ function showConfirmation(message) {
   checkoutModal.classList.add('confirmed');
 }
 
-document.getElementById('buyEarlyBird').addEventListener('click', openCheckout);
+document.getElementById('buyEarlyBird')?.addEventListener('click', openCheckout);
 checkoutClose.addEventListener('click', closeCheckout);
 confirmDone.addEventListener('click', closeCheckout);
 checkoutOverlay.addEventListener('click', (e) => {
@@ -716,6 +763,55 @@ function initPayPal() {
         : undefined);
     })
   }).render('#paypalMount');
+}
+
+// ─────────────────────────────────────────────────────────────
+// EARLY-BIRD WAITLIST (notify-me form)
+// ─────────────────────────────────────────────────────────────
+const notifyForm = document.getElementById('notifyForm');
+if (notifyForm) {
+  const emailEl = document.getElementById('notifyEmail');
+  const phoneEl = document.getElementById('notifyPhone');
+  const statusEl = document.getElementById('notifyStatus');
+  const submitEl = document.getElementById('notifySubmit');
+
+  function setStatus(msg, type) {
+    statusEl.textContent = msg;
+    statusEl.className = 'notify-status' + (type ? ' ' + type : '');
+  }
+
+  notifyForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = emailEl.value.trim();
+    const phone = phoneEl.value.trim();
+
+    if (!email && !phone) {
+      setStatus('Please enter an email or phone number.', 'error');
+      return;
+    }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setStatus('Please enter a valid email address.', 'error');
+      return;
+    }
+
+    submitEl.disabled = true;
+    setStatus('Adding you to the list…', '');
+
+    try {
+      const res = await fetch(CHECKOUT_CONFIG.notifyEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, phone, source: 'gala-early-bird' })
+      });
+      if (!res.ok) throw new Error('Request failed');
+      notifyForm.reset();
+      setStatus('You\u2019re on the list! We\u2019ll send your early bird link as soon as tickets go live.', 'success');
+    } catch (err) {
+      setStatus('Something went wrong. Please try again in a moment.', 'error');
+    } finally {
+      submitEl.disabled = false;
+    }
+  });
 }
 </script>
 

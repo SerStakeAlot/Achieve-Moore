@@ -7,6 +7,7 @@
  *
  * Endpoints:
  *   POST /api/create-checkout-session  -> { clientSecret }
+ *   POST /api/notify                   -> { ok: true }   (early-bird waitlist)
  *   GET  /health                       -> "ok"
  */
 
@@ -30,6 +31,10 @@ export default {
 
     if (request.method === 'POST' && url.pathname === '/api/create-checkout-session') {
       return createSession(env, cors);
+    }
+
+    if (request.method === 'POST' && url.pathname === '/api/notify') {
+      return addToWaitlist(request, env, cors);
     }
 
     return json({ error: 'Not found' }, 404, cors);
@@ -71,6 +76,45 @@ async function createSession(env, cors) {
   }
 
   return json({ clientSecret: data.client_secret }, 200, cors);
+}
+
+async function addToWaitlist(request, env, cors) {
+  if (!env.DB) {
+    return json({ error: 'Waitlist storage not configured' }, 500, cors);
+  }
+
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return json({ error: 'Invalid request' }, 400, cors);
+  }
+
+  const email = (body.email || '').toString().trim().toLowerCase();
+  const phone = (body.phone || '').toString().trim();
+  const source = (body.source || 'gala-early-bird').toString().slice(0, 64);
+
+  if (!email && !phone) {
+    return json({ error: 'Email or phone is required' }, 400, cors);
+  }
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return json({ error: 'Invalid email address' }, 400, cors);
+  }
+  if (email.length > 254 || phone.length > 32) {
+    return json({ error: 'Input too long' }, 400, cors);
+  }
+
+  try {
+    await env.DB.prepare(
+      `INSERT INTO waitlist (email, phone, source, created_at)
+       VALUES (?, ?, ?, ?)
+       ON CONFLICT(email) DO UPDATE SET phone = excluded.phone`
+    ).bind(email || null, phone || null, source, new Date().toISOString()).run();
+  } catch (err) {
+    return json({ error: 'Could not save. Please try again.' }, 500, cors);
+  }
+
+  return json({ ok: true }, 200, cors);
 }
 
 function corsHeaders(origin, env) {
