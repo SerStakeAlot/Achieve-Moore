@@ -636,6 +636,10 @@ const CHECKOUT_CONFIG = {
   // --- PayPal (Smart Buttons, no backend required) ---
   paypalClientId: 'YOUR_PAYPAL_CLIENT_ID',
 
+  // PayPal payment link — used as a fallback while the client ID
+  // above is not yet configured.
+  paypalPaymentLink: 'https://www.paypal.com/ncp/payment/5CVEMUYASSJTU',
+
   // --- Ticket ---
   amount: '275.00',
   currency: 'USD',
@@ -716,10 +720,25 @@ function initStripe() {
 }
 
 // ── PayPal Smart Buttons ──
+function paypalFallbackLink() {
+  // Shown only if PayPal Smart Buttons aren't configured yet.
+  const mount = document.getElementById('paypalMount');
+  mount.innerHTML = '';
+  const a = document.createElement('a');
+  a.className = 'ticket-cta';
+  a.href = CHECKOUT_CONFIG.paypalPaymentLink;
+  a.target = '_blank';
+  a.rel = 'noopener';
+  a.textContent = 'Pay with PayPal';
+  mount.appendChild(a);
+}
+
 function initPayPal() {
   if (paypalRendered) return;
-  if (CHECKOUT_CONFIG.paypalClientId.startsWith('YOUR_')) return; // placeholder — skip
-  if (typeof paypal === 'undefined') return;
+  if (CHECKOUT_CONFIG.paypalClientId.startsWith('YOUR_') || typeof paypal === 'undefined') {
+    paypalFallbackLink();
+    return;
+  }
   paypalRendered = true;
 
   document.getElementById('paypalMount').innerHTML = '';
