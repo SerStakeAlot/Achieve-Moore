@@ -150,6 +150,17 @@
     max-width: 680px; margin: 0 auto 16px;
   }
 
+  /* Placeholder card for drafting */
+  .draft-placeholder {
+    border: 1.5px dashed rgba(200,146,10,0.4);
+    border-radius: 12px;
+    padding: 48px 32px;
+    color: rgba(26,26,26,0.35);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    background: rgba(245,243,240,0.4);
+  }
+
   /* Detail chips (date / venue / attire) */
   .gala-details {
     display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
@@ -233,37 +244,7 @@
     box-shadow: 0 8px 22px rgba(200,146,10,0.35);
   }
 
-  /* Notify-me form (early bird waitlist) */
   #tickets { scroll-margin-top: 90px; }
-  .notify-form { margin-top: 8px; }
-  .notify-heading {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 6px;
-  }
-  .notify-copy {
-    font-size: 12px; color: rgba(26,26,26,0.55); line-height: 1.6;
-    max-width: 260px; margin: 0 auto 16px;
-  }
-  .notify-input {
-    display: block; width: 100%; box-sizing: border-box;
-    padding: 12px 16px; margin-bottom: 10px;
-    border: 1px solid rgba(26,26,26,0.18); border-radius: 10px;
-    font-size: 13px; font-family: inherit; color: #1a1a1a;
-    background: #fff; transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .notify-input:focus {
-    outline: none; border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(200,146,10,0.15);
-  }
-  button.notify-submit {
-    width: 100%; border: none; margin-top: 4px;
-  }
-  button.notify-submit:disabled { opacity: 0.6; cursor: default; transform: none; box-shadow: none; }
-  .notify-status {
-    font-size: 12px; margin-top: 12px; min-height: 16px; line-height: 1.5;
-  }
-  .notify-status.success { color: #2e7d32; }
-  .notify-status.error { color: #c0392b; }
 
   /* ── Checkout modal ── */
   .checkout-overlay {
@@ -477,7 +458,7 @@
   <div class="gold-divider"></div>
 </section>
 
-<!-- GALA CONTENT -->
+<!-- GALA CONTENT (SHELL — draft sections below) -->
 <section class="gala-section">
 
   <!-- ABOUT THE GALA -->
@@ -529,7 +510,7 @@
     <p class="section-label">The Honorees</p>
     <div class="gold-divider" style="margin-bottom: 18px;"></div>
     <h2>Pushing the Hands of Time Forward</h2>
-    <p><strong>Announcement Coming Soon</strong></p>
+    <div class="draft-placeholder">Draft: honoree names, photos, and award categories go here.</div>
   </div>
 
   <!-- TICKETS & SPONSORSHIP -->
@@ -539,25 +520,14 @@
     <h2>Tickets &amp; Sponsorship</h2>
     <div class="ticket-tiers">
       <div class="ticket-card">
-        <div class="ticket-badge">Coming Soon</div>
+        <div class="ticket-badge">On Sale Now</div>
         <div class="ticket-tier">Early Bird</div>
+        <div class="ticket-price">$275</div>
         <div class="ticket-desc">Per guest &middot; Black tie evening of dinner, celebration &amp; purpose</div>
-
-        <!-- Purchase flow hidden until tickets go live.
         <button type="button" class="ticket-cta" id="buyEarlyBird" data-tier="Early Bird" data-price="275">Purchase Ticket</button>
-        -->
-
-        <form class="notify-form" id="notifyForm" novalidate>
-          <p class="notify-heading">Get the early bird link first</p>
-          <p class="notify-copy">Leave your name and email or phone and we&rsquo;ll send you the purchase link the moment tickets are available.</p>
-          <input type="text" id="notifyName" class="notify-input" placeholder="Full name" autocomplete="name" />
-          <input type="email" id="notifyEmail" class="notify-input" placeholder="Email address" autocomplete="email" />
-          <input type="tel" id="notifyPhone" class="notify-input" placeholder="Phone (optional)" autocomplete="tel" />
-          <button type="submit" class="ticket-cta notify-submit" id="notifySubmit">Notify Me</button>
-          <p class="notify-status" id="notifyStatus" role="status" aria-live="polite"></p>
-        </form>
       </div>
     </div>
+    <div class="draft-placeholder" style="margin-top: 24px;">Draft: additional ticket tiers, sponsorship packages, and purchase/RSVP links go here.</div>
   </div>
 
 </section>
@@ -576,14 +546,14 @@
 
       <!-- Stripe (Apple Pay / Google Pay / cards) mounts here -->
       <div class="pay-mount" id="stripeMount">
-        <div class="pay-placeholder">Stripe checkout (Apple&nbsp;Pay, Google&nbsp;Pay &amp; cards) will appear here once keys are added.</div>
+        <div class="pay-placeholder">Loading secure checkout…</div>
       </div>
 
       <div class="pay-divider">or</div>
 
       <!-- PayPal Smart Buttons mount here -->
       <div class="pay-mount" id="paypalMount">
-        <div class="pay-placeholder">PayPal button will appear here once the client ID is added.</div>
+        <div class="pay-placeholder">PayPal — coming soon.</div>
       </div>
 
       <p class="pay-note">Secure checkout. You will receive an email receipt. Tickets are non-refundable.</p>
@@ -594,7 +564,7 @@
       <div class="confirm-check">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
       </div>
-      <p class="checkout-label">You're on the list</p>
+      <p class="checkout-label">Payment Received</p>
       <h3 class="checkout-title">See You December 5th</h3>
       <p class="checkout-sub" id="confirmMsg">Thank you for supporting Achieve M.O.O.R.E. A confirmation and receipt are on their way to your email.</p>
       <button type="button" class="confirm-cta" id="confirmDone">Done</button>
@@ -619,11 +589,10 @@
   <p class="footer-bottom">&copy; 2016 Achieve M.O.O.R.E &mdash; <a href="#">Terms and Conditions</a></p>
 </footer>
 
+<!-- Stripe.js — enables embedded checkout (Apple Pay / Google Pay / cards) -->
+<script src="https://js.stripe.com/v3/"></script>
 <!--
-  PAYMENT SDKs \u2014 uncomment when going live and after filling in CHECKOUT_CONFIG below.
-  Stripe (Apple Pay / Google Pay / cards):
-    <script src="https://js.stripe.com/v3/"></script>
-  PayPal (replace YOUR_PAYPAL_CLIENT_ID with your live client ID):
+  PayPal SDK — uncomment when the PayPal client ID is added to CHECKOUT_CONFIG below:
     <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
 -->
 
@@ -660,17 +629,17 @@ const CHECKOUT_CONFIG = {
   stripePublishableKey: 'YOUR_STRIPE_PUBLISHABLE_KEY',   // pk_live_...
   stripeSessionEndpoint: 'https://gala-checkout.achievemoore.workers.dev/api/create-checkout-session',
 
+  // Stripe Payment Link — used as a fallback while the embedded checkout
+  // keys above are not yet configured.
+  stripePaymentLink: 'https://buy.stripe.com/bJe00jcN0clAflQ5dr2kw00',
+
   // --- PayPal (Smart Buttons, no backend required) ---
   paypalClientId: 'YOUR_PAYPAL_CLIENT_ID',
 
   // --- Ticket ---
   amount: '275.00',
   currency: 'USD',
-  itemName: 'Hands of Time Gala — Early Bird Ticket',
-
-  // --- Early-bird waitlist (notify-me form) ---
-  // Your Cloudflare Worker URL + /api/notify
-  notifyEndpoint: 'https://gala-checkout.achievemoore.workers.dev/api/notify'
+  itemName: 'Hands of Time Gala — Early Bird Ticket'
 };
 
 const checkoutOverlay = document.getElementById('checkoutOverlay');
@@ -709,16 +678,32 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ── Stripe Embedded Checkout ──
+function stripeFallbackLink() {
+  // Shown only if embedded checkout isn't configured/reachable yet.
+  const mount = document.getElementById('stripeMount');
+  mount.innerHTML = '';
+  const a = document.createElement('a');
+  a.className = 'ticket-cta';
+  a.href = CHECKOUT_CONFIG.stripePaymentLink;
+  a.target = '_blank';
+  a.rel = 'noopener';
+  a.textContent = 'Pay with Card \u2014 Secure Stripe Checkout';
+  mount.appendChild(a);
+}
+
 function initStripe() {
   if (stripeInitialized) return;
-  if (CHECKOUT_CONFIG.stripePublishableKey.startsWith('YOUR_')) return; // placeholder — skip
-  if (typeof Stripe === 'undefined') return;
+  if (CHECKOUT_CONFIG.stripePublishableKey.startsWith('YOUR_') || typeof Stripe === 'undefined') {
+    stripeFallbackLink();
+    return;
+  }
   stripeInitialized = true;
 
   const stripe = Stripe(CHECKOUT_CONFIG.stripePublishableKey);
   fetch(CHECKOUT_CONFIG.stripeSessionEndpoint, { method: 'POST' })
     .then(r => r.json())
     .then(({ clientSecret }) => {
+      if (!clientSecret) throw new Error('No client secret');
       stripe.initEmbeddedCheckout({
         clientSecret,
         onComplete: () => showConfirmation()
@@ -727,7 +712,7 @@ function initStripe() {
         checkout.mount('#stripeMount');
       });
     })
-    .catch(() => {/* leave placeholder visible */});
+    .catch(() => stripeFallbackLink());
 }
 
 // ── PayPal Smart Buttons ──
@@ -754,62 +739,8 @@ function initPayPal() {
   }).render('#paypalMount');
 }
 
-// ─────────────────────────────────────────────────────────────
-// EARLY-BIRD WAITLIST (notify-me form)
-// ─────────────────────────────────────────────────────────────
-const notifyForm = document.getElementById('notifyForm');
-if (notifyForm) {
-  const nameEl = document.getElementById('notifyName');
-  const emailEl = document.getElementById('notifyEmail');
-  const phoneEl = document.getElementById('notifyPhone');
-  const statusEl = document.getElementById('notifyStatus');
-  const submitEl = document.getElementById('notifySubmit');
-
-  function setStatus(msg, type) {
-    statusEl.textContent = msg;
-    statusEl.className = 'notify-status' + (type ? ' ' + type : '');
-  }
-
-  notifyForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const name = nameEl.value.trim();
-    const email = emailEl.value.trim();
-    const phone = phoneEl.value.trim();
-    if (!name) {
-      setStatus('Please enter your name.', 'error');
-      return;
-    }
-    if (!email && !phone) {
-      setStatus('Please enter an email or phone number.', 'error');
-      return;
-    }
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setStatus('Please enter a valid email address.', 'error');
-      return;
-    }
-
-    submitEl.disabled = true;
-    setStatus('Adding you to the list…', '');
-
-    try {
-      const res = await fetch(CHECKOUT_CONFIG.notifyEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, phone, source: 'gala-early-bird' })
-      });
-      if (!res.ok) throw new Error('Request failed');
-      notifyForm.reset();
-      setStatus('You\u2019re on the list! We\u2019ll send your early bird link as soon as tickets go live.', 'success');
-    } catch (err) {
-      setStatus('Something went wrong. Please try again in a moment.', 'error');
-    } finally {
-      submitEl.disabled = false;
-    }
-  });
-}
-
 // Re-scroll to #tickets after images/map load shift the layout
-// (fixes newsletter links landing above the signup form).
+// (fixes newsletter links landing above the ticket card).
 if (location.hash === '#tickets') {
   window.addEventListener('load', () => {
     setTimeout(() => {
