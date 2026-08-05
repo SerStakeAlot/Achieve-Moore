@@ -524,52 +524,12 @@
         <div class="ticket-tier">Early Bird</div>
         <div class="ticket-price">$275</div>
         <div class="ticket-desc">Per guest &middot; Black tie evening of dinner, celebration &amp; purpose</div>
-        <button type="button" class="ticket-cta" id="buyEarlyBird" data-tier="Early Bird" data-price="275">Purchase Ticket</button>
+        <a href="https://www.paypal.com/ncp/payment/5CVEMUYASSJTU" target="_blank" rel="noopener" class="ticket-cta ticket-cta-solid">Purchase Ticket</a>
       </div>
     </div>
   </div>
 
 </section>
-
-<!-- CHECKOUT MODAL (placeholder — see config in script below) -->
-<div class="checkout-overlay" id="checkoutOverlay" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
-  <div class="checkout-modal" id="checkoutModal">
-    <button type="button" class="checkout-close" id="checkoutClose" aria-label="Close">&times;</button>
-
-    <!-- Payment view -->
-    <div class="checkout-pay">
-      <p class="checkout-label">Hands of Time Gala</p>
-      <h3 class="checkout-title" id="checkoutTitle">Early Bird Ticket</h3>
-      <p class="checkout-sub">December 5, 2026 &middot; Black Tie</p>
-      <div class="checkout-amount" id="checkoutAmount">$275</div>
-
-      <!-- Stripe (Apple Pay / Google Pay / cards) mounts here -->
-      <div class="pay-mount" id="stripeMount">
-        <div class="pay-placeholder">Loading secure checkout…</div>
-      </div>
-
-      <div class="pay-divider">or</div>
-
-      <!-- PayPal Smart Buttons mount here -->
-      <div class="pay-mount" id="paypalMount">
-        <div class="pay-placeholder">PayPal — coming soon.</div>
-      </div>
-
-      <p class="pay-note">Secure checkout. You will receive an email receipt. Tickets are non-refundable.</p>
-    </div>
-
-    <!-- Confirmation view -->
-    <div class="checkout-confirm">
-      <div class="confirm-check">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-      </div>
-      <p class="checkout-label">Payment Received</p>
-      <h3 class="checkout-title">See You December 5th</h3>
-      <p class="checkout-sub" id="confirmMsg">Thank you for supporting Achieve M.O.O.R.E. A confirmation and receipt are on their way to your email.</p>
-      <button type="button" class="confirm-cta" id="confirmDone">Done</button>
-    </div>
-  </div>
-</div>
 
 <!-- FOOTER -->
 <footer>
@@ -587,13 +547,6 @@
   <p class="footer-nonprofit">Achieve M.O.O.R.E Foundation INC. 501(c)(3) Non Profit Organization</p>
   <p class="footer-bottom">&copy; 2016 Achieve M.O.O.R.E &mdash; <a href="#">Terms and Conditions</a></p>
 </footer>
-
-<!-- Stripe.js — enables embedded checkout (Apple Pay / Google Pay / cards) -->
-<script src="https://js.stripe.com/v3/"></script>
-<!--
-  PayPal SDK — uncomment when the PayPal client ID is added to CHECKOUT_CONFIG below:
-    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
--->
 
 <script>
 // Hamburger menu toggle
@@ -616,146 +569,6 @@ navLinks.querySelectorAll('a').forEach(link => {
     if (navLinks.classList.contains('open')) toggleMenu();
   });
 });
-
-// ─────────────────────────────────────────────────────────────
-// GALA TICKET CHECKOUT
-// ─────────────────────────────────────────────────────────────
-// Fill these in to go live. Leave as-is to keep placeholders.
-const CHECKOUT_CONFIG = {
-  // --- Stripe (supports Apple Pay & Google Pay automatically) ---
-  // Requires a tiny serverless endpoint that creates a Checkout Session
-  // and returns its clientSecret. See setup notes.
-  stripePublishableKey: 'YOUR_STRIPE_PUBLISHABLE_KEY',   // pk_live_...
-  stripeSessionEndpoint: 'https://gala-checkout.achievemoore.workers.dev/api/create-checkout-session',
-
-  // Stripe Payment Link — used as a fallback while the embedded checkout
-  // keys above are not yet configured.
-  stripePaymentLink: 'https://buy.stripe.com/bJe00jcN0clAflQ5dr2kw00',
-
-  // --- PayPal (Smart Buttons, no backend required) ---
-  paypalClientId: 'YOUR_PAYPAL_CLIENT_ID',
-
-  // PayPal payment link — used as a fallback while the client ID
-  // above is not yet configured.
-  paypalPaymentLink: 'https://www.paypal.com/ncp/payment/5CVEMUYASSJTU',
-
-  // --- Ticket ---
-  amount: '275.00',
-  currency: 'USD',
-  itemName: 'Hands of Time Gala — Early Bird Ticket'
-};
-
-const checkoutOverlay = document.getElementById('checkoutOverlay');
-const checkoutModal = document.getElementById('checkoutModal');
-const checkoutClose = document.getElementById('checkoutClose');
-const confirmDone = document.getElementById('confirmDone');
-let paypalRendered = false;
-let stripeInitialized = false;
-
-function openCheckout() {
-  checkoutModal.classList.remove('confirmed');
-  checkoutOverlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
-  initStripe();
-  initPayPal();
-}
-
-function closeCheckout() {
-  checkoutOverlay.classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function showConfirmation(message) {
-  if (message) document.getElementById('confirmMsg').textContent = message;
-  checkoutModal.classList.add('confirmed');
-}
-
-document.getElementById('buyEarlyBird')?.addEventListener('click', openCheckout);
-checkoutClose.addEventListener('click', closeCheckout);
-confirmDone.addEventListener('click', closeCheckout);
-checkoutOverlay.addEventListener('click', (e) => {
-  if (e.target === checkoutOverlay) closeCheckout();
-});
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && checkoutOverlay.classList.contains('open')) closeCheckout();
-});
-
-// ── Stripe Embedded Checkout ──
-function stripeFallbackLink() {
-  // Shown only if embedded checkout isn't configured/reachable yet.
-  const mount = document.getElementById('stripeMount');
-  mount.innerHTML = '';
-  const a = document.createElement('a');
-  a.className = 'ticket-cta';
-  a.href = CHECKOUT_CONFIG.stripePaymentLink;
-  a.target = '_blank';
-  a.rel = 'noopener';
-  a.textContent = 'Pay with Card \u2014 Secure Stripe Checkout';
-  mount.appendChild(a);
-}
-
-function initStripe() {
-  if (stripeInitialized) return;
-  if (CHECKOUT_CONFIG.stripePublishableKey.startsWith('YOUR_') || typeof Stripe === 'undefined') {
-    stripeFallbackLink();
-    return;
-  }
-  stripeInitialized = true;
-
-  const stripe = Stripe(CHECKOUT_CONFIG.stripePublishableKey);
-  fetch(CHECKOUT_CONFIG.stripeSessionEndpoint, { method: 'POST' })
-    .then(r => r.json())
-    .then(({ clientSecret }) => {
-      if (!clientSecret) throw new Error('No client secret');
-      stripe.initEmbeddedCheckout({
-        clientSecret,
-        onComplete: () => showConfirmation()
-      }).then(checkout => {
-        document.getElementById('stripeMount').innerHTML = '';
-        checkout.mount('#stripeMount');
-      });
-    })
-    .catch(() => stripeFallbackLink());
-}
-
-// ── PayPal Smart Buttons ──
-function paypalFallbackLink() {
-  // Shown only if PayPal Smart Buttons aren't configured yet.
-  const mount = document.getElementById('paypalMount');
-  mount.innerHTML = '';
-  const a = document.createElement('a');
-  a.className = 'ticket-cta';
-  a.href = CHECKOUT_CONFIG.paypalPaymentLink;
-  a.target = '_blank';
-  a.rel = 'noopener';
-  a.textContent = 'Pay with PayPal';
-  mount.appendChild(a);
-}
-
-function initPayPal() {
-  if (paypalRendered) return;
-  if (CHECKOUT_CONFIG.paypalClientId.startsWith('YOUR_') || typeof paypal === 'undefined') {
-    paypalFallbackLink();
-    return;
-  }
-  paypalRendered = true;
-
-  document.getElementById('paypalMount').innerHTML = '';
-  paypal.Buttons({
-    createOrder: (data, actions) => actions.order.create({
-      purchase_units: [{
-        description: CHECKOUT_CONFIG.itemName,
-        amount: { value: CHECKOUT_CONFIG.amount, currency_code: CHECKOUT_CONFIG.currency }
-      }]
-    }),
-    onApprove: (data, actions) => actions.order.capture().then((details) => {
-      const name = details?.payer?.name?.given_name;
-      showConfirmation(name
-        ? `Thank you, ${name}! A confirmation and receipt are on their way to your email.`
-        : undefined);
-    })
-  }).render('#paypalMount');
-}
 
 // Re-scroll to #tickets after images/map load shift the layout
 // (fixes newsletter links landing above the ticket card).
