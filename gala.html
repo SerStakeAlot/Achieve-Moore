@@ -161,6 +161,66 @@
     background: rgba(245,243,240,0.4);
   }
 
+  /* Honoree reveal teaser */
+  .honoree-tease {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(200,146,10,0.35);
+    border-radius: 14px;
+    padding: 64px 32px 58px;
+    background: linear-gradient(135deg, rgba(245,243,240,0.85), #ffffff 45%, rgba(245,243,240,0.85));
+    box-shadow: 0 14px 40px rgba(0,0,0,0.08);
+  }
+  .honoree-tease::before {
+    content: '';
+    position: absolute; top: 0; left: -60%;
+    width: 45%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(200,146,10,0.10), transparent);
+    transform: skewX(-12deg);
+    animation: teaseSweep 3.6s ease-in-out infinite;
+  }
+  @keyframes teaseSweep {
+    0%   { left: -60%; }
+    60%  { left: 130%; }
+    100% { left: 130%; }
+  }
+  .tease-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.42em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
+  }
+  .tease-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 6vw, 54px); font-weight: 700; line-height: 1.1;
+    background: linear-gradient(90deg, #1a1a1a 20%, var(--gold) 50%, #1a1a1a 80%);
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    animation: teaseShimmer 5s linear infinite;
+    margin-bottom: 18px;
+  }
+  @keyframes teaseShimmer {
+    to { background-position: -200% center; }
+  }
+  .tease-dots {
+    display: flex; justify-content: center; gap: 10px; margin-bottom: 22px;
+  }
+  .tease-dots span {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--gold); opacity: 0.25;
+    animation: teasePulse 1.8s ease-in-out infinite;
+  }
+  .tease-dots span:nth-child(2) { animation-delay: 0.3s; }
+  .tease-dots span:nth-child(3) { animation-delay: 0.6s; }
+  @keyframes teasePulse {
+    0%, 100% { opacity: 0.25; transform: scale(1); }
+    50%      { opacity: 1; transform: scale(1.35); }
+  }
+  .tease-copy {
+    font-size: 13px; line-height: 1.8; font-weight: 300;
+    color: rgba(26,26,26,0.6); letter-spacing: 0.04em;
+    max-width: 480px; margin: 0 auto;
+  }
+
   /* Detail chips (date / venue / attire) */
   .gala-details {
     display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
@@ -510,7 +570,12 @@
     <p class="section-label">The Honorees</p>
     <div class="gold-divider" style="margin-bottom: 18px;"></div>
     <h2>Pushing the Hands of Time Forward</h2>
-    <div class="draft-placeholder">Announcement Coming Soon</div>
+    <div class="honoree-tease">
+      <p class="tease-label">December 5, 2026</p>
+      <p class="tease-title">To Be Revealed</p>
+      <div class="tease-dots"><span></span><span></span><span></span></div>
+      <p class="tease-copy">The hands of time are moving. This year&rsquo;s honorees will be announced soon &mdash; history-makers, legacy-leavers, and future-keepers whose names you may already know.</p>
+    </div>
   </div>
 
   <!-- TICKETS & SPONSORSHIP -->
@@ -538,7 +603,7 @@
   </div>
   <p class="footer-tagline">The goal is not only to succeed, but as you succeed, bring others with you.</p>
   <div class="footer-ctas">
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSf6DUo-dIDM3EpcW2LyW-TEszDbcYLiQFBkntuP0aQCl1yglQ/viewform" target="_blank" class="footer-btn">Global Network</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSf6DUo-dIDM3EpcW2LyW-TEszDbcYLiQFBkntuP0aQCl1yglQ/viewform" target="_blank" class="footer-btn">A.M News</a>
   </div>
   <div class="footer-social">
     <a href="https://www.instagram.com/achievemoore/" target="_blank">Instagram</a>
