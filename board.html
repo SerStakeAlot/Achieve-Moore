@@ -461,7 +461,18 @@
     .tree-connector, .branch-vertical { height: 28px; }
 
     /* Bio popup: fixed & centered, translucent so the card shows through */
+    /* Clear the card's transform/animation while open — an ancestor transform
+       would make position:fixed anchor to the card and push the bio off-screen */
+    .member-card:hover,
+    .member-card.bio-open,
+    .member-card.bio-open:hover {
+      animation: none;
+      transition: none;
+      transform: none;
+      opacity: 1;
+    }
     .member-bio {
+      display: none;
       position: fixed;
       top: 50%; left: 50%; bottom: auto;
       transform: translate(-50%, -50%) translateY(8px);
@@ -478,6 +489,7 @@
     .member-card:hover .member-bio,
     .member-card.bio-open .member-bio,
     .member-card:focus-visible .member-bio {
+      display: block;
       transform: translate(-50%, -50%);
       pointer-events: auto;
     }
