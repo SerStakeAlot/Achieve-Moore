@@ -59,6 +59,9 @@ async function createSession(env, cors) {
   form.set('line_items[0][price_data][currency]', currency);
   form.set('line_items[0][price_data][unit_amount]', amount);
   form.set('line_items[0][price_data][product_data][name]', name);
+  // Auto-generate an invoice (uses the account's default invoice template)
+  // and email it to the buyer if "successful payments" emails are enabled.
+  form.set('invoice_creation[enabled]', 'true');
 
   const resp = await fetch(STRIPE_API, {
     method: 'POST',
