@@ -304,6 +304,44 @@
     box-shadow: 0 8px 22px rgba(200,146,10,0.35);
   }
 
+  .ticket-deadline {
+    margin-top: 18px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--maroon);
+  }
+
+  /* Goal hourglass */
+  .goal-wrap {
+    display: flex; align-items: center; justify-content: center;
+    gap: 56px; flex-wrap: wrap; margin-top: 10px;
+  }
+  #hourglass { width: 260px; height: 380px; }
+  .goal-stats { text-align: left; max-width: 320px; }
+  .goal-raised {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 62px; font-weight: 700; color: var(--gold); line-height: 1;
+  }
+  .goal-of { font-size: 15px; font-weight: 300; color: rgba(26,26,26,0.7); margin: 6px 0 22px; }
+  .goal-of strong { font-weight: 600; color: #1a1a1a; }
+  .goal-meter {
+    height: 6px; border-radius: 999px; background: rgba(200,146,10,0.14);
+    overflow: hidden; margin-bottom: 10px;
+  }
+  .goal-meter span {
+    display: block; height: 100%; width: 0;
+    background: linear-gradient(90deg, var(--gold), #f0c028);
+    border-radius: 999px;
+  }
+  .goal-pct {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: rgba(200,146,10,0.85); margin-bottom: 18px;
+  }
+  .goal-note { font-size: 12.5px; font-weight: 300; color: rgba(26,26,26,0.5); line-height: 1.7; }
+  @media (max-width: 640px) {
+    .goal-wrap { gap: 30px; }
+    .goal-stats { text-align: center; }
+  }
+
   #tickets { scroll-margin-top: 90px; }
 
   /* ── Checkout modal ── */
@@ -414,12 +452,13 @@
   }
   .footer-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
   .footer-btn {
-    background: transparent; border: 1px solid rgba(26,26,26,0.2);
-    color: rgba(26,26,26,0.6); padding: 11px 28px; font-size: 10px;
-    font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
-    text-decoration: none; border-radius: 999px; transition: all 0.25s;
+    background: rgba(255,255,255,0.9); border: 1px solid rgba(200,146,10,0.45);
+    color: rgba(200,146,10,0.75); padding: 9px 22px; font-size: 13px;
+    font-weight: 700; letter-spacing: 0.1em;
+    text-decoration: none; border-radius: 999px;
+    transition: border-color 0.25s, box-shadow 0.25s, color 0.25s;
   }
-  .footer-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .footer-btn:hover { border-color: var(--gold); color: var(--gold); box-shadow: 0 4px 14px rgba(200,146,10,0.25); }
   .footer-social { display: flex; gap: 22px; justify-content: center; margin-bottom: 28px; }
   .footer-social a {
     color: rgba(26,26,26,0.45); text-decoration: none; font-size: 13px;
@@ -578,6 +617,24 @@
     </div>
   </div>
 
+  <!-- GOAL HOURGLASS -->
+  <div class="gala-block" id="goal">
+    <p class="section-label">The Goal</p>
+    <div class="gold-divider" style="margin-bottom: 18px;"></div>
+    <h2>Every Grain Counts</h2>
+    <p>This year&rsquo;s gala aims to raise <strong>$100,000</strong> for scholarships. Every ticket purchased and every donation drops more sand through the glass &mdash; watch the bottom fill as we close in on the goal.</p>
+    <div class="goal-wrap">
+      <canvas id="hourglass" aria-label="Hourglass showing $825 raised of the $100,000 goal"></canvas>
+      <div class="goal-stats">
+        <div class="goal-raised" id="goalRaised">$0</div>
+        <div class="goal-of">raised of our <strong>$100,000</strong> goal</div>
+        <div class="goal-meter"><span id="goalMeter"></span></div>
+        <div class="goal-pct" id="goalPct">0% of the way</div>
+        <div class="goal-note">3 Early Bird tickets purchased so far. Every ticket and every donation adds sand to the glass.</div>
+      </div>
+    </div>
+  </div>
+
   <!-- TICKETS & SPONSORSHIP -->
   <div class="gala-block" id="tickets">
     <p class="section-label">Join Us</p>
@@ -585,11 +642,12 @@
     <h2>Tickets &amp; Sponsorship</h2>
     <div class="ticket-tiers">
       <div class="ticket-card">
-        <div class="ticket-badge">On Sale Now</div>
+        <div class="ticket-badge">On Sale Now &mdash; Ends Sept 5</div>
         <div class="ticket-tier">Early Bird</div>
         <div class="ticket-price">$275</div>
         <div class="ticket-desc">Per Guest &bull; An elegant black-tie evening of fine dining, celebration, and fundraising in support of scholarships for the next generation of leaders.</div>
         <a href="https://buy.stripe.com/bJe00jcN0clAflQ5dr2kw00" target="_blank" rel="noopener" class="ticket-cta ticket-cta-solid">Purchase Ticket</a>
+        <p class="ticket-deadline">Early bird pricing ends September 5th</p>
       </div>
     </div>
   </div>
@@ -606,12 +664,293 @@
     <a href="/newsletter" class="footer-btn">A.M News</a>
   </div>
   <div class="footer-social">
-    <a href="https://www.instagram.com/achievemoore/" target="_blank">Instagram</a>
-    <a href="https://www.linkedin.com/company/achieve-moore-foundation-inc" target="_blank">LinkedIn</a>
+    <a class="instagram-orb" href="https://www.instagram.com/achievemoore/" target="_blank" rel="noopener" aria-label="Achieve M.O.O.R.E on Instagram"><canvas aria-hidden="true"></canvas><span data-text="Instagram">Instagram</span></a>
+    <a class="linkedin-orb" href="https://www.linkedin.com/company/achieve-moore-foundation-inc" target="_blank" rel="noopener" aria-label="Achieve M.O.O.R.E on LinkedIn"><canvas aria-hidden="true"></canvas><span data-text="LinkedIn">LinkedIn</span></a>
   </div>
+  <script src="assets/linkedin-orb.js" defer></script>
+  <script src="assets/gala-countdown.js" defer></script>
   <p class="footer-nonprofit">Achieve M.O.O.R.E Foundation INC. 501(c)(3) Non Profit Organization</p>
   <p class="footer-bottom">&copy; 2016 Achieve M.O.O.R.E &mdash; <a href="#">Terms and Conditions</a></p>
 </footer>
+
+<script>
+// ── Goal hourglass ── update TICKETS_SOLD / EXTRA_RAISED as money comes in
+(() => {
+  const GOAL = 100000, TICKET_PRICE = 275, TICKETS_SOLD = 3, EXTRA_RAISED = 0;
+  const RAISED = TICKETS_SOLD * TICKET_PRICE + EXTRA_RAISED;
+  const FRAC = Math.min(1, RAISED / GOAL);
+
+  const cv = document.getElementById('hourglass');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = 260, H = 380, dpr = Math.min(2, devicePixelRatio || 1);
+  cv.width = W * dpr; cv.height = H * dpr;
+
+  const cx = W / 2, capH = 20;
+  const glassTop = 66, neckY = 190, glassBot = 314, R = 72, neckW = 5;
+
+  const logo = new Image();
+  logo.src = 'assets/clock_transparent.png';
+
+  // engraved gold lettering on the wooden caps
+  function engrave(text, y, size, spacing) {
+    ctx.font = `700 ${size}px Montserrat, sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.letterSpacing = spacing + 'px';
+    ctx.fillStyle = 'rgba(0,0,0,.55)';
+    ctx.fillText(text, cx, y + .8);
+    const g = ctx.createLinearGradient(0, y - size / 2, 0, y + size / 2);
+    g.addColorStop(0, '#f0c855'); g.addColorStop(.5, '#c8920a'); g.addColorStop(1, '#8a6205');
+    ctx.fillStyle = g;
+    ctx.fillText(text, cx, y);
+    ctx.letterSpacing = '0px';
+  }
+
+  const prof = u => neckW + (R - neckW) * Math.pow(Math.sin(Math.PI * (0.085 + 0.915 * u)), 1.15);
+  const wTop = y => prof((y - glassTop) / (neckY - glassTop));
+  const wBot = y => prof((glassBot - y) / (glassBot - neckY));
+
+  function bulb(top) {
+    const y0 = top ? glassTop : neckY, y1 = top ? neckY : glassBot;
+    const wf = top ? wTop : wBot;
+    const p = new Path2D();
+    p.moveTo(cx - wf(y0), y0);
+    for (let y = y0; y <= y1; y += 2) p.lineTo(cx - wf(y), y);
+    p.lineTo(cx + wf(y1), y1);
+    for (let y = y1; y >= y0; y -= 2) p.lineTo(cx + wf(y), y);
+    p.closePath();
+    return p;
+  }
+  const topBulb = bulb(true), botBulb = bulb(false);
+
+  // sand levels by bulb area, so the fill is true to the fraction raised
+  function topSurfaceY(emptyFrac) {
+    let total = 0;
+    for (let y = glassTop; y <= neckY; y += .5) total += wTop(y);
+    let acc = 0;
+    for (let y = glassTop; y <= neckY; y += .5) { acc += wTop(y); if (acc >= emptyFrac * total) return y; }
+    return neckY;
+  }
+  function pileSurfaceY(fillFrac) {
+    let total = 0;
+    for (let y = neckY; y <= glassBot; y += .5) total += wBot(y);
+    let acc = 0;
+    for (let y = glassBot; y >= neckY; y -= .5) { acc += wBot(y); if (acc >= fillFrac * total) return y; }
+    return neckY;
+  }
+
+  // static grain speckles for sand texture
+  const speck = [];
+  for (let i = 0; i < 800; i++) {
+    const top = i % 2 === 0;
+    const y = top ? glassTop + Math.random() * (neckY - glassTop) : neckY + Math.random() * (glassBot - neckY);
+    const w = (top ? wTop : wBot)(y);
+    speck.push([cx + (Math.random() * 2 - 1) * (w - 1), y, .12 + Math.random() * .3, Math.random() < .5, top]);
+  }
+
+  const CAP_W = R + 18, CAP_RY = 8;
+  function capCyl(yTop, h) {
+    // turned side, bulging into an elliptical bottom rim
+    let g = ctx.createLinearGradient(cx - CAP_W, 0, cx + CAP_W, 0);
+    g.addColorStop(0, '#241407'); g.addColorStop(.16, '#5d3a20'); g.addColorStop(.4, '#7c5028');
+    g.addColorStop(.62, '#4a2d16'); g.addColorStop(1, '#1d0f05');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.moveTo(cx - CAP_W, yTop);
+    ctx.lineTo(cx - CAP_W, yTop + h);
+    ctx.ellipse(cx, yTop + h, CAP_W, CAP_RY, 0, Math.PI, 0, true);
+    ctx.lineTo(cx + CAP_W, yTop);
+    ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = 'rgba(240,192,40,.4)'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.ellipse(cx, yTop + h, CAP_W - 1, CAP_RY - 1, 0, 0, Math.PI); ctx.stroke();
+    // top face, lit from the upper left
+    const tg = ctx.createRadialGradient(cx - CAP_W * .35, yTop - 2, 4, cx, yTop, CAP_W);
+    tg.addColorStop(0, '#96683c'); tg.addColorStop(.6, '#5d3a20'); tg.addColorStop(1, '#38210f');
+    ctx.fillStyle = tg;
+    ctx.beginPath(); ctx.ellipse(cx, yTop, CAP_W, CAP_RY, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(240,192,40,.55)'; ctx.lineWidth = 1.1;
+    ctx.beginPath(); ctx.ellipse(cx, yTop, CAP_W - 1, CAP_RY - 1, 0, 0, Math.PI * 2); ctx.stroke();
+  }
+
+  let easeVal = 0;
+
+  function frame(t) {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    // ground shadow
+    let g = ctx.createRadialGradient(cx, glassBot + capH + 14, 4, cx, glassBot + capH + 14, R + 34);
+    g.addColorStop(0, 'rgba(26,26,26,.2)'); g.addColorStop(1, 'rgba(26,26,26,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.ellipse(cx, glassBot + capH + 14, R + 34, 12, 0, 0, Math.PI * 2); ctx.fill();
+
+    // turned wooden posts behind the glass
+    for (const px2 of [cx - R - 13, cx + R + 5]) {
+      g = ctx.createLinearGradient(px2, 0, px2 + 8, 0);
+      g.addColorStop(0, '#6b4526'); g.addColorStop(.35, '#8a5c33'); g.addColorStop(.6, '#3a2312'); g.addColorStop(1, '#1d0f05');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.roundRect(px2, glassTop - 8, 8, glassBot - glassTop + 16, 4); ctx.fill();
+      ctx.fillStyle = 'rgba(255,235,190,.16)';
+      ctx.fillRect(px2 + 1.6, glassTop - 6, 1.1, glassBot - glassTop + 12);
+    }
+
+    // bottom cap behind the glass base, with the foundation name engraved
+    capCyl(glassBot + 2, capH);
+    engrave('ACHIEVE M.O.O.R.E', glassBot + 2 + capH / 2 + 3, 9, 2);
+
+    // glass volume: a cool cast so the bulbs read as blown glass, not outlines
+    for (const b of [topBulb, botBulb]) {
+      ctx.save(); ctx.clip(b);
+      g = ctx.createRadialGradient(cx - R * .3, (glassTop + glassBot) / 2, 10, cx, (glassTop + glassBot) / 2, R * 1.6);
+      g.addColorStop(0, 'rgba(225,238,244,.30)'); g.addColorStop(.6, 'rgba(210,226,234,.12)'); g.addColorStop(1, 'rgba(170,190,200,.05)');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      ctx.restore();
+    }
+
+    const emptyFrac = Math.max(FRAC, .008) * easeVal;
+    const fillFrac = Math.max(FRAC, .022) * easeVal;
+    const surfY = topSurfaceY(emptyFrac);
+    const pileY = pileSurfaceY(fillFrac);
+    const bump = 10 * easeVal;
+    const pileTop = pileY - bump - 1;
+
+    // top sand — body fill, then a dished elliptical surface toward the neck
+    ctx.save(); ctx.clip(topBulb);
+    let sg = ctx.createLinearGradient(0, glassTop, 0, neckY);
+    sg.addColorStop(0, '#e3b322'); sg.addColorStop(1, '#a97b08');
+    ctx.fillStyle = sg;
+    ctx.fillRect(cx - R, surfY, R * 2, neckY - surfY + 2);
+    for (const [sx2, sy2, a, light, top] of speck)
+      if (top && sy2 > surfY + 2) {
+        ctx.fillStyle = light ? `rgba(246,213,94,${a})` : `rgba(122,86,6,${a})`;
+        ctx.fillRect(sx2, sy2, 1.3, 1.3);
+      }
+    const rxs = Math.max(wTop(surfY) - 1, 3), rys = Math.max(rxs * .22, 2.5);
+    sg = ctx.createRadialGradient(cx, surfY, 1, cx, surfY, rxs);
+    sg.addColorStop(0, '#8a6204'); sg.addColorStop(.5, '#b98a0c'); sg.addColorStop(.88, '#e9bd35'); sg.addColorStop(1, '#f4d264');
+    ctx.fillStyle = sg;
+    ctx.beginPath(); ctx.ellipse(cx, surfY, rxs, rys, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+
+    // bottom pile — a mound lit from its peak where the stream lands
+    ctx.save(); ctx.clip(botBulb);
+    sg = ctx.createRadialGradient(cx - 10, pileTop + 2, 2, cx, pileY + 6, R * 1.05);
+    sg.addColorStop(0, '#f2c64d'); sg.addColorStop(.45, '#d3a01a'); sg.addColorStop(1, '#8a6205');
+    ctx.fillStyle = sg;
+    ctx.beginPath();
+    ctx.moveTo(cx - R, glassBot + 2);
+    ctx.lineTo(cx - R, pileY);
+    for (let x = -R; x <= R; x += 4)
+      ctx.lineTo(cx + x, pileY - bump * Math.exp(-(x * x) / (2 * Math.pow(R * .26, 2))));
+    ctx.lineTo(cx + R, glassBot + 2);
+    ctx.closePath(); ctx.fill();
+    for (const [sx2, sy2, a, light, top] of speck)
+      if (!top && sy2 > pileY - 1) {
+        ctx.fillStyle = light ? `rgba(246,213,94,${a})` : `rgba(122,86,6,${a})`;
+        ctx.fillRect(sx2, sy2, 1.3, 1.3);
+      }
+    ctx.restore();
+
+    // falling stream with individual grains
+    const streamTop = neckY - 4;
+    if (pileTop > streamTop + 4) {
+      ctx.strokeStyle = 'rgba(200,146,10,.3)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(cx, streamTop); ctx.lineTo(cx, pileTop); ctx.stroke();
+      const len = pileTop - streamTop;
+      for (let i = 0; i < 9; i++) {
+        const gy = streamTop + ((t * 150 + i * 47.3) % len);
+        const gx = cx - .7 + Math.sin(gy * .55 + i * 2.1) * .9;
+        ctx.fillStyle = `rgba(232,185,30,${(.55 + .45 * Math.sin(i * 1.7 + t * 7)).toFixed(3)})`;
+        ctx.fillRect(gx, gy, 1.4, 2.4);
+      }
+      for (let i = 0; i < 3; i++) {
+        const a = t * 5 + i * 2.1;
+        ctx.fillStyle = 'rgba(222,170,20,.5)';
+        ctx.fillRect(cx + Math.cos(a) * (3 + i * 1.5), pileTop + 1 + Math.abs(Math.sin(a)) * 2.5, 1.3, 1.3);
+      }
+    }
+
+    // brand mark etched into the lower bulb's glass
+    if (logo.complete && logo.naturalWidth) {
+      ctx.save(); ctx.clip(botBulb);
+      ctx.globalAlpha = .13;
+      const LR = 44, ly = (neckY + glassBot) / 2 + 4;
+      ctx.drawImage(logo, cx - LR, ly - LR, LR * 2, LR * 2);
+      ctx.globalAlpha = 1;
+      ctx.restore();
+    }
+
+    // glass shading: bright left wall, soft right kick, darkened silhouette edges
+    for (const b of [topBulb, botBulb]) {
+      ctx.save(); ctx.clip(b);
+      const sh = ctx.createLinearGradient(cx - R, 0, cx + R, 0);
+      sh.addColorStop(0, 'rgba(26,26,26,.12)');
+      sh.addColorStop(.09, 'rgba(255,255,255,.36)');
+      sh.addColorStop(.22, 'rgba(255,255,255,.07)');
+      sh.addColorStop(.5, 'rgba(255,255,255,0)');
+      sh.addColorStop(.82, 'rgba(255,255,255,.16)');
+      sh.addColorStop(.95, 'rgba(26,26,26,.14)');
+      ctx.fillStyle = sh; ctx.fillRect(0, 0, W, H);
+      ctx.restore();
+      ctx.strokeStyle = 'rgba(26,26,26,.35)'; ctx.lineWidth = 2; ctx.stroke(b);
+      ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = .8; ctx.stroke(b);
+    }
+    // curved specular streaks tracing the left wall of each bulb
+    ctx.strokeStyle = 'rgba(255,255,255,.3)'; ctx.lineWidth = 2.4; ctx.lineCap = 'round';
+    for (const [y0, y1, wf] of [[glassTop + 12, neckY - 16, wTop], [neckY + 16, glassBot - 12, wBot]]) {
+      ctx.beginPath();
+      for (let y = y0; y <= y1; y += 3) {
+        const x = cx - wf(y) * .62;
+        y === y0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
+    // top cap over the glass throat
+    capCyl(glassTop - capH - 2, capH);
+    engrave('EST. 2016', glassTop - capH - 2 + capH / 2 + 3, 7, 3);
+  }
+
+  const raisedEl = document.getElementById('goalRaised');
+  const pctEl = document.getElementById('goalPct');
+  const meterEl = document.getElementById('goalMeter');
+  const pct = FRAC * 100;
+  function setStats(p) {
+    raisedEl.textContent = '$' + Math.round(RAISED * p).toLocaleString('en-US');
+    pctEl.textContent = (pct * p).toFixed(1) + '% of the way';
+    meterEl.style.width = (Math.max(pct, 1.2) * p) + '%';
+  }
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    easeVal = 1;
+    setStats(1);
+    frame(1.3);
+    return;
+  }
+
+  let started = false, startT = 0, running = false;
+  function loop(now) {
+    if (started) {
+      const f = Math.min(1, (now - startT) / 1600);
+      easeVal = 1 - Math.pow(1 - f, 3);
+      setStats(easeVal);
+    }
+    frame(now / 1000);
+    if (running) requestAnimationFrame(loop);
+  }
+  const io = new IntersectionObserver(([e]) => {
+    if (e.isIntersecting) {
+      if (!started) { started = true; startT = performance.now(); }
+      if (!running) { running = true; requestAnimationFrame(loop); }
+    } else {
+      running = false;
+    }
+  }, { threshold: .25 });
+  io.observe(cv);
+  frame(0);
+})();
+</script>
 
 <script>
 // Hamburger menu toggle

@@ -245,12 +245,13 @@
   }
   .footer-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
   .footer-btn {
-    background: transparent; border: 1px solid rgba(26,26,26,0.2);
-    color: rgba(26,26,26,0.6); padding: 11px 28px; font-size: 10px;
-    font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
-    text-decoration: none; border-radius: 999px; transition: all 0.25s;
+    background: rgba(255,255,255,0.9); border: 1px solid rgba(200,146,10,0.45);
+    color: rgba(200,146,10,0.75); padding: 9px 22px; font-size: 13px;
+    font-weight: 700; letter-spacing: 0.1em;
+    text-decoration: none; border-radius: 999px;
+    transition: border-color 0.25s, box-shadow 0.25s, color 0.25s;
   }
-  .footer-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .footer-btn:hover { border-color: var(--gold); color: var(--gold); box-shadow: 0 4px 14px rgba(200,146,10,0.25); }
   .footer-social { display: flex; gap: 22px; justify-content: center; margin-bottom: 28px; }
   .footer-social a {
     color: rgba(26,26,26,0.45); text-decoration: none; font-size: 13px;
@@ -419,9 +420,11 @@
     <a href="/newsletter" class="footer-btn">A.M News</a>
   </div>
   <div class="footer-social">
-    <a href="https://www.instagram.com/achievemoore/" target="_blank">Instagram</a>
-    <a href="https://www.linkedin.com/company/achieve-moore-foundation-inc" target="_blank">LinkedIn</a>
+    <a class="instagram-orb" href="https://www.instagram.com/achievemoore/" target="_blank" rel="noopener" aria-label="Achieve M.O.O.R.E on Instagram"><canvas aria-hidden="true"></canvas><span data-text="Instagram">Instagram</span></a>
+    <a class="linkedin-orb" href="https://www.linkedin.com/company/achieve-moore-foundation-inc" target="_blank" rel="noopener" aria-label="Achieve M.O.O.R.E on LinkedIn"><canvas aria-hidden="true"></canvas><span data-text="LinkedIn">LinkedIn</span></a>
   </div>
+  <script src="assets/linkedin-orb.js" defer></script>
+  <script src="assets/gala-countdown.js" defer></script>
   <p class="footer-nonprofit">Achieve M.O.O.R.E Foundation INC. 501(c)(3) Non Profit Organization</p>
   <p class="footer-bottom">&copy; 2016 Achieve M.O.O.R.E &mdash; <a href="#">Terms and Conditions</a></p>
 </footer>
