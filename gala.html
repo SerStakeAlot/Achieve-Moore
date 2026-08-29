@@ -621,16 +621,16 @@
   <div class="gala-block" id="goal">
     <p class="section-label">The Goal</p>
     <div class="gold-divider" style="margin-bottom: 18px;"></div>
-    <h2>Every Grain Counts</h2>
+    <h2>Every Dollar Counts</h2>
     <p>This year&rsquo;s gala aims to raise <strong>$100,000</strong> for scholarships. Every ticket purchased and every donation drops more sand through the glass &mdash; watch the bottom fill as we close in on the goal.</p>
     <div class="goal-wrap">
-      <canvas id="hourglass" aria-label="Hourglass showing $825 raised of the $100,000 goal"></canvas>
+      <canvas id="hourglass" aria-label="Hourglass showing $1,100 raised of the $100,000 goal"></canvas>
       <div class="goal-stats">
         <div class="goal-raised" id="goalRaised">$0</div>
         <div class="goal-of">raised of our <strong>$100,000</strong> goal</div>
         <div class="goal-meter"><span id="goalMeter"></span></div>
         <div class="goal-pct" id="goalPct">0% of the way</div>
-        <div class="goal-note">3 Early Bird tickets purchased so far. Every ticket and every donation adds sand to the glass.</div>
+        <div class="goal-note">4 Early Bird tickets purchased so far. Every ticket and every donation adds sand to the glass.</div>
       </div>
     </div>
   </div>
@@ -676,7 +676,7 @@
 <script>
 // ── Goal hourglass ── update TICKETS_SOLD / EXTRA_RAISED as money comes in
 (() => {
-  const GOAL = 100000, TICKET_PRICE = 275, TICKETS_SOLD = 3, EXTRA_RAISED = 0;
+  const GOAL = 100000, TICKET_PRICE = 275, TICKETS_SOLD = 4, EXTRA_RAISED = 0;
   const RAISED = TICKETS_SOLD * TICKET_PRICE + EXTRA_RAISED;
   const FRAC = Math.min(1, RAISED / GOAL);
 
