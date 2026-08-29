@@ -310,6 +310,20 @@
     text-transform: uppercase; color: var(--maroon);
   }
 
+  /* Sponsorship tiers */
+  .sponsor-heading {
+    margin-top: 56px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--gold);
+  }
+  .sponsor-sub {
+    font-size: 13px; font-weight: 300; color: rgba(26,26,26,0.55);
+    margin: 10px auto 28px; max-width: 520px; line-height: 1.7;
+  }
+  .sponsor-card { min-width: 230px; padding: 34px 36px 30px; }
+  .sponsor-card .ticket-price { font-size: 44px; }
+  .sponsor-card--eternal { border-color: var(--gold); box-shadow: 0 14px 40px rgba(200,146,10,0.22); }
+
   /* Goal hourglass */
   .goal-wrap {
     display: flex; align-items: center; justify-content: center;
@@ -648,6 +662,30 @@
         <div class="ticket-desc">Per Guest &bull; An elegant black-tie evening of fine dining, celebration, and fundraising in support of scholarships for the next generation of leaders.</div>
         <a href="https://buy.stripe.com/bJe00jcN0clAflQ5dr2kw00" target="_blank" rel="noopener" class="ticket-cta ticket-cta-solid">Purchase Ticket</a>
         <p class="ticket-deadline">Early bird pricing ends September 5th</p>
+      </div>
+    </div>
+
+    <div class="sponsor-heading" id="sponsorship">Sponsorship Tiers</div>
+    <p class="sponsor-sub">Become a sponsor and put your name behind the next generation of leaders. Every tier directly funds scholarships.</p>
+    <div class="ticket-tiers">
+      <div class="ticket-card sponsor-card sponsor-card--eternal">
+        <div class="ticket-badge">Presenting Sponsor</div>
+        <div class="ticket-tier">Eternal</div>
+        <div class="ticket-price">$10,000+</div>
+        <div class="ticket-desc">Our highest honor &mdash; a legacy-level gift that anchors the evening and the scholarship fund.</div>
+        <a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" class="ticket-cta">Become a Sponsor</a>
+      </div>
+      <div class="ticket-card sponsor-card">
+        <div class="ticket-tier">Timekeeper</div>
+        <div class="ticket-price">$5,000</div>
+        <div class="ticket-desc">A cornerstone gift that keeps the mission moving and opens doors for deserving students.</div>
+        <a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" class="ticket-cta">Become a Sponsor</a>
+      </div>
+      <div class="ticket-card sponsor-card">
+        <div class="ticket-tier">Sundial</div>
+        <div class="ticket-price">$1,000</div>
+        <div class="ticket-desc">A meaningful gift that adds sand to the glass and scholarships to the stage.</div>
+        <a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" class="ticket-cta">Become a Sponsor</a>
       </div>
     </div>
   </div>
