@@ -208,6 +208,75 @@
     outline: none;
   }
 
+  /* ── BOOKLET VIEWER ── */
+  .booklet { max-width: 820px; margin: 0 auto 56px; }
+  .booklet-stage {
+    position: relative;
+    perspective: 2400px;
+    outline: none;
+  }
+  /* stacked-paper edges behind the open page */
+  .booklet-stage::before, .booklet-stage::after {
+    content: "";
+    position: absolute; z-index: -1;
+    border: 1px solid rgba(200,146,10,0.18);
+    border-radius: 12px;
+    background: #fdfcfa;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  }
+  .booklet-stage::before { inset: 9px -9px -9px 9px; }
+  .booklet-stage::after  { inset: 4px -4px -4px 4px; }
+  .booklet .news-page { display: none; margin: 0; }
+  .booklet .news-page.active { display: block; }
+  .booklet .news-page.turn-forward {
+    transform-origin: left center;
+    animation: pageTurnF 0.55s cubic-bezier(0.22, 0.7, 0.3, 1) both;
+  }
+  .booklet .news-page.turn-back {
+    transform-origin: right center;
+    animation: pageTurnB 0.55s cubic-bezier(0.22, 0.7, 0.3, 1) both;
+  }
+  @keyframes pageTurnF {
+    from { transform: rotateY(-65deg); opacity: 0.3; }
+    to   { transform: rotateY(0);      opacity: 1; }
+  }
+  @keyframes pageTurnB {
+    from { transform: rotateY(65deg); opacity: 0.3; }
+    to   { transform: rotateY(0);     opacity: 1; }
+  }
+  .booklet-controls {
+    display: flex; align-items: center; justify-content: center;
+    gap: 18px; margin-top: 24px;
+  }
+  .booklet-btn {
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 1.5px solid var(--gold); background: transparent; color: var(--gold);
+    font-size: 18px; line-height: 1; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all 0.25s;
+  }
+  .booklet-btn:hover:not(:disabled), .booklet-btn:focus-visible {
+    background: var(--gold); color: #ffffff;
+    box-shadow: 0 6px 18px rgba(200,146,10,0.35);
+  }
+  .booklet-btn:disabled { opacity: 0.3; cursor: default; }
+  .booklet-count {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.22em;
+    text-transform: uppercase; color: rgba(26,26,26,0.55);
+    min-width: 110px; text-align: center;
+  }
+  .booklet-dots { display: flex; gap: 9px; justify-content: center; margin-top: 14px; }
+  .booklet-dot {
+    width: 9px; height: 9px; border-radius: 50%; padding: 0;
+    border: 1px solid var(--gold); background: transparent;
+    cursor: pointer; transition: background 0.2s, transform 0.2s;
+  }
+  .booklet-dot:hover { transform: scale(1.25); }
+  .booklet-dot.active { background: var(--gold); }
+
+  .past-editions { margin-top: 84px; }
+  .past-editions .news-intro { margin-bottom: 40px; }
+
   /* Subscribe strip below the pages */
   .subscribe-strip {
     text-align: center;
@@ -355,59 +424,146 @@
     <p class="section-label">Current Edition</p>
     <div class="gold-divider" style="margin-bottom: 18px;"></div>
     <h2>M.O.O.R.E. Updates</h2>
-    <p>Read the latest edition below. Underlined links in the newsletter are clickable &mdash; tap them to visit the website, purchase gala tickets, donate, and more.</p>
-    <span class="issue-badge">Issue #5 &bull; August 2026</span>
+    <p>Flip through the latest edition below like a booklet. Underlined links in the newsletter are clickable &mdash; tap them to visit the website, purchase gala tickets, donate, and more.</p>
+    <span class="issue-badge">Issue #6 &bull; September 2026</span>
   </div>
 
-  <!-- Page 1 -->
-  <div class="news-page">
-    <img src="assets/a.m%20news%201.jpg" alt="A.M News Issue 5, page 1 — F(A.M.)ILY Updates from Kareem Moore, CEO and Founder" loading="lazy">
+  <!-- ISSUE #6 BOOKLET -->
+  <div class="booklet" data-booklet aria-label="A.M News Issue 6 booklet">
+    <div class="booklet-stage" tabindex="0">
+
+      <!-- Page 1 -->
+      <div class="news-page active">
+        <img src="assets/news%201.jpg" alt="A.M News Issue 6, page 1 — F(A.M.)ILY Updates from Kareem Moore, CEO and Founder">
+      </div>
+
+      <!-- Page 2 -->
+      <div class="news-page">
+        <img src="assets/news%202.jpg" alt="A.M News Issue 6, page 2 — Hands of Time Sponsorship Tiers" loading="lazy">
+        <a class="news-link" href="/gala#sponsorship" title="View the Hands of Time Sponsorship Tiers" aria-label="View the Hands of Time Sponsorship Tiers"
+           style="left: 15%; top: 10%; width: 70%; height: 41.5%;"></a>
+        <a class="news-link" href="/gala#tickets" title="Purchase tickets or become a sponsor at achievemoorefoundation.org" aria-label="Purchase tickets or become a sponsor at achievemoorefoundation.org"
+           style="left: 15.3%; top: 84%; width: 21%; height: 2.4%;"></a>
+      </div>
+
+      <!-- Page 3 -->
+      <div class="news-page">
+        <img src="assets/news%203.jpg" alt="A.M News Issue 6, page 3 — 3rd Annual 9/11 Service Event at Morehouse College" loading="lazy">
+        <a class="news-link" href="/events" title="Fall 2025 9/11 Service Event recap" aria-label="Fall 2025 9/11 Service Event recap"
+           style="left: 43.8%; top: 86.7%; width: 19.5%; height: 2.4%;"></a>
+      </div>
+
+      <!-- Page 4 -->
+      <div class="news-page">
+        <img src="assets/news%204.jpg" alt="A.M News Issue 6, page 4 — Visit Our New Website and Donate Today" loading="lazy">
+        <a class="news-link" href="/home" title="Visit achievemoorefoundation.org" aria-label="Visit achievemoorefoundation.org"
+           style="left: 29%; top: 26%; width: 42%; height: 3.4%;"></a>
+        <a class="news-link" href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" title="Donate to the Achieve M.O.O.R.E. Foundation" aria-label="Donate to the Achieve M.O.O.R.E. Foundation"
+           style="left: 14.8%; top: 65.5%; width: 70%; height: 5.8%;"></a>
+        <a class="news-link" href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" title="F(A.M.)ILY Donation Link" aria-label="F(A.M.)ILY Donation Link"
+           style="left: 14.8%; top: 74.3%; width: 23%; height: 2.6%;"></a>
+        <a class="news-link" href="mailto:achievemoorefoundation@gmail.com" title="Email achievemoorefoundation@gmail.com" aria-label="Email achievemoorefoundation@gmail.com"
+           style="left: 14.8%; top: 86.9%; width: 28%; height: 2.2%;"></a>
+      </div>
+
+      <!-- Page 5 -->
+      <div class="news-page">
+        <img src="assets/news%205.jpg" alt="A.M News Issue 6, page 5 — In Case You Missed It, links to events and pages" loading="lazy">
+        <a class="news-link" href="https://docs.google.com/forms/d/e/1FAIpQLSf6DUo-dIDM3EpcW2LyW-TEszDbcYLiQFBkntuP0aQCl1yglQ/viewform" target="_blank" rel="noopener" title="Alumni Spotlight Survey" aria-label="Alumni Spotlight Survey"
+           style="left: 33.4%; top: 17.7%; width: 16.5%; height: 2%;"></a>
+        <a class="news-link" href="/home" title="Visit Our New Website" aria-label="Visit Our New Website"
+           style="left: 15.6%; top: 20.3%; width: 17%; height: 2%;"></a>
+        <a class="news-link" href="/gala#tickets" title="Become A Sponsor at the Gala" aria-label="Become A Sponsor at the Gala"
+           style="left: 15.6%; top: 23.3%; width: 22.5%; height: 2%;"></a>
+        <a class="news-link" href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" title="Donate Today" aria-label="Donate Today"
+           style="left: 15.6%; top: 26.4%; width: 11.5%; height: 2%;"></a>
+        <a class="news-link" href="https://www.linkedin.com/company/achieve-moore-foundation-inc" target="_blank" rel="noopener" title="Follow Us On LinkedIn" aria-label="Follow Us On LinkedIn"
+           style="left: 15.6%; top: 29.4%; width: 17.5%; height: 2%;"></a>
+        <a class="news-link" href="https://docs.google.com/forms/d/e/1FAIpQLSf6DUo-dIDM3EpcW2LyW-TEszDbcYLiQFBkntuP0aQCl1yglQ/viewform" target="_blank" rel="noopener" title="Complete and share the Achieve M.O.O.R.E. Global Network Survey" aria-label="Complete and share the Achieve M.O.O.R.E. Global Network Survey"
+           style="left: 15.6%; top: 33.9%; width: 49%; height: 2%;"></a>
+      </div>
+
+    </div>
+    <div class="booklet-controls">
+      <button class="booklet-btn booklet-prev" aria-label="Previous page">&#8592;</button>
+      <span class="booklet-count">Page 1 of 5</span>
+      <button class="booklet-btn booklet-next" aria-label="Next page">&#8594;</button>
+    </div>
+    <div class="booklet-dots" aria-label="Go to page"></div>
   </div>
 
-  <!-- Page 2 -->
-  <div class="news-page">
-    <img src="assets/a.m%20news%202.jpg" alt="A.M News Issue 5, page 2 — Visit Our New Website and Donate Today" loading="lazy">
-    <a class="news-link" href="/home" title="Visit achievemoorefoundation.org" aria-label="Visit achievemoorefoundation.org"
-       style="left: 27%; top: 25.3%; width: 45%; height: 3.6%;"></a>
-    <a class="news-link" href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" title="Donate to the Achieve M.O.O.R.E. Foundation" aria-label="Donate to the Achieve M.O.O.R.E. Foundation"
-       style="left: 13.5%; top: 64.5%; width: 71%; height: 6%;"></a>
-    <a class="news-link" href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" title="F(A.M.)ILY Donation Link" aria-label="F(A.M.)ILY Donation Link"
-       style="left: 13.5%; top: 73.2%; width: 25%; height: 2.6%;"></a>
-    <a class="news-link" href="mailto:achievemoorefoundation@gmail.com" title="Email achievemoorefoundation@gmail.com" aria-label="Email achievemoorefoundation@gmail.com"
-       style="left: 13.5%; top: 86%; width: 29%; height: 2.2%;"></a>
-  </div>
+  <!-- PAST EDITIONS -->
+  <div class="past-editions">
+    <div class="news-intro">
+      <p class="section-label">Past Editions</p>
+      <div class="gold-divider" style="margin-bottom: 18px;"></div>
+      <h2>The Archive</h2>
+      <span class="issue-badge">Issue #5 &bull; August 2026</span>
+    </div>
 
-  <!-- Page 3 -->
-  <div class="news-page">
-    <img src="assets/a.m%20news%203.jpg" alt="A.M News Issue 5, page 3 — Meet the Board of Directors" loading="lazy">
-    <a class="news-link" href="/board" title="Meet the Board of Directors" aria-label="Meet the Board of Directors"
-       style="left: 11%; top: 7%; width: 78%; height: 50%;"></a>
-  </div>
+    <!-- ISSUE #5 BOOKLET -->
+    <div class="booklet" data-booklet aria-label="A.M News Issue 5 booklet">
+      <div class="booklet-stage" tabindex="0">
 
-  <!-- Page 4 -->
-  <div class="news-page">
-    <img src="assets/a.m%20news%204.jpg" alt="A.M News Issue 5, page 4 — Hands of Time Gala, Early Bird Tickets On Sale" loading="lazy">
-    <a class="news-link" href="/gala" title="Hands of Time Gala" aria-label="Hands of Time Gala"
-       style="left: 28.5%; top: 12.3%; width: 41%; height: 31.5%;"></a>
-    <a class="news-link" href="/gala#tickets" title="Early Bird tickets are on sale now" aria-label="Early Bird tickets are on sale now"
-       style="left: 11.5%; top: 65.6%; width: 25%; height: 2.4%;"></a>
-  </div>
+        <!-- Page 1 -->
+        <div class="news-page active">
+          <img src="assets/a.m%20news%201.jpg" alt="A.M News Issue 5, page 1 — F(A.M.)ILY Updates from Kareem Moore, CEO and Founder" loading="lazy">
+        </div>
 
-  <!-- Page 5 -->
-  <div class="news-page">
-    <img src="assets/a.m%20news%205.jpg" alt="A.M News Issue 5, page 5 — In Case You Missed It, links to events and pages" loading="lazy">
-    <a class="news-link" href="https://docs.google.com/forms/d/e/1FAIpQLSf6DUo-dIDM3EpcW2LyW-TEszDbcYLiQFBkntuP0aQCl1yglQ/viewform" target="_blank" rel="noopener" title="Alumni Spotlight Survey" aria-label="Alumni Spotlight Survey"
-       style="left: 33%; top: 17.4%; width: 17.5%; height: 2%;"></a>
-    <a class="news-link" href="/home" title="Visit Our New Website" aria-label="Visit Our New Website"
-       style="left: 15.3%; top: 20%; width: 18%; height: 2%;"></a>
-    <a class="news-link" href="/gala#tickets" title="Early Bird Tickets Available Now" aria-label="Early Bird Tickets Available Now"
-       style="left: 15.3%; top: 23%; width: 25%; height: 2%;"></a>
-    <a class="news-link" href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" title="Donate Today" aria-label="Donate Today"
-       style="left: 15.3%; top: 26%; width: 12.5%; height: 2%;"></a>
-    <a class="news-link" href="https://www.linkedin.com/company/achieve-moore-foundation-inc" target="_blank" rel="noopener" title="Follow Us On LinkedIn" aria-label="Follow Us On LinkedIn"
-       style="left: 15.3%; top: 29.1%; width: 18%; height: 2%;"></a>
-    <a class="news-link" href="https://docs.google.com/forms/d/e/1FAIpQLSf6DUo-dIDM3EpcW2LyW-TEszDbcYLiQFBkntuP0aQCl1yglQ/viewform" target="_blank" rel="noopener" title="Complete and share the Achieve M.O.O.R.E. Global Network Survey" aria-label="Complete and share the Achieve M.O.O.R.E. Global Network Survey"
-       style="left: 15.3%; top: 33.6%; width: 49.5%; height: 2%;"></a>
+        <!-- Page 2 -->
+        <div class="news-page">
+          <img src="assets/a.m%20news%202.jpg" alt="A.M News Issue 5, page 2 — Visit Our New Website and Donate Today" loading="lazy">
+          <a class="news-link" href="/home" title="Visit achievemoorefoundation.org" aria-label="Visit achievemoorefoundation.org"
+             style="left: 27%; top: 25.3%; width: 45%; height: 3.6%;"></a>
+          <a class="news-link" href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" title="Donate to the Achieve M.O.O.R.E. Foundation" aria-label="Donate to the Achieve M.O.O.R.E. Foundation"
+             style="left: 13.5%; top: 64.5%; width: 71%; height: 6%;"></a>
+          <a class="news-link" href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" title="F(A.M.)ILY Donation Link" aria-label="F(A.M.)ILY Donation Link"
+             style="left: 13.5%; top: 73.2%; width: 25%; height: 2.6%;"></a>
+          <a class="news-link" href="mailto:achievemoorefoundation@gmail.com" title="Email achievemoorefoundation@gmail.com" aria-label="Email achievemoorefoundation@gmail.com"
+             style="left: 13.5%; top: 86%; width: 29%; height: 2.2%;"></a>
+        </div>
+
+        <!-- Page 3 -->
+        <div class="news-page">
+          <img src="assets/a.m%20news%203.jpg" alt="A.M News Issue 5, page 3 — Meet the Board of Directors" loading="lazy">
+          <a class="news-link" href="/board" title="Meet the Board of Directors" aria-label="Meet the Board of Directors"
+             style="left: 11%; top: 7%; width: 78%; height: 50%;"></a>
+        </div>
+
+        <!-- Page 4 -->
+        <div class="news-page">
+          <img src="assets/a.m%20news%204.jpg" alt="A.M News Issue 5, page 4 — Hands of Time Gala, Early Bird Tickets On Sale" loading="lazy">
+          <a class="news-link" href="/gala" title="Hands of Time Gala" aria-label="Hands of Time Gala"
+             style="left: 28.5%; top: 12.3%; width: 41%; height: 31.5%;"></a>
+          <a class="news-link" href="/gala#tickets" title="Gala tickets are on sale now" aria-label="Gala tickets are on sale now"
+             style="left: 11.5%; top: 65.6%; width: 25%; height: 2.4%;"></a>
+        </div>
+
+        <!-- Page 5 -->
+        <div class="news-page">
+          <img src="assets/a.m%20news%205.jpg" alt="A.M News Issue 5, page 5 — In Case You Missed It, links to events and pages" loading="lazy">
+          <a class="news-link" href="https://docs.google.com/forms/d/e/1FAIpQLSf6DUo-dIDM3EpcW2LyW-TEszDbcYLiQFBkntuP0aQCl1yglQ/viewform" target="_blank" rel="noopener" title="Alumni Spotlight Survey" aria-label="Alumni Spotlight Survey"
+             style="left: 33%; top: 17.4%; width: 17.5%; height: 2%;"></a>
+          <a class="news-link" href="/home" title="Visit Our New Website" aria-label="Visit Our New Website"
+             style="left: 15.3%; top: 20%; width: 18%; height: 2%;"></a>
+          <a class="news-link" href="/gala#tickets" title="Gala Tickets Available Now" aria-label="Gala Tickets Available Now"
+             style="left: 15.3%; top: 23%; width: 25%; height: 2%;"></a>
+          <a class="news-link" href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" title="Donate Today" aria-label="Donate Today"
+             style="left: 15.3%; top: 26%; width: 12.5%; height: 2%;"></a>
+          <a class="news-link" href="https://www.linkedin.com/company/achieve-moore-foundation-inc" target="_blank" rel="noopener" title="Follow Us On LinkedIn" aria-label="Follow Us On LinkedIn"
+             style="left: 15.3%; top: 29.1%; width: 18%; height: 2%;"></a>
+          <a class="news-link" href="https://docs.google.com/forms/d/e/1FAIpQLSf6DUo-dIDM3EpcW2LyW-TEszDbcYLiQFBkntuP0aQCl1yglQ/viewform" target="_blank" rel="noopener" title="Complete and share the Achieve M.O.O.R.E. Global Network Survey" aria-label="Complete and share the Achieve M.O.O.R.E. Global Network Survey"
+             style="left: 15.3%; top: 33.6%; width: 49.5%; height: 2%;"></a>
+        </div>
+
+      </div>
+      <div class="booklet-controls">
+        <button class="booklet-btn booklet-prev" aria-label="Previous page">&#8592;</button>
+        <span class="booklet-count">Page 1 of 5</span>
+        <button class="booklet-btn booklet-next" aria-label="Next page">&#8594;</button>
+      </div>
+      <div class="booklet-dots" aria-label="Go to page"></div>
+    </div>
   </div>
 
   <!-- SUBSCRIBE -->
@@ -458,6 +614,60 @@ navLinks.querySelectorAll('a').forEach(link => {
   link.addEventListener('click', () => {
     if (navLinks.classList.contains('open')) toggleMenu();
   });
+});
+
+// Booklet viewers — page flip, dots, swipe, arrow keys
+document.querySelectorAll('[data-booklet]').forEach(book => {
+  const pages = Array.from(book.querySelectorAll('.news-page'));
+  const prevBtn = book.querySelector('.booklet-prev');
+  const nextBtn = book.querySelector('.booklet-next');
+  const countEl = book.querySelector('.booklet-count');
+  const dotsWrap = book.querySelector('.booklet-dots');
+  const stage = book.querySelector('.booklet-stage');
+  let idx = 0;
+
+  const dots = pages.map((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'booklet-dot';
+    d.setAttribute('aria-label', 'Go to page ' + (i + 1));
+    d.addEventListener('click', () => { const dir = i > idx ? 1 : -1; if (i !== idx) { idx = i; render(dir); } });
+    dotsWrap.appendChild(d);
+    return d;
+  });
+
+  function render(dir) {
+    pages.forEach((p, i) => {
+      p.classList.remove('active', 'turn-forward', 'turn-back');
+      if (i === idx) {
+        p.classList.add('active');
+        if (dir > 0) p.classList.add('turn-forward');
+        if (dir < 0) p.classList.add('turn-back');
+      }
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    countEl.textContent = 'Page ' + (idx + 1) + ' of ' + pages.length;
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === pages.length - 1;
+  }
+
+  prevBtn.addEventListener('click', () => { if (idx > 0) { idx--; render(-1); } });
+  nextBtn.addEventListener('click', () => { if (idx < pages.length - 1) { idx++; render(1); } });
+
+  stage.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') prevBtn.click();
+    if (e.key === 'ArrowRight') nextBtn.click();
+  });
+
+  let touchX = null;
+  stage.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+  stage.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 48) (dx < 0 ? nextBtn : prevBtn).click();
+    touchX = null;
+  }, { passive: true });
+
+  render(0);
 });
 </script>
 
