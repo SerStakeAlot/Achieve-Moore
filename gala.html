@@ -310,6 +310,22 @@
     text-transform: uppercase; color: var(--maroon);
   }
 
+  /* Sold-out ticket */
+  .ticket-card--soldout > *:not(.soldout-stamp) { filter: grayscale(1); opacity: 0.4; }
+  .ticket-card--soldout { border-color: rgba(26,26,26,0.2); box-shadow: 0 14px 40px rgba(0,0,0,0.06); }
+  .ticket-card--soldout .ticket-cta { pointer-events: none; }
+  .soldout-stamp {
+    position: absolute; inset: 0; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  .soldout-stamp span {
+    font-size: 38px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--maroon); border: 5px solid var(--maroon); border-radius: 12px;
+    padding: 10px 26px; transform: rotate(-14deg);
+    background: rgba(255,255,255,0.78);
+  }
+
   /* Sponsorship tiers */
   .sponsor-heading {
     margin-top: 56px;
@@ -638,13 +654,13 @@
     <h2>Every Dollar Counts</h2>
     <p>This year&rsquo;s gala aims to raise <strong>$100,000</strong> for scholarships. Every ticket purchased and every donation drops more sand through the glass &mdash; watch the bottom fill as we close in on the goal.</p>
     <div class="goal-wrap">
-      <canvas id="hourglass" aria-label="Hourglass showing $1,100 raised of the $100,000 goal"></canvas>
+      <canvas id="hourglass" aria-label="Hourglass showing $5,050 raised of the $100,000 goal"></canvas>
       <div class="goal-stats">
         <div class="goal-raised" id="goalRaised">$0</div>
         <div class="goal-of">raised of our <strong>$100,000</strong> goal</div>
         <div class="goal-meter"><span id="goalMeter"></span></div>
         <div class="goal-pct" id="goalPct">0% of the way</div>
-        <div class="goal-note">4 Early Bird tickets purchased so far. Every ticket and every donation adds sand to the glass.</div>
+        <div class="goal-note">Raised so far through tickets and donations. Every ticket and every donation adds sand to the glass.</div>
       </div>
     </div>
   </div>
@@ -655,13 +671,42 @@
     <div class="gold-divider" style="margin-bottom: 18px;"></div>
     <h2>Tickets &amp; Sponsorship</h2>
     <div class="ticket-tiers">
-      <div class="ticket-card">
-        <div class="ticket-badge">On Sale Now &mdash; Ends Sept 5</div>
+      <div class="ticket-card ticket-card--soldout" aria-label="Early Bird ticket — sold out">
         <div class="ticket-tier">Early Bird</div>
         <div class="ticket-price">$275</div>
+        <div class="ticket-desc">Per Guest &bull; Our limited early-bird rate for the first supporters of the evening.</div>
+        <span class="ticket-cta" aria-hidden="true">Sold Out</span>
+        <div class="soldout-stamp"><span>Sold Out</span></div>
+      </div>
+      <div class="ticket-card">
+        <div class="ticket-badge">On Sale Now</div>
+        <div class="ticket-tier">General Admission</div>
+        <div class="ticket-price">$300</div>
         <div class="ticket-desc">Per Guest &bull; An elegant black-tie evening of fine dining, celebration, and fundraising in support of scholarships for the next generation of leaders.</div>
-        <a href="https://buy.stripe.com/bJe00jcN0clAflQ5dr2kw00" target="_blank" rel="noopener" class="ticket-cta ticket-cta-solid">Purchase Ticket</a>
-        <p class="ticket-deadline">Early bird pricing ends September 5th</p>
+        <a href="https://buy.stripe.com/5kQ14n14i85k6PkgW92kw02" target="_blank" rel="noopener" class="ticket-cta ticket-cta-solid">Purchase Ticket</a>
+        <div style="margin-top:16px;">
+          <a href="/seating" style="font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(200,146,10,0.4);">Already have a ticket? Choose your seats &rarr;</a>
+        </div>
+      </div>
+      <div class="ticket-card">
+        <div class="ticket-badge">VIP</div>
+        <div class="ticket-tier">VIP Ticket</div>
+        <div class="ticket-price">$400</div>
+        <div class="ticket-desc">Per Guest &bull; All the elegance of the evening plus <strong>open bar</strong> access throughout the night.</div>
+        <a href="https://buy.stripe.com/3cI00jeV80CS4HcbBP2kw03" target="_blank" rel="noopener" class="ticket-cta ticket-cta-solid">Purchase VIP Ticket</a>
+        <div style="margin-top:16px;">
+          <a href="/seating" style="font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(200,146,10,0.4);">Already have a ticket? Choose your seats &rarr;</a>
+        </div>
+      </div>
+      <div class="ticket-card">
+        <div class="ticket-badge">Best for Groups</div>
+        <div class="ticket-tier">Table Reservation</div>
+        <div class="ticket-price">$5,000</div>
+        <div class="ticket-desc">Reserve an <strong>entire table</strong> for your party &bull; Includes <strong>open bar</strong> for everyone at the table.</div>
+        <a href="https://buy.stripe.com/8x25kDdR471ggpUeO12kw04" target="_blank" rel="noopener" class="ticket-cta ticket-cta-solid">Reserve a Table</a>
+        <div style="margin-top:16px;">
+          <a href="/seating" style="font-size:11px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); text-decoration:none; border-bottom:1px solid rgba(200,146,10,0.4);">Already have a ticket? Choose your seats &rarr;</a>
+        </div>
       </div>
     </div>
 
@@ -712,10 +757,9 @@
 </footer>
 
 <script>
-// ── Goal hourglass ── update TICKETS_SOLD / EXTRA_RAISED as money comes in
+// ── Goal hourglass ── update RAISED as money comes in (tickets + donations)
 (() => {
-  const GOAL = 100000, TICKET_PRICE = 275, TICKETS_SOLD = 4, EXTRA_RAISED = 0;
-  const RAISED = TICKETS_SOLD * TICKET_PRICE + EXTRA_RAISED;
+  const GOAL = 100000, RAISED = 5050;
   const FRAC = Math.min(1, RAISED / GOAL);
 
   const cv = document.getElementById('hourglass');

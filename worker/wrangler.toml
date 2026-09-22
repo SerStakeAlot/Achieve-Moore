@@ -8,10 +8,21 @@ compatibility_date = "2024-09-23"
 # Comma-separated list of sites allowed to call this Worker.
 ALLOWED_ORIGIN = "https://achievemoorefoundation.org,https://www.achievemoorefoundation.org"
 
-# Ticket price in the smallest currency unit (cents). 27500 = $275.00
-TICKET_AMOUNT = "27500"
+# Ticket price in the smallest currency unit (cents). 30000 = $300.00
+TICKET_AMOUNT = "30000"
 CURRENCY = "usd"
-TICKET_NAME = "Hands of Time Gala — Early Bird Ticket"
+TICKET_NAME = "Hands of Time Gala — Individual Ticket"
+
+# Seat-selection emails ("pick your seats" magic links).
+# EMAIL_FROM must be on a domain you've verified with Resend.
+SITE_URL = "https://achievemoorefoundation.org"
+EMAIL_FROM = "Achieve M.O.O.R.E <gala@achievemoorefoundation.org>"
+
+# Secrets to set (never stored here):
+#   npx wrangler secret put STRIPE_SECRET_KEY      (sk_live_... from Stripe)
+#   npx wrangler secret put STRIPE_WEBHOOK_SECRET  (whsec_... from the webhook endpoint)
+#   npx wrangler secret put RESEND_API_KEY         (re_... from resend.com)
+#   npx wrangler secret put ADMIN_KEY              (any long random string, for /api/seats/admin)
 
 # D1 database for the early-bird waitlist (notify-me form).
 # Create it once with:  npx wrangler d1 create gala-waitlist

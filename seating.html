@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Choose Your Seats — Hands of Time Gala</title>
+<meta name="description" content="Pick your seats for the Hands of Time Gala — December 5, 2026 at the Hyatt Regency Atlanta Perimeter at Villa Christina.">
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c8920a;
+    --gold-light: #b8830a;
+    --maroon: #6b0f1a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: #ffffff;
+    color: #1a1a1a;
+    overflow-x: hidden;
+    display: flex; flex-direction: column; min-height: 100vh;
+  }
+
+  /* ── NAV (matches index.html) ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 72px;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+  .nav-logo img {
+    width: 50px; height: 50px; border-radius: 50%;
+    border: none; object-fit: cover;
+  }
+  .nav-logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px; font-weight: 600;
+    color: var(--gold); letter-spacing: 0.06em; line-height: 1.1;
+  }
+  .nav-logo-text span {
+    display: block; font-size: 10px;
+    font-family: 'Montserrat', sans-serif; font-weight: 300;
+    letter-spacing: 0.24em; color: rgba(200,146,10,0.7); text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 34px; list-style: none; }
+  .nav-links a {
+    text-decoration: none; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(26,26,26,0.7); transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+  .nav-donate {
+    background: transparent; border: 1.5px solid var(--gold);
+    color: var(--gold); padding: 10px 26px; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.25s; text-decoration: none;
+  }
+  .nav-donate:hover { background: var(--gold); color: #ffffff; }
+
+  /* HAMBURGER */
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center;
+    gap: 5px; background: none; border: none; cursor: pointer;
+    padding: 8px; z-index: 110;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: #1a1a1a; border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+  .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+  /* ── PAGE HERO ── */
+  .page-hero {
+    position: relative;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    padding: 130px 40px 46px;
+    background: rgba(245,243,240,0.6);
+    border-bottom: 1px solid rgba(200,146,10,0.15);
+  }
+  .page-hero-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.42em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .page-hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(38px, 7vw, 72px); font-weight: 700;
+    line-height: 1; color: #1a1a1a; margin-bottom: 8px;
+    opacity: 0; animation: fadeUp 0.9s 0.4s forwards;
+  }
+  .page-hero-title .gold { color: var(--gold); }
+  .page-hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(16px, 2.5vw, 21px); font-weight: 400;
+    letter-spacing: 0.1em; color: rgba(26,26,26,0.55);
+    max-width: 640px; margin-top: 14px;
+    opacity: 0; animation: fadeUp 0.9s 0.6s forwards;
+  }
+  .gold-divider { width: 50px; height: 1px; background: var(--gold); margin: 24px auto 0; opacity: 0.55; }
+
+  /* ── SEATING LAYOUT ── */
+  .seating-section {
+    flex: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 56px 32px 90px;
+    width: 100%;
+  }
+  .seat-columns {
+    display: flex; gap: 40px; align-items: flex-start;
+    justify-content: center; flex-wrap: wrap;
+  }
+  .map-col { flex: 1 1 520px; min-width: 300px; max-width: 640px; }
+  .side-col { flex: 0 1 360px; min-width: 290px; position: sticky; top: 92px; }
+
+  .map-scroll { overflow-x: auto; }
+  #seatMap {
+    display: block; width: 100%; min-width: 480px; height: auto;
+    user-select: none; -webkit-user-select: none;
+  }
+
+  /* SVG seat states */
+  .table-circle { fill: #f5f3f0; stroke: rgba(26,26,26,0.25); stroke-width: 1.4; }
+  .table-num {
+    font-family: 'Cormorant Garamond', serif; font-weight: 700;
+    fill: rgba(26,26,26,0.6); text-anchor: middle;
+  }
+  .table-cap {
+    font-family: 'Montserrat', sans-serif; font-size: 7.5px; font-weight: 700;
+    letter-spacing: 1.6px; fill: rgba(26,26,26,0.35);
+    text-anchor: middle; text-transform: uppercase;
+  }
+  .seat circle { stroke-width: 1.4; transition: fill 0.15s, stroke 0.15s; }
+  .seat text {
+    font-family: 'Montserrat', sans-serif; font-size: 8.5px; font-weight: 600;
+    text-anchor: middle; pointer-events: none;
+  }
+  .seat-open circle { fill: #ffffff; stroke: rgba(200,146,10,0.75); cursor: pointer; }
+  .seat-open text { fill: rgba(26,26,26,0.6); }
+  .seat-open:hover circle, .seat-open:focus-visible circle { fill: rgba(200,146,10,0.18); stroke: var(--gold); }
+  .seat-open:focus-visible { outline: none; }
+  .seat-selected circle { fill: var(--gold); stroke: #a67807; cursor: pointer; }
+  .seat-selected text { fill: #ffffff; }
+  .seat-taken circle { fill: rgba(26,26,26,0.16); stroke: rgba(26,26,26,0.2); cursor: not-allowed; }
+  .seat-taken text { fill: rgba(26,26,26,0.35); }
+  .seat-mine circle { fill: var(--maroon); stroke: #4d0a12; }
+  .seat-mine text { fill: #ffffff; }
+  .room-label {
+    font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 700;
+    letter-spacing: 2.4px; fill: rgba(26,26,26,0.4);
+    text-anchor: middle; text-transform: uppercase;
+  }
+
+  /* Legend */
+  .seat-legend {
+    display: flex; justify-content: center; gap: 22px; flex-wrap: wrap;
+    margin: 18px 0 8px; font-size: 10.5px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase; color: rgba(26,26,26,0.6);
+  }
+  .seat-legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .legend-dot {
+    width: 14px; height: 14px; border-radius: 50%; display: inline-block;
+    border: 1.4px solid rgba(200,146,10,0.75); background: #fff;
+  }
+  .legend-dot.sel   { background: var(--gold); border-color: #a67807; }
+  .legend-dot.tkn   { background: rgba(26,26,26,0.16); border-color: rgba(26,26,26,0.2); }
+  .legend-dot.mine  { background: var(--maroon); border-color: #4d0a12; }
+
+  /* Side panels */
+  .side-card {
+    border: 1px solid rgba(200,146,10,0.35);
+    border-radius: 14px;
+    background: #ffffff;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.10);
+    padding: 30px 28px;
+    margin-bottom: 22px;
+    text-align: center;
+  }
+  .side-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 600; margin-bottom: 8px;
+  }
+  .side-card .card-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+  }
+  .side-card p {
+    font-size: 13px; font-weight: 300; line-height: 1.75;
+    color: rgba(26,26,26,0.65); margin-bottom: 14px;
+  }
+  .seat-input {
+    width: 100%; padding: 13px 16px; margin-bottom: 12px;
+    border: 1px solid rgba(26,26,26,0.2); border-radius: 10px;
+    font-family: 'Montserrat', sans-serif; font-size: 14px;
+    outline: none; transition: border-color 0.2s;
+  }
+  .seat-input:focus { border-color: var(--gold); }
+  .seat-btn {
+    display: inline-block; width: 100%;
+    background: var(--gold); color: #ffffff; border: none; cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 14px 30px; border-radius: 999px;
+    transition: background 0.25s, transform 0.15s, box-shadow 0.25s;
+  }
+  .seat-btn:hover:not(:disabled) {
+    background: #b3820a; transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(200,146,10,0.35);
+  }
+  .seat-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .status-msg {
+    font-size: 12.5px; line-height: 1.7; margin-top: 12px;
+    display: none;
+  }
+  .status-msg.ok    { display: block; color: #2e7d32; }
+  .status-msg.err   { display: block; color: var(--maroon); }
+  .status-msg.info  { display: block; color: rgba(26,26,26,0.6); }
+
+  /* Allowance banner */
+  .allowance {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px; color: #1a1a1a; margin-bottom: 4px;
+  }
+  .allowance strong { color: var(--gold); }
+  .buyer-email { font-size: 11px; color: rgba(26,26,26,0.45); letter-spacing: 0.05em; margin-bottom: 14px; word-break: break-all; }
+
+  /* Selected / claimed seat rows */
+  .seat-rows { text-align: left; margin-top: 6px; }
+  .seat-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 0; border-bottom: 1px solid rgba(26,26,26,0.08);
+  }
+  .seat-row:last-child { border-bottom: none; }
+  .seat-tag {
+    flex-shrink: 0;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    color: #ffffff; background: var(--gold);
+    padding: 6px 10px; border-radius: 8px; white-space: nowrap;
+  }
+  .seat-row.mine .seat-tag { background: var(--maroon); }
+  .seat-row input {
+    flex: 1; min-width: 0;
+    padding: 9px 12px; font-size: 13px;
+    border: 1px solid rgba(26,26,26,0.18); border-radius: 8px;
+    font-family: 'Montserrat', sans-serif; outline: none;
+  }
+  .seat-row input:focus { border-color: var(--gold); }
+  .seat-row .guest-name { flex: 1; font-size: 13px; color: rgba(26,26,26,0.7); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .seat-remove {
+    background: none; border: none; cursor: pointer;
+    color: rgba(26,26,26,0.35); font-size: 17px; line-height: 1;
+    padding: 4px 6px; transition: color 0.2s;
+  }
+  .seat-remove:hover { color: var(--maroon); }
+
+  .hidden { display: none !important; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 10;
+    background: rgba(245,243,240,0.98);
+    border-top: 1px solid rgba(200,146,10,0.2);
+    padding: 60px 40px 36px; text-align: center;
+  }
+  .footer-logo img { width: 58px; height: 58px; border-radius: 50%; margin-bottom: 18px; opacity: 0.8; }
+  .footer-tagline {
+    font-family: 'Cormorant Garamond', serif; font-size: 17px;
+    color: rgba(26,26,26,0.45); margin-bottom: 30px; letter-spacing: 0.05em;
+  }
+  .footer-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+  .footer-btn {
+    background: rgba(255,255,255,0.9); border: 1px solid rgba(200,146,10,0.45);
+    color: rgba(200,146,10,0.75); padding: 9px 22px; font-size: 13px;
+    font-weight: 700; letter-spacing: 0.1em;
+    text-decoration: none; border-radius: 999px;
+    transition: border-color 0.25s, box-shadow 0.25s, color 0.25s;
+  }
+  .footer-btn:hover { border-color: var(--gold); color: var(--gold); box-shadow: 0 4px 14px rgba(200,146,10,0.25); }
+  .footer-social { display: flex; gap: 22px; justify-content: center; margin-bottom: 28px; }
+  .footer-social a {
+    color: rgba(26,26,26,0.45); text-decoration: none; font-size: 13px;
+    font-weight: 700; letter-spacing: 0.1em; transition: color 0.2s;
+  }
+  .footer-social a:hover { color: var(--gold); }
+  .footer-nonprofit { font-size: 11px; color: rgba(26,26,26,0.45); letter-spacing: 0.05em; margin-bottom: 10px; }
+  .footer-bottom { font-size: 10px; color: rgba(26,26,26,0.3); letter-spacing: 0.1em; }
+  .footer-bottom a { color: rgba(200,146,10,0.7); text-decoration: underline; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(26px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .hamburger { display: flex; }
+    .nav-links {
+      position: fixed; top: 72px; right: 0;
+      flex-direction: column; gap: 0;
+      background: rgba(255,255,255,0.98);
+      width: 240px; height: calc(100vh - 72px);
+      padding: 24px 28px;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      border-left: 1px solid rgba(0,0,0,0.08);
+      z-index: 105;
+    }
+    .nav-links.open { transform: translateX(0); }
+    .nav-links li { padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+    .nav-links a { font-size: 13px; letter-spacing: 0.18em; }
+    .nav-donate { display: none; }
+    .nav-logo-text { font-size: 17px; }
+    .nav-logo-text span { font-size: 9px; }
+    .nav-logo img { width: 40px; height: 40px; }
+
+    .page-hero { padding: 104px 24px 36px; }
+    .seating-section { padding: 36px 18px 60px; }
+    .side-col { position: static; }
+    footer { padding: 40px 20px 28px; }
+    .footer-tagline { font-size: 15px; }
+  }
+
+  /* Mobile menu overlay */
+  .nav-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 104;
+  }
+  .nav-overlay.open { display: block; background: rgba(0,0,0,0.3); }
+
+  .mobile-donate { display: none; }
+  @media (max-width: 768px) {
+    .mobile-donate { display: block; }
+    .mobile-donate a {
+      color: var(--gold) !important;
+      font-size: 13px !important;
+      letter-spacing: 0.18em !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/home" class="nav-logo">
+    <img src="assets/clock_transparent.png" alt="Achieve M.O.O.R.E" />
+    <div class="nav-logo-text">
+      Achieve M.O.O.R.E
+      <span>Est. 2016</span>
+    </div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/home#mission">Mission</a></li>
+    <li><a href="/gala" class="active">Hands of Time Gala</a></li>
+    <li><a href="/board">Meet the Board</a></li>
+    <li><a href="/newsletter">A.M News</a></li>
+    <li><a href="/about">About Us</a></li>
+    <li class="mobile-donate"><a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener">Donate</a></li>
+  </ul>
+  <div class="nav-overlay" id="navOverlay"></div>
+  <a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" class="nav-donate">Donate</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <p class="page-hero-label">Hands of Time Gala &mdash; December 5, 2026</p>
+  <h1 class="page-hero-title">Choose Your <span class="gold">Seats</span></h1>
+  <p class="page-hero-subtitle">Sixteen tables. One unforgettable evening. Pick exactly where you&rsquo;ll be when the hands of time move forward.</p>
+  <div class="gold-divider"></div>
+</section>
+
+<!-- SEAT PICKER -->
+<section class="seating-section">
+  <div class="seat-columns">
+
+    <div class="map-col">
+      <div class="map-scroll">
+        <svg id="seatMap" viewBox="0 0 740 940" role="group" aria-label="Ballroom seat map: 16 tables of 10 seats"></svg>
+      </div>
+      <div class="seat-legend">
+        <span><i class="legend-dot"></i> Available</span>
+        <span><i class="legend-dot sel"></i> Selected</span>
+        <span><i class="legend-dot mine"></i> Your Seats</span>
+        <span><i class="legend-dot tkn"></i> Taken</span>
+      </div>
+    </div>
+
+    <div class="side-col">
+
+      <!-- Verify panel (no token yet) -->
+      <div class="side-card" id="verifyCard">
+        <div class="card-label">Ticket Holders</div>
+        <h3>Find Your Invitation</h3>
+        <p>Every ticket purchase receives a personal <em>Choose My Seats</em> email. Can&rsquo;t find yours? Enter the email you used at checkout and we&rsquo;ll send it again.</p>
+        <input type="email" class="seat-input" id="resendEmail" placeholder="you@example.com" autocomplete="email" />
+        <button class="seat-btn" id="resendBtn">Email My Seat Link</button>
+        <div class="status-msg" id="resendMsg" role="status"></div>
+        <p style="margin-top:18px; margin-bottom:0;">Don&rsquo;t have a ticket yet? <a href="/gala#tickets" style="color:var(--gold);">Purchase one here</a> &mdash; your seat link arrives moments after checkout.</p>
+      </div>
+
+      <!-- Picker panel (valid token) -->
+      <div class="side-card hidden" id="pickerCard">
+        <div class="card-label">Welcome</div>
+        <div class="allowance" id="allowanceLine"></div>
+        <div class="buyer-email" id="buyerEmail"></div>
+
+        <div id="selectedWrap" class="hidden">
+          <p style="margin-bottom:6px;"><strong>Selected</strong> &mdash; add each guest&rsquo;s name for their place card (optional):</p>
+          <div class="seat-rows" id="selectedRows"></div>
+          <button class="seat-btn" id="confirmBtn" style="margin-top:16px;">Confirm Seats</button>
+        </div>
+        <p id="pickHint" style="margin-bottom:0;">Tap an open seat on the map to select it.</p>
+        <div class="status-msg" id="claimMsg" role="status"></div>
+      </div>
+
+      <!-- Confirmed seats -->
+      <div class="side-card hidden" id="mineCard">
+        <div class="card-label">Confirmed</div>
+        <h3>Your Seats</h3>
+        <div class="seat-rows" id="mineRows"></div>
+        <div class="status-msg" id="mineMsg" role="status"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <img src="assets/clock_transparent.png" alt="Achieve M.O.O.R.E" />
+  </div>
+  <p class="footer-tagline">The goal is not only to succeed, but as you succeed, bring others with you.</p>
+  <div class="footer-ctas">
+    <a href="/newsletter" class="footer-btn">A.M News</a>
+  </div>
+  <div class="footer-social">
+    <a class="instagram-orb" href="https://www.instagram.com/achievemoore/" target="_blank" rel="noopener" aria-label="Achieve M.O.O.R.E on Instagram"><canvas aria-hidden="true"></canvas><span data-text="Instagram">Instagram</span></a>
+    <a class="linkedin-orb" href="https://www.linkedin.com/company/achieve-moore-foundation-inc" target="_blank" rel="noopener" aria-label="Achieve M.O.O.R.E on LinkedIn"><canvas aria-hidden="true"></canvas><span data-text="LinkedIn">LinkedIn</span></a>
+  </div>
+  <script src="assets/linkedin-orb.js" defer></script>
+  <script src="assets/gala-countdown.js" defer></script>
+  <p class="footer-nonprofit">Achieve M.O.O.R.E Foundation INC. 501(c)(3) Non Profit Organization</p>
+  <p class="footer-bottom">&copy; 2016 Achieve M.O.O.R.E &mdash; <a href="#">Terms and Conditions</a></p>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────
+// CONFIG — set apiBase to your deployed Worker URL (no trailing slash).
+// ─────────────────────────────────────────────────────────────────────────
+const SEATING_CONFIG = {
+  apiBase: 'https://gala-checkout.achievemoore.workers.dev'
+};
+
+(() => {
+  const API = SEATING_CONFIG.apiBase.replace(/\/$/, '');
+  const TABLES = 16, SEATS_PER_TABLE = 10;
+  const token = new URLSearchParams(location.search).get('t') || '';
+
+  let session = null;              // { email, name, tickets, seats: [...] }
+  const taken = new Set();         // seats claimed by anyone (from /api/seats)
+  const mine = new Map();          // seatId -> guestName (confirmed, this buyer)
+  const selected = new Map();      // seatId -> guestName (pending)
+  const seatEls = new Map();       // seatId -> <g> element
+
+  const $ = id => document.getElementById(id);
+  const seatLabel = id => {
+    const m = /^T(\d+)-S(\d+)$/.exec(id);
+    return `Table ${m[1]} · Seat ${m[2]}`;
+  };
+
+  /* ── Build the SVG floor plan ── */
+  const svg = $('seatMap');
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, attrs, parent) => {
+    const n = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v);
+    (parent || svg).appendChild(n);
+    return n;
+  };
+
+  // Room outline
+  el('rect', { x: 14, y: 14, width: 712, height: 912, rx: 14, fill: 'rgba(245,243,240,0.45)', stroke: 'rgba(26,26,26,0.22)', 'stroke-width': 1.6 });
+
+  // Stage / program band (head table + screen on the floor plan)
+  el('rect', { x: 150, y: 40, width: 440, height: 66, rx: 8, fill: 'rgba(200,146,10,0.10)', stroke: 'rgba(200,146,10,0.45)', 'stroke-width': 1.2 });
+  const stageT = el('text', { x: 370, y: 68, class: 'room-label' }); stageT.textContent = 'Stage · Program';
+  const stageT2 = el('text', { x: 370, y: 88, class: 'room-label', 'font-size': 7.5, fill: 'rgba(26,26,26,0.3)' }); stageT2.textContent = 'Head Table & Presentation';
+
+  // Buffet band (bottom-left on the plan)
+  el('rect', { x: 60, y: 862, width: 200, height: 40, rx: 8, fill: 'rgba(200,146,10,0.08)', stroke: 'rgba(200,146,10,0.35)', 'stroke-width': 1.1 });
+  const bufT = el('text', { x: 160, y: 887, class: 'room-label' }); bufT.textContent = 'Buffet';
+  // Entrance (bottom-center doors on the plan)
+  const entT = el('text', { x: 470, y: 913, class: 'room-label' }); entT.textContent = '· Entrance ·';
+
+  // 4 x 4 grid of tables — Table 1 is front-left (nearest the stage)
+  const COLS = [130, 290, 450, 610];
+  const ROWS = [212, 384, 556, 728];
+  const TABLE_R = 42, RING_R = 62, SEAT_R = 12;
+
+  for (let t = 1; t <= TABLES; t++) {
+    const cx = COLS[(t - 1) % 4];
+    const cy = ROWS[Math.floor((t - 1) / 4)];
+    const g = el('g', {});
+
+    el('circle', { cx, cy, r: TABLE_R, class: 'table-circle' }, g);
+    const cap = el('text', { x: cx, y: cy - 7, class: 'table-cap' }, g);
+    cap.textContent = 'Table';
+    const num = el('text', { x: cx, y: cy + 15, class: 'table-num', 'font-size': 24 }, g);
+    num.textContent = t;
+
+    for (let s = 1; s <= SEATS_PER_TABLE; s++) {
+      const ang = -Math.PI / 2 + (s - 1) * (2 * Math.PI / SEATS_PER_TABLE);
+      const sx = cx + RING_R * Math.cos(ang);
+      const sy = cy + RING_R * Math.sin(ang);
+      const id = `T${t}-S${s}`;
+
+      const seat = el('g', { class: 'seat seat-open', 'data-seat': id, tabindex: 0, role: 'button', 'aria-label': `${seatLabel(id)} — available` }, g);
+      el('circle', { cx: sx, cy: sy, r: SEAT_R }, seat);
+      const txt = el('text', { x: sx, y: sy + 3 }, seat);
+      txt.textContent = s;
+
+      seat.addEventListener('click', () => onSeatClick(id));
+      seat.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSeatClick(id); }
+      });
+      seatEls.set(id, seat);
+    }
+  }
+
+  /* ── Rendering ── */
+  function seatState(id) {
+    if (mine.has(id)) return 'mine';
+    if (selected.has(id)) return 'selected';
+    if (taken.has(id)) return 'taken';
+    return 'open';
+  }
+
+  function render() {
+    for (const [id, elmt] of seatEls) {
+      const st = seatState(id);
+      elmt.setAttribute('class', `seat seat-${st}`);
+      elmt.setAttribute('aria-label', `${seatLabel(id)} — ${st === 'open' ? 'available' : st === 'mine' ? 'your seat' : st}`);
+      if (st === 'taken' || st === 'mine') elmt.setAttribute('tabindex', '-1');
+      else elmt.setAttribute('tabindex', '0');
+    }
+    renderPanels();
+  }
+
+  function remaining() {
+    return session ? session.tickets - mine.size - selected.size : 0;
+  }
+
+  function renderPanels() {
+    if (!session) return;
+    $('pickerCard').classList.remove('hidden');
+
+    const total = session.tickets, left = session.tickets - mine.size;
+    $('allowanceLine').innerHTML = left > 0
+      ? `${session.name ? escapeHtml(session.name.split(' ')[0]) + ', you' : 'You'} have <strong>${left} of ${total}</strong> seat${total === 1 ? '' : 's'} left to place.`
+      : `All <strong>${total}</strong> of your seat${total === 1 ? '' : 's'} are confirmed. See you there!`;
+    $('buyerEmail').textContent = session.email;
+
+    // Pending selections
+    const wrap = $('selectedWrap'), rows = $('selectedRows');
+    rows.innerHTML = '';
+    if (selected.size > 0) {
+      wrap.classList.remove('hidden');
+      for (const [id, guest] of selected) {
+        const row = document.createElement('div');
+        row.className = 'seat-row';
+        row.innerHTML = `<span class="seat-tag">${seatLabel(id)}</span>
+          <input type="text" maxlength="80" placeholder="Guest name (optional)" aria-label="Guest name for ${seatLabel(id)}" />
+          <button class="seat-remove" aria-label="Unselect ${seatLabel(id)}">&times;</button>`;
+        const input = row.querySelector('input');
+        input.value = guest;
+        input.addEventListener('input', () => selected.set(id, input.value));
+        row.querySelector('.seat-remove').addEventListener('click', () => { selected.delete(id); render(); });
+        rows.appendChild(row);
+      }
+      $('confirmBtn').textContent = `Confirm ${selected.size} Seat${selected.size === 1 ? '' : 's'}`;
+    } else {
+      wrap.classList.add('hidden');
+    }
+    $('pickHint').style.display = (left - selected.size) > 0 ? '' : 'none';
+
+    // Confirmed seats
+    const mineCard = $('mineCard'), mineRows = $('mineRows');
+    mineRows.innerHTML = '';
+    if (mine.size > 0) {
+      mineCard.classList.remove('hidden');
+      for (const [id, guest] of mine) {
+        const row = document.createElement('div');
+        row.className = 'seat-row mine';
+        row.innerHTML = `<span class="seat-tag">${seatLabel(id)}</span>
+          <span class="guest-name">${guest ? escapeHtml(guest) : '<em style="color:rgba(26,26,26,0.35)">No name yet</em>'}</span>
+          <button class="seat-remove" title="Release this seat" aria-label="Release ${seatLabel(id)}">&times;</button>`;
+        row.querySelector('.seat-remove').addEventListener('click', () => releaseSeat(id));
+        mineRows.appendChild(row);
+      }
+    } else {
+      mineCard.classList.add('hidden');
+    }
+  }
+
+  function onSeatClick(id) {
+    const st = seatState(id);
+    if (st === 'taken' || st === 'mine' || !session) return;
+    if (st === 'selected') { selected.delete(id); render(); return; }
+    if (remaining() <= 0) {
+      setMsg('claimMsg', `You can place ${session.tickets} seat${session.tickets === 1 ? '' : 's'} total. Unselect one first.`, 'info');
+      return;
+    }
+    setMsg('claimMsg', '', '');
+    selected.set(id, '');
+    render();
+  }
+
+  function setMsg(id, text, kind) {
+    const m = $(id);
+    m.textContent = text;
+    m.className = 'status-msg' + (kind ? ' ' + kind : '');
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  /* ── API calls ── */
+  async function api(path, body) {
+    const resp = await fetch(API + path, body === undefined ? {} : {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await resp.json().catch(() => ({}));
+    if (!resp.ok) throw Object.assign(new Error(data.error || 'Something went wrong'), { data, status: resp.status });
+    return data;
+  }
+
+  async function refreshTaken() {
+    try {
+      const data = await api('/api/seats');
+      taken.clear();
+      for (const id of data.taken) if (!mine.has(id)) taken.add(id);
+      // Drop any pending pick someone else just grabbed
+      for (const id of [...selected.keys()]) if (taken.has(id)) selected.delete(id);
+      render();
+    } catch { /* map keeps last known state */ }
+  }
+
+  async function loadSession() {
+    if (!token) return;
+    try {
+      const data = await api('/api/seats/me', { token });
+      session = data;
+      mine.clear();
+      for (const s of data.seats) mine.set(s.seatId, s.guestName);
+      $('verifyCard').classList.add('hidden');
+      render();
+    } catch (e) {
+      setMsg('resendMsg', e.message, 'err');
+    }
+  }
+
+  async function confirmSeats() {
+    if (!session || selected.size === 0) return;
+    const btn = $('confirmBtn');
+    btn.disabled = true;
+    setMsg('claimMsg', '', '');
+    try {
+      const payload = [...selected].map(([seatId, guestName]) => ({ seatId, guestName }));
+      await api('/api/seats/claim', { token, seats: payload });
+      for (const [id, guest] of selected) mine.set(id, guest);
+      selected.clear();
+      setMsg('claimMsg', 'Seats confirmed — see you at the gala!', 'ok');
+      render();
+    } catch (e) {
+      if (e.status === 409 && e.data.taken) {
+        for (const id of e.data.taken) { selected.delete(id); taken.add(id); }
+      }
+      setMsg('claimMsg', e.message, 'err');
+      render();
+      refreshTaken();
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async function releaseSeat(id) {
+    if (!confirm(`Release ${seatLabel(id)}? Someone else will be able to take it.`)) return;
+    try {
+      await api('/api/seats/release', { token, seatId: id });
+      mine.delete(id);
+      setMsg('mineMsg', `${seatLabel(id)} released — pick a new seat on the map.`, 'info');
+      render();
+      refreshTaken();
+    } catch (e) {
+      setMsg('mineMsg', e.message, 'err');
+    }
+  }
+
+  async function resend() {
+    const email = $('resendEmail').value.trim();
+    if (!email) { setMsg('resendMsg', 'Please enter your email address.', 'err'); return; }
+    const btn = $('resendBtn');
+    btn.disabled = true;
+    try {
+      await api('/api/seats/resend', { email });
+      setMsg('resendMsg', 'If that email purchased tickets, your seat link is on its way. Check your inbox (and spam folder).', 'ok');
+    } catch (e) {
+      setMsg('resendMsg', e.message, 'err');
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  $('confirmBtn').addEventListener('click', confirmSeats);
+  $('resendBtn').addEventListener('click', resend);
+  $('resendEmail').addEventListener('keydown', e => { if (e.key === 'Enter') resend(); });
+
+  /* ── Boot ── */
+  refreshTaken();
+  loadSession();
+  setInterval(() => { if (!document.hidden) refreshTaken(); }, 30000);
+})();
+</script>
+
+<script>
+// Hamburger menu toggle
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+const navOverlay = document.getElementById('navOverlay');
+
+function toggleMenu() {
+  hamburger.classList.toggle('active');
+  navLinks.classList.toggle('open');
+  navOverlay.classList.toggle('open');
+  document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
+}
+
+hamburger.addEventListener('click', toggleMenu);
+navOverlay.addEventListener('click', toggleMenu);
+
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    if (navLinks.classList.contains('open')) toggleMenu();
+  });
+});
+</script>
+
+</body>
+</html>
