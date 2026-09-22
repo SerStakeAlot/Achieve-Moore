@@ -311,20 +311,9 @@
   }
 
   /* Sold-out ticket */
-  .ticket-card--soldout > *:not(.soldout-stamp) { filter: grayscale(1); opacity: 0.4; }
+  .ticket-card--soldout > * { filter: grayscale(1); opacity: 0.4; }
   .ticket-card--soldout { border-color: rgba(26,26,26,0.2); box-shadow: 0 14px 40px rgba(0,0,0,0.06); }
   .ticket-card--soldout .ticket-cta { pointer-events: none; }
-  .soldout-stamp {
-    position: absolute; inset: 0; z-index: 2;
-    display: flex; align-items: center; justify-content: center;
-    pointer-events: none;
-  }
-  .soldout-stamp span {
-    font-size: 38px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
-    color: var(--maroon); border: 5px solid var(--maroon); border-radius: 12px;
-    padding: 10px 26px; transform: rotate(-14deg);
-    background: rgba(255,255,255,0.78);
-  }
 
   /* Sponsorship tiers */
   .sponsor-heading {
@@ -676,7 +665,6 @@
         <div class="ticket-price">$275</div>
         <div class="ticket-desc">Per Guest &bull; Our limited early-bird rate for the first supporters of the evening.</div>
         <span class="ticket-cta" aria-hidden="true">Sold Out</span>
-        <div class="soldout-stamp"><span>Sold Out</span></div>
       </div>
       <div class="ticket-card">
         <div class="ticket-badge">On Sale Now</div>
