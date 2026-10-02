@@ -348,6 +348,18 @@
     font-variant-numeric: tabular-nums;
   }
   .goal-note { font-size: 12.5px; font-weight: 300; color: rgba(26,26,26,0.5); line-height: 1.7; }
+  .goal-amount {
+    font-weight: 700; color: var(--gold);
+    text-shadow: 0 0 8px rgba(240,192,40,0.55), 0 0 22px rgba(200,146,10,0.35);
+    animation: goalGlow 2.6s ease-in-out infinite;
+  }
+  @keyframes goalGlow {
+    0%, 100% { text-shadow: 0 0 8px rgba(240,192,40,0.55), 0 0 22px rgba(200,146,10,0.35); }
+    50% { text-shadow: 0 0 14px rgba(240,192,40,0.85), 0 0 34px rgba(200,146,10,0.55); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .goal-amount { animation: none; }
+  }
   @media (max-width: 640px) {
     .goal-wrap { gap: 30px; }
     .goal-stats { text-align: center; }
@@ -650,7 +662,7 @@
     <p class="section-label">The Goal</p>
     <div class="gold-divider" style="margin-bottom: 18px;"></div>
     <h2>Every Dollar Counts</h2>
-    <p>This year&rsquo;s gala aims to raise <strong>$100,000</strong> for scholarships &mdash; but the night is bigger than one evening. It marks the start of our ultimate mission: raising <strong>$1,000,000</strong> to expand access, ease financial barriers, and empower the next generation of student leaders to Achieve M.O.O.R.E. Every ticket purchased and every donation moves the mission forward.</p>
+    <p>This year&rsquo;s gala aims to raise <strong class="goal-amount">$100,000</strong> for scholarships &mdash; but the night is bigger than one evening. It marks the start of our ultimate mission: raising <strong class="goal-amount">$1,000,000</strong> to expand access, ease financial barriers, and empower the next generation of student leaders to Achieve M.O.O.R.E. Every ticket purchased and every donation moves the mission forward.</p>
   </div>
 
   <!-- TICKETS & SPONSORSHIP -->
