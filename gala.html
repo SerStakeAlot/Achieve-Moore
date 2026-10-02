@@ -329,7 +329,7 @@
   .sponsor-card .ticket-price { font-size: 44px; }
   .sponsor-card--eternal { border-color: var(--gold); box-shadow: 0 14px 40px rgba(200,146,10,0.22); }
 
-  /* Goal hourglass */
+  /* Countdown hourglass */
   .goal-wrap {
     display: flex; align-items: center; justify-content: center;
     gap: 56px; flex-wrap: wrap; margin-top: 10px;
@@ -342,18 +342,10 @@
   }
   .goal-of { font-size: 15px; font-weight: 300; color: rgba(26,26,26,0.7); margin: 6px 0 22px; }
   .goal-of strong { font-weight: 600; color: #1a1a1a; }
-  .goal-meter {
-    height: 6px; border-radius: 999px; background: rgba(200,146,10,0.14);
-    overflow: hidden; margin-bottom: 10px;
-  }
-  .goal-meter span {
-    display: block; height: 100%; width: 0;
-    background: linear-gradient(90deg, var(--gold), #f0c028);
-    border-radius: 999px;
-  }
   .goal-pct {
-    font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.14em;
     text-transform: uppercase; color: rgba(200,146,10,0.85); margin-bottom: 18px;
+    font-variant-numeric: tabular-nums;
   }
   .goal-note { font-size: 12.5px; font-weight: 300; color: rgba(26,26,26,0.5); line-height: 1.7; }
   @media (max-width: 640px) {
@@ -636,22 +628,29 @@
     </div>
   </div>
 
-  <!-- GOAL HOURGLASS -->
+  <!-- COUNTDOWN HOURGLASS -->
+  <div class="gala-block" id="countdown">
+    <p class="section-label">The Countdown</p>
+    <div class="gold-divider" style="margin-bottom: 18px;"></div>
+    <h2>Sand Through the Glass</h2>
+    <p>The hands of time are moving &mdash; grain by grain, the evening draws closer. When the last of the sand falls, we&rsquo;ll see you in black tie.</p>
+    <div class="goal-wrap">
+      <canvas id="hourglass" aria-label="Hourglass counting down to the Hands of Time Gala on December 5, 2026"></canvas>
+      <div class="goal-stats">
+        <div class="goal-raised" id="cdDays">&nbsp;</div>
+        <div class="goal-of">days until the <strong>Hands of Time Gala</strong></div>
+        <div class="goal-pct" id="cdClock"></div>
+        <div class="goal-note">December 5, 2026 &middot; 7:00 PM &middot; Hyatt Regency Atlanta Perimeter at Villa Christina</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOAL -->
   <div class="gala-block" id="goal">
     <p class="section-label">The Goal</p>
     <div class="gold-divider" style="margin-bottom: 18px;"></div>
     <h2>Every Dollar Counts</h2>
-    <p>This year&rsquo;s gala aims to raise <strong>$100,000</strong> for scholarships. Every ticket purchased and every donation drops more sand through the glass &mdash; watch the bottom fill as we close in on the goal.</p>
-    <div class="goal-wrap">
-      <canvas id="hourglass" aria-label="Hourglass showing $5,050 raised of the $100,000 goal"></canvas>
-      <div class="goal-stats">
-        <div class="goal-raised" id="goalRaised">$0</div>
-        <div class="goal-of">raised of our <strong>$100,000</strong> goal</div>
-        <div class="goal-meter"><span id="goalMeter"></span></div>
-        <div class="goal-pct" id="goalPct">0% of the way</div>
-        <div class="goal-note">Raised so far through tickets and donations. Every ticket and every donation adds sand to the glass.</div>
-      </div>
-    </div>
+    <p>This year&rsquo;s gala aims to raise <strong>$100,000</strong> for scholarships &mdash; but the night is bigger than one evening. It marks the start of our ultimate mission: raising <strong>$1,000,000</strong> to expand access, ease financial barriers, and empower the next generation of student leaders to Achieve M.O.O.R.E. Every ticket purchased and every donation moves the mission forward.</p>
   </div>
 
   <!-- TICKETS & SPONSORSHIP -->
@@ -736,10 +735,11 @@
 </footer>
 
 <script>
-// ── Goal hourglass ── update RAISED as money comes in (tickets + donations)
+// ── Countdown hourglass ── sand drains from the top bulb as the gala approaches
 (() => {
-  const GOAL = 100000, RAISED = 5050;
-  const FRAC = Math.min(1, RAISED / GOAL);
+  const GALA = new Date('2026-12-05T19:00:00-05:00').getTime();
+  const START = new Date('2025-12-05T19:00:00-05:00').getTime();
+  const FRAC = Math.min(1, Math.max(0, (Date.now() - START) / (GALA - START)));
 
   const cv = document.getElementById('hourglass');
   if (!cv) return;
@@ -784,7 +784,7 @@
   }
   const topBulb = bulb(true), botBulb = bulb(false);
 
-  // sand levels by bulb area, so the fill is true to the fraction raised
+  // sand levels by bulb area, so the fill is true to the time-elapsed fraction
   function topSurfaceY(emptyFrac) {
     let total = 0;
     for (let y = glassTop; y <= neckY; y += .5) total += wTop(y);
@@ -973,19 +973,21 @@
     engrave('EST. 2016', glassTop - capH - 2 + capH / 2 + 3, 7, 3);
   }
 
-  const raisedEl = document.getElementById('goalRaised');
-  const pctEl = document.getElementById('goalPct');
-  const meterEl = document.getElementById('goalMeter');
-  const pct = FRAC * 100;
-  function setStats(p) {
-    raisedEl.textContent = '$' + Math.round(RAISED * p).toLocaleString('en-US');
-    pctEl.textContent = (pct * p).toFixed(1) + '% of the way';
-    meterEl.style.width = (Math.max(pct, 1.2) * p) + '%';
+  const daysEl = document.getElementById('cdDays');
+  const clockEl = document.getElementById('cdClock');
+  const pad = n => String(n).padStart(2, '0');
+  function tick() {
+    const left = Math.max(0, GALA - Date.now());
+    daysEl.textContent = Math.floor(left / 86400000);
+    clockEl.textContent = left === 0
+      ? 'The night is here'
+      : pad(Math.floor(left / 3600000) % 24) + ':' + pad(Math.floor(left / 60000) % 60) + ':' + pad(Math.floor(left / 1000) % 60);
   }
+  tick();
+  setInterval(tick, 1000);
 
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
     easeVal = 1;
-    setStats(1);
     frame(1.3);
     return;
   }
@@ -995,7 +997,6 @@
     if (started) {
       const f = Math.min(1, (now - startT) / 1600);
       easeVal = 1 - Math.pow(1 - f, 3);
-      setStats(easeVal);
     }
     frame(now / 1000);
     if (running) requestAnimationFrame(loop);
