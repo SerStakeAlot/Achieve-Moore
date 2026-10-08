@@ -702,6 +702,68 @@
       letter-spacing: 0.18em !important;
     }
   }
+
+  /* ── GALA FLYER POPUP (first visit) ── */
+  .flyer-overlay {
+    position: fixed; inset: 0; z-index: 2000;
+    background: rgba(20,16,10,0.72); backdrop-filter: blur(4px);
+    display: none; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .flyer-overlay.open { display: flex; animation: flyerFade 0.4s ease; }
+  @keyframes flyerFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .flyer-modal {
+    position: relative;
+    width: 100%; max-width: 420px;
+    max-height: 92vh; overflow-y: auto;
+    background: #ffffff; border-radius: 18px;
+    border: 1px solid rgba(200,146,10,0.35);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+    padding: 36px 28px 30px; text-align: center;
+    animation: flyerUp 0.45s ease;
+  }
+  @keyframes flyerUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .flyer-close {
+    position: absolute; top: 14px; right: 16px;
+    background: none; border: none; cursor: pointer;
+    font-size: 26px; line-height: 1; color: rgba(26,26,26,0.4);
+    transition: color 0.2s;
+  }
+  .flyer-close:hover { color: var(--gold); }
+  .flyer-modal-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 8px;
+  }
+  .flyer-modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px;
+  }
+  .flyer-modal img {
+    display: block; width: 100%;
+    border-radius: 12px;
+    border: 1px solid rgba(200,146,10,0.3);
+    box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+    margin-bottom: 22px;
+  }
+  .flyer-modal-cta {
+    display: inline-block;
+    background: var(--gold); color: #ffffff;
+    font-size: 10px; font-weight: 800; letter-spacing: 0.22em;
+    text-transform: uppercase; text-decoration: none;
+    padding: 14px 36px; border-radius: 999px;
+    transition: background 0.25s, transform 0.15s, box-shadow 0.25s;
+  }
+  .flyer-modal-cta:hover {
+    background: #b3820a;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(200,146,10,0.35);
+  }
 </style>
 </head>
 <body>
@@ -736,6 +798,17 @@
     <span></span><span></span><span></span>
   </button>
 </nav>
+
+<!-- GALA FLYER POPUP (first visit only) -->
+<div class="flyer-overlay" id="flyerOverlay" role="dialog" aria-modal="true" aria-label="Hands of Time Gala announcement">
+  <div class="flyer-modal">
+    <button class="flyer-close" id="flyerClose" aria-label="Close">&times;</button>
+    <p class="flyer-modal-label">You're Invited</p>
+    <h3 class="flyer-modal-title">Hands of Time Gala</h3>
+    <img src="assets/team/gala-op.jpg" alt="Hands of Time Gala — A Black Tie Gala, December 5th 2026, 7:00 PM, Hyatt Regency Villa Christina" />
+    <a href="/gala" class="flyer-modal-cta">Explore the Gala</a>
+  </div>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -1273,6 +1346,29 @@ navLinks.querySelectorAll('a').forEach(link => {
   // Pause auto-advance on hover
   slideshow.addEventListener('mouseenter', () => clearInterval(timer));
   slideshow.addEventListener('mouseleave', resetTimer);
+})();
+
+// ── Gala flyer popup — shows once per visit ──
+(function () {
+  const overlay = document.getElementById('flyerOverlay');
+  if (!overlay) return;
+  const KEY = 'am_gala_flyer_seen';
+  let seen = false;
+  try { seen = sessionStorage.getItem(KEY) === '1'; } catch (e) {}
+  if (seen) return;
+
+  function dismiss() {
+    overlay.classList.remove('open');
+    try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
+  }
+
+  setTimeout(() => overlay.classList.add('open'), 800);
+  document.getElementById('flyerClose').addEventListener('click', dismiss);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) dismiss(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) dismiss();
+  });
+  overlay.querySelector('.flyer-modal-cta').addEventListener('click', dismiss);
 })();
 </script>
 </body>

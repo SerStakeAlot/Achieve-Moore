@@ -122,6 +122,23 @@
   }
   .gold-divider { width: 50px; height: 1px; background: var(--gold); margin: 24px auto 0; opacity: 0.55; }
 
+  /* Hero buy-now CTA */
+  .hero-buy-cta {
+    display: inline-block; margin-top: 32px;
+    background: var(--gold); color: #ffffff;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.24em;
+    text-transform: uppercase; text-decoration: none;
+    padding: 16px 44px; border-radius: 999px;
+    box-shadow: 0 10px 28px rgba(200,146,10,0.3);
+    transition: background 0.25s, transform 0.15s, box-shadow 0.25s;
+    opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+  }
+  .hero-buy-cta:hover {
+    background: #b3820a;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 34px rgba(200,146,10,0.45);
+  }
+
   /* ── GALA SECTIONS ── */
   .gala-section {
     flex: 1;
@@ -578,6 +595,7 @@
   <h1 class="page-hero-title">Hands of Time <span class="gold">Gala</span></h1>
   <p class="page-hero-subtitle">Honoring those who have pushed the hands of time forward &mdash; creating history, leaving legacy, and keeping the future in mind.</p>
   <div class="gold-divider"></div>
+  <a href="#tickets" class="hero-buy-cta">Buy Tickets Now</a>
 </section>
 
 <!-- GALA CONTENT (SHELL — draft sections below) -->
