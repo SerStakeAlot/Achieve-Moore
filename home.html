@@ -119,6 +119,32 @@
     color: rgba(26,26,26,0.7); transition: color 0.2s;
   }
   .nav-links a:hover { color: var(--gold); }
+  /* Gala sub-menu dropdown */
+  .nav-item-dropdown { position: relative; }
+  .nav-item-dropdown::after {
+    content: ''; position: absolute; top: 100%; left: 0; right: 0; height: 18px;
+  }
+  .nav-sub {
+    list-style: none;
+    position: absolute; top: calc(100% + 14px); left: 50%;
+    transform: translateX(-50%) translateY(6px);
+    background: rgba(255,255,255,0.98);
+    border: 1px solid rgba(200,146,10,0.3);
+    border-radius: 8px;
+    box-shadow: 0 14px 34px rgba(0,0,0,0.14);
+    padding: 10px 0;
+    min-width: 170px;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    z-index: 120;
+  }
+  .nav-item-dropdown:hover .nav-sub,
+  .nav-item-dropdown:focus-within .nav-sub {
+    opacity: 1; visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  .nav-sub li { padding: 0; }
+  .nav-sub a { display: block; padding: 10px 22px; white-space: nowrap; text-align: center; }
 
   /* HAMBURGER */
   .hamburger {
@@ -622,6 +648,15 @@
     .nav-links.open { right: 0; }
     .nav-links li { padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
     .nav-links a { font-size: 13px; letter-spacing: 0.18em; }
+    .nav-item-dropdown::after { display: none; }
+    .nav-sub {
+      position: static; transform: none;
+      opacity: 1; visibility: visible;
+      background: transparent; border: none; box-shadow: none;
+      padding: 10px 0 0 16px; min-width: 0;
+    }
+    .nav-sub li { padding: 6px 0; border-bottom: none; }
+    .nav-sub a { font-size: 11px; }
     .nav-donate { display: none; }
     .nav-logo-text { font-size: 17px; }
     .nav-logo-text span { font-size: 9px; }
@@ -786,7 +821,12 @@
   </a>
   <ul class="nav-links" id="navLinks">
     <li><a href="/home#mission">Mission</a></li>
-    <li><a href="/gala">Hands of Time Gala</a></li>
+    <li class="nav-item-dropdown">
+      <a href="/gala">Hands of Time Gala</a>
+      <ul class="nav-sub">
+        <li><a href="/gala#sponsors">Sponsors</a></li>
+      </ul>
+    </li>
     <li><a href="/board">Meet the Board</a></li>
     <li><a href="/newsletter">A.M News</a></li>
     <li><a href="/about">About Us</a></li>
@@ -799,14 +839,14 @@
   </button>
 </nav>
 
-<!-- GALA FLYER POPUP (first visit only) -->
+<!-- GALA FLYER POPUP (rotates per visit) -->
 <div class="flyer-overlay" id="flyerOverlay" role="dialog" aria-modal="true" aria-label="Hands of Time Gala announcement">
   <div class="flyer-modal">
     <button class="flyer-close" id="flyerClose" aria-label="Close">&times;</button>
-    <p class="flyer-modal-label">You're Invited</p>
-    <h3 class="flyer-modal-title">Hands of Time Gala</h3>
-    <img src="assets/honorees/gala-flyer-bryce.jpg" alt="Hands of Time Gala flyer — proudly honoring Bryce Thompson with the BOWY Legacy Award, Saturday December 5, 2026, 7:00–10:00 PM, Hyatt Regency Villa Christina" />
-    <a href="/gala" class="flyer-modal-cta">Explore the Gala</a>
+    <p class="flyer-modal-label" id="flyerLabel">You're Invited</p>
+    <h3 class="flyer-modal-title" id="flyerTitle">Hands of Time Gala</h3>
+    <img id="flyerImg" src="assets/honorees/gala-flyer-bryce.jpg" alt="Hands of Time Gala flyer — proudly honoring Bryce Thompson with the BOWY Legacy Award, Saturday December 5, 2026, 7:00–10:00 PM, Hyatt Regency Villa Christina" />
+    <a href="/gala" class="flyer-modal-cta" id="flyerCta">Explore the Gala</a>
   </div>
 </div>
 
@@ -1348,14 +1388,46 @@ navLinks.querySelectorAll('a').forEach(link => {
   slideshow.addEventListener('mouseleave', resetTimer);
 })();
 
-// ── Gala flyer popup — shows once per visit ──
+// ── Gala flyer popup — shows once per visit, rotates flyers between visits ──
 (function () {
   const overlay = document.getElementById('flyerOverlay');
   if (!overlay) return;
-  const KEY = 'am_gala_flyer_seen_bryce';
+  const KEY = 'am_gala_flyer_seen_v3';
   let seen = false;
   try { seen = sessionStorage.getItem(KEY) === '1'; } catch (e) {}
   if (seen) return;
+
+  const FLYERS = [
+    {
+      src: 'assets/honorees/gala-flyer-bryce.jpg',
+      alt: 'Hands of Time Gala flyer — proudly honoring Bryce Thompson with the BOWY Legacy Award, Saturday December 5, 2026, 7:00–10:00 PM, Hyatt Regency Villa Christina',
+      label: "You're Invited",
+      title: 'Hands of Time Gala',
+      cta: 'Explore the Gala',
+      href: '/gala'
+    },
+    {
+      src: 'assets/sponsors/sundial-flyer-ey-parker.jpg',
+      alt: 'Celebrating our first Sundial Partner — thank you, EY Parker Foundation, for investing in scholarships, leadership, and career launch for the next generation',
+      label: 'Thank You',
+      title: 'Our First Sundial Partner',
+      cta: 'Meet Our Sponsors',
+      href: '/gala#sponsors'
+    }
+  ];
+  let idx = 0;
+  try {
+    idx = parseInt(localStorage.getItem('am_flyer_rotation') || '0', 10) % FLYERS.length;
+    if (isNaN(idx) || idx < 0) idx = 0;
+    localStorage.setItem('am_flyer_rotation', String((idx + 1) % FLYERS.length));
+  } catch (e) {}
+  const f = FLYERS[idx];
+  document.getElementById('flyerLabel').textContent = f.label;
+  document.getElementById('flyerTitle').textContent = f.title;
+  const img = document.getElementById('flyerImg');
+  img.src = f.src; img.alt = f.alt;
+  const cta = document.getElementById('flyerCta');
+  cta.textContent = f.cta; cta.href = f.href;
 
   function dismiss() {
     overlay.classList.remove('open');
