@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Achieve M.O.O.R.E</title>
-<meta name="description" content="Achieve M.O.O.R.E Foundation INC. — 501(c)(3) nonprofit. The goal is not only to succeed, but as you succeed, bring others with you.">
+<meta name="description" content="Join Achieve M.O.O.R.E. for the 2026 Hands of Time Gala featuring Georgia State Representative Robert Dawson as keynote speaker.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Achieve M.O.O.R.E Foundation">
 <meta property="og:title" content="Achieve M.O.O.R.E">
-<meta property="og:description" content="Achieve M.O.O.R.E Foundation INC. — 501(c)(3) nonprofit. The goal is not only to succeed, but as you succeed, bring others with you.">
+<meta property="og:description" content="Join Achieve M.O.O.R.E. for the 2026 Hands of Time Gala featuring Georgia State Representative Robert Dawson as keynote speaker.">
 <meta property="og:url" content="https://achievemoorefoundation.org/home">
 <meta property="og:image" content="https://achievemoorefoundation.org/assets/og-logo.png">
 <meta property="og:image:width" content="1072">
 <meta property="og:image:height" content="1072">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Achieve M.O.O.R.E">
-<meta name="twitter:description" content="Achieve M.O.O.R.E Foundation INC. — 501(c)(3) nonprofit. The goal is not only to succeed, but as you succeed, bring others with you.">
+<meta name="twitter:description" content="Join Achieve M.O.O.R.E. for the 2026 Hands of Time Gala featuring Georgia State Representative Robert Dawson as keynote speaker.">
 <meta name="twitter:image" content="https://achievemoorefoundation.org/assets/og-logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 <style>
@@ -230,6 +230,57 @@
     cursor: pointer; text-decoration: none; transition: all 0.25s; display: inline-block;
   }
   .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+  /* KEYNOTE SPOTLIGHT */
+  .home-keynote {
+    position: relative; z-index: 10;
+    padding: 58px 40px;
+    background: linear-gradient(110deg, #59101b, #24191a 72%);
+    color: #ffffff;
+    overflow: hidden;
+  }
+  .home-keynote::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 5px; height: 100%;
+    background: var(--gold);
+  }
+  .home-keynote-inner {
+    display: grid; grid-template-columns: minmax(220px, 0.8fr) 1.2fr;
+    max-width: 1040px; min-height: 340px; margin: 0 auto;
+    border: 1px solid rgba(200,146,10,0.45);
+    background: rgba(15,12,12,0.32);
+  }
+  .home-keynote-photo {
+    min-height: 340px; width: 100%; height: 100%;
+    object-fit: cover; object-position: center 25%; display: block;
+  }
+  .home-keynote-copy {
+    padding: 42px 52px; display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+  }
+  .home-keynote .section-label { color: #e0b94e; margin-bottom: 12px; }
+  .home-keynote h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(34px, 5vw, 52px); line-height: 1.05;
+    font-weight: 600; margin-bottom: 8px;
+  }
+  .home-keynote-role {
+    color: #e0b94e; font-size: 11px; line-height: 1.7;
+    font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .home-keynote-copy > p:not(.section-label):not(.home-keynote-role) {
+    max-width: 570px; color: rgba(255,255,255,0.82);
+    font-size: 14px; line-height: 1.85; margin-bottom: 20px;
+  }
+  .home-keynote-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .home-keynote-actions a {
+    display: inline-block; padding: 13px 20px; text-decoration: none;
+    text-transform: uppercase; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; border: 1px solid #d5ac3e;
+    color: #ffffff; transition: background 0.2s, color 0.2s;
+  }
+  .home-keynote-actions a:first-child { background: #c8920a; border-color: #c8920a; }
+  .home-keynote-actions a:hover { background: #ffffff; border-color: #ffffff; color: #351217; }
 
   /* MISSION */
   .mission {
@@ -669,6 +720,13 @@
     .hero-ctas { flex-direction: column; align-items: center; gap: 14px; }
     .btn-primary, .btn-outline { width: 100%; max-width: 280px; text-align: center; }
 
+    .home-keynote { padding: 36px 20px; }
+    .home-keynote-inner { grid-template-columns: 1fr; }
+    .home-keynote-photo { min-height: 0; aspect-ratio: 4 / 3; object-position: center 22%; }
+    .home-keynote-copy { padding: 30px 24px 32px; }
+    .home-keynote-actions { flex-direction: column; width: 100%; }
+    .home-keynote-actions a { text-align: center; }
+
     .mission { padding: 60px 24px; }
     .mission h2 { font-size: clamp(26px, 7vw, 40px); }
     .mission p { font-size: 14px; }
@@ -858,8 +916,24 @@
   <h1 class="hero-title">ACHIEVE<br><span class="gold">M.O.O.R.E</span></h1>
   <p class="hero-subtitle">The goal is not only to succeed, but as you succeed, bring others with you. It is one thing to achieve, but one should strive to Achieve M.O.O.R.E.</p>
   <div class="hero-ctas">
-    <a href="#corevalues" class="btn-primary">Our Core Values</a>
-    <a href="#mission" class="btn-outline">Our Mission</a>
+    <a href="/gala#tickets" class="btn-primary">Reserve Gala Tickets</a>
+    <a href="/gala#keynote" class="btn-outline">Meet Our Keynote</a>
+  </div>
+</section>
+
+<section class="home-keynote" aria-labelledby="home-keynote-title">
+  <div class="home-keynote-inner">
+    <img class="home-keynote-photo" src="Representative%20Robert%20dawson.jpg" alt="Georgia State Representative Robert Dawson" loading="lazy" />
+    <div class="home-keynote-copy">
+      <p class="section-label">2026 Hands of Time Gala · Keynote Speaker</p>
+      <h2 id="home-keynote-title">Representative Robert Dawson</h2>
+      <p class="home-keynote-role">Georgia House District 65</p>
+      <p>Rooted in community service, youth mentorship, and public leadership, Representative Dawson brings a perspective shaped by listening to the people he serves. His experience includes service as a staff writer in the U.S. House of Representatives.</p>
+      <div class="home-keynote-actions">
+        <a href="/gala#tickets">Join Us December 5</a>
+        <a href="https://www.robertforgeorgia.com/" target="_blank" rel="noopener">Visit Robert’s Official Site</a>
+      </div>
+    </div>
   </div>
 </section>
 

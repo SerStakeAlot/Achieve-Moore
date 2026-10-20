@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hands of Time Gala — Achieve M.O.O.R.E</title>
-<meta name="description" content="The Hands of Time Gala — honoring those who have pushed the hands of time forward: creating history, leaving legacy, and keeping the future in mind.">
+<meta name="description" content="Celebrate the Hands of Time Gala on December 5, 2026, featuring Georgia State Representative Robert Dawson as keynote speaker.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Achieve M.O.O.R.E Foundation">
 <meta property="og:title" content="Hands of Time Gala — Achieve M.O.O.R.E">
-<meta property="og:description" content="The Hands of Time Gala — honoring those who have pushed the hands of time forward: creating history, leaving legacy, and keeping the future in mind.">
+<meta property="og:description" content="Celebrate the Hands of Time Gala on December 5, 2026, featuring Georgia State Representative Robert Dawson as keynote speaker.">
 <meta property="og:url" content="https://achievemoorefoundation.org/gala">
 <meta property="og:image" content="https://achievemoorefoundation.org/assets/og-logo.png">
 <meta property="og:image:width" content="1072">
 <meta property="og:image:height" content="1072">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hands of Time Gala — Achieve M.O.O.R.E">
-<meta name="twitter:description" content="The Hands of Time Gala — honoring those who have pushed the hands of time forward: creating history, leaving legacy, and keeping the future in mind.">
+<meta name="twitter:description" content="Celebrate the Hands of Time Gala on December 5, 2026, featuring Georgia State Representative Robert Dawson as keynote speaker.">
 <meta name="twitter:image" content="https://achievemoorefoundation.org/assets/og-logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 <style>
@@ -320,6 +320,46 @@
     color: rgba(255,255,255,0.72); max-width: 420px;
   }
   .honoree-bio strong { color: #ffffff; font-weight: 600; }
+  .keynote-spotlight {
+    display: flex; align-items: stretch; text-align: left;
+    max-width: 880px; margin: 28px auto 0;
+    border: 1px solid rgba(200,146,10,0.55);
+    background: linear-gradient(110deg, #59101b, #24191a 72%);
+    color: #ffffff; overflow: hidden;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.16);
+  }
+  .keynote-photo {
+    flex: 0 0 36%; min-height: 350px; width: 36%;
+    object-fit: cover; object-position: center 22%; display: block;
+  }
+  .keynote-copy {
+    flex: 1; padding: 38px 42px;
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  }
+  .keynote-copy .section-label { color: #e0b94e; margin-bottom: 10px; }
+  .keynote-copy h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 5vw, 48px); line-height: 1.05;
+    color: #ffffff; margin-bottom: 8px;
+  }
+  .keynote-copy .keynote-role {
+    color: #e0b94e; font-size: 10px; line-height: 1.7;
+    font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .keynote-copy > p:not(.section-label):not(.keynote-role) {
+    color: rgba(255,255,255,0.82); font-size: 13px;
+    line-height: 1.85; margin: 0 0 12px; max-width: 480px;
+  }
+  .keynote-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .keynote-actions a {
+    display: inline-block; padding: 12px 16px;
+    border: 1px solid #d5ac3e; color: #ffffff; text-decoration: none;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; transition: background 0.2s, color 0.2s;
+  }
+  .keynote-actions a:first-child { background: #c8920a; border-color: #c8920a; }
+  .keynote-actions a:hover { background: #ffffff; border-color: #ffffff; color: #351217; }
   .honoree-more {
     margin-top: 26px;
     font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
@@ -330,6 +370,11 @@
     .honoree-card { flex-direction: column; }
     .honoree-photo { flex: none; width: 100%; min-height: 0; aspect-ratio: 3 / 2.3; background-position: center 18%; }
     .honoree-info { padding: 32px 26px 36px; text-align: center; align-items: center; }
+    .keynote-spotlight { flex-direction: column; }
+    .keynote-photo { flex: none; width: 100%; min-height: 0; aspect-ratio: 4 / 3; object-position: center 22%; }
+    .keynote-copy { padding: 30px 24px 32px; align-items: center; text-align: center; }
+    .keynote-actions { flex-direction: column; width: 100%; }
+    .keynote-actions a { text-align: center; }
   }
 
   /* Sponsor wall */
@@ -760,9 +805,10 @@
 <section class="page-hero">
   <p class="page-hero-label">A Night of Legacy</p>
   <h1 class="page-hero-title">Hands of Time <span class="gold">Gala</span></h1>
-  <p class="page-hero-subtitle">Honoring those who have pushed the hands of time forward &mdash; creating history, leaving legacy, and keeping the future in mind.</p>
+  <p class="page-hero-subtitle">An evening of legacy and leadership, featuring Georgia State Representative Robert Dawson as our confirmed keynote speaker.</p>
   <div class="gold-divider"></div>
   <a href="#tickets" class="hero-buy-cta">Buy Tickets Now</a>
+  <a href="#keynote" class="hero-buy-cta" style="margin-top: 12px; background: transparent; color: #6b0f1a; border: 1px solid rgba(107,15,26,0.35); box-shadow: none;">Meet the Keynote Speaker</a>
 </section>
 
 <!-- GALA CONTENT (SHELL — draft sections below) -->
@@ -809,6 +855,27 @@
         referrerpolicy="no-referrer-when-downgrade"
         allowfullscreen
         title="Map to Hyatt Regency Atlanta Perimeter at Villa Christina"></iframe>
+    </div>
+  </div>
+
+  <!-- KEYNOTE SPEAKER -->
+  <div class="gala-block" id="keynote">
+    <p class="section-label">Our Keynote Speaker</p>
+    <div class="gold-divider" style="margin-bottom: 18px;"></div>
+    <h2>A Voice for Service and Community</h2>
+    <div class="keynote-spotlight">
+      <img class="keynote-photo" src="Representative%20Robert%20dawson.jpg" alt="Georgia State Representative Robert Dawson" loading="lazy" />
+      <div class="keynote-copy">
+        <p class="section-label">Confirmed Keynote Speaker</p>
+        <h3>Representative Robert Dawson</h3>
+        <p class="keynote-role">Georgia House District 65</p>
+        <p>Representative Dawson’s public service is grounded in community engagement and a commitment to expanding opportunity. Before serving in the Georgia House, he worked as a staff writer in the U.S. House of Representatives and has supported youth and community initiatives.</p>
+        <p>Join us for an evening centered on leadership, legacy, and the next generation.</p>
+        <div class="keynote-actions">
+          <a href="#tickets">Reserve Gala Tickets</a>
+          <a href="https://www.robertforgeorgia.com/" target="_blank" rel="noopener">Robert Dawson’s Official Site</a>
+        </div>
+      </div>
     </div>
   </div>
 
