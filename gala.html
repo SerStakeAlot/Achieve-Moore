@@ -613,9 +613,22 @@
     font-size: 13px; font-weight: 300; color: rgba(26,26,26,0.55);
     margin: 10px auto 28px; max-width: 520px; line-height: 1.7;
   }
-  .sponsor-card { min-width: 230px; padding: 34px 36px 30px; }
+  .sponsor-card { min-width: 230px; max-width: 320px; padding: 34px 36px 30px; }
   .sponsor-card .ticket-price { font-size: 44px; }
-  .sponsor-card--eternal { border-color: var(--gold); box-shadow: 0 14px 40px rgba(200,146,10,0.22); }
+  .sponsor-card--featured { border-color: var(--gold); box-shadow: 0 14px 40px rgba(200,146,10,0.22); }
+  .sponsor-benefits {
+    list-style: none; padding: 0; margin: 0 auto 22px;
+    max-width: 250px; text-align: left;
+    font-size: 12px; color: rgba(26,26,26,0.55); letter-spacing: 0.04em; line-height: 1.6;
+  }
+  .sponsor-benefits li { position: relative; padding-left: 16px; margin-bottom: 6px; }
+  .sponsor-benefits li::before {
+    content: '\2022'; position: absolute; left: 0; color: var(--gold); font-weight: 700;
+  }
+  .sponsor-footnote {
+    margin-top: 28px; font-size: 12px; font-weight: 300;
+    color: rgba(26,26,26,0.5); letter-spacing: 0.06em; line-height: 1.7;
+  }
 
   /* Countdown hourglass */
   .goal-wrap {
@@ -1124,28 +1137,89 @@
     </div>
 
     <div class="sponsor-heading" id="sponsorship">Sponsorship Tiers</div>
-    <p class="sponsor-sub">Become a sponsor and put your name behind the next generation of leaders. Every tier directly funds scholarships.</p>
+    <p class="sponsor-sub">Every level of giving builds a leader. Become a partner and put your name behind the next generation &mdash; every tier directly funds scholarships.</p>
     <div class="ticket-tiers">
-      <div class="ticket-card sponsor-card sponsor-card--eternal">
+      <div class="ticket-card sponsor-card sponsor-card--featured">
+        <div class="ticket-badge">Highest Honor</div>
+        <div class="ticket-tier">Perpetuity</div>
+        <div class="ticket-price">$250,000+</div>
+        <ul class="sponsor-benefits">
+          <li>Endowed named scholarship fund</li>
+          <li>Flagship program or cohort naming</li>
+          <li>Jointly designed initiative</li>
+          <li>Joint announcement</li>
+          <li>Outcomes reporting</li>
+        </ul>
+        <a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" class="ticket-cta">Become a Partner</a>
+      </div>
+      <div class="ticket-card sponsor-card">
         <div class="ticket-badge">Presenting Sponsor</div>
+        <div class="ticket-tier">Epoch</div>
+        <div class="ticket-price">$100,000+</div>
+        <ul class="sponsor-benefits">
+          <li>Presenting sponsor of the gala</li>
+          <li>Program naming</li>
+          <li>Permanent Founding Partner designation</li>
+          <li>Three-year commitment</li>
+        </ul>
+        <a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" class="ticket-cta">Become a Partner</a>
+      </div>
+      <div class="ticket-card sponsor-card">
+        <div class="ticket-tier">Zenith</div>
+        <div class="ticket-price">$50,000+</div>
+        <ul class="sponsor-benefits">
+          <li>Presenting sponsor of a signature event</li>
+          <li>Named scholarship fund</li>
+          <li>Early access to scholars for internships and recruiting</li>
+        </ul>
+        <a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" class="ticket-cta">Become a Partner</a>
+      </div>
+      <div class="ticket-card sponsor-card">
+        <div class="ticket-tier">Legacy</div>
+        <div class="ticket-price">$25,000+</div>
+        <ul class="sponsor-benefits">
+          <li>Named scholarship</li>
+          <li>Gala remarks</li>
+          <li>Co-branded workshop or masterclass</li>
+          <li>Scholar meet-and-greet</li>
+          <li>Annual impact summary</li>
+        </ul>
+        <a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" class="ticket-cta">Become a Partner</a>
+      </div>
+      <div class="ticket-card sponsor-card">
         <div class="ticket-tier">Eternal</div>
         <div class="ticket-price">$10,000+</div>
-        <div class="ticket-desc">Our highest honor &mdash; a legacy-level gift that anchors the evening and the scholarship fund.</div>
-        <a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" class="ticket-cta">Become a Sponsor</a>
+        <ul class="sponsor-benefits">
+          <li>Premier website and newsletter segment</li>
+          <li>Featured social</li>
+          <li>Alignment with a program or scholarship</li>
+        </ul>
+        <a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" class="ticket-cta">Become a Partner</a>
       </div>
       <div class="ticket-card sponsor-card">
         <div class="ticket-tier">Timekeeper</div>
-        <div class="ticket-price">$5,000</div>
-        <div class="ticket-desc">A cornerstone gift that keeps the mission moving and opens doors for deserving students.</div>
-        <a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" class="ticket-cta">Become a Sponsor</a>
+        <div class="ticket-price">$5,000+</div>
+        <ul class="sponsor-benefits">
+          <li>Table of 10</li>
+          <li>VIP reception</li>
+          <li>Stage recognition</li>
+          <li>Step-and-repeat logo</li>
+          <li>Brand activation</li>
+          <li>Apparel</li>
+        </ul>
+        <a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" class="ticket-cta">Become a Partner</a>
       </div>
       <div class="ticket-card sponsor-card">
         <div class="ticket-tier">Sundial</div>
-        <div class="ticket-price">$1,000</div>
-        <div class="ticket-desc">A meaningful gift that adds sand to the glass and scholarships to the stage.</div>
-        <a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" class="ticket-cta">Become a Sponsor</a>
+        <div class="ticket-price">$1,000+</div>
+        <ul class="sponsor-benefits">
+          <li>3 gala seats</li>
+          <li>Logo on signage, website, newsletter, and social media</li>
+        </ul>
+        <a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" class="ticket-cta">Become a Partner</a>
       </div>
     </div>
+    <p class="sponsor-footnote">Each level includes the benefits of the levels below it. Gifts may be paid over multiple years.</p>
   </div>
 
 </section>
