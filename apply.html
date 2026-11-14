@@ -673,6 +673,21 @@
           </div>
         </div>
         <div class="field full">
+          <label>Unofficial Transcript <em>*</em></label>
+          <label class="dropzone" id="transcriptDrop" style="padding:18px 20px;">
+            <div class="dz-main">Tap to attach your unofficial transcript</div>
+            <div class="dz-sub">PDF or photo (JPG/PNG), up to 20 MB &mdash; used to verify your 3.0+ cumulative GPA</div>
+            <input type="file" id="transcriptFile" accept="application/pdf,image/jpeg,image/png,image/webp,image/heic,.pdf,.jpg,.jpeg,.png,.webp,.heic">
+          </label>
+          <div class="file-chip hidden" id="transcriptChip">
+            <div>
+              <div class="fc-name" id="tfName"></div>
+              <div class="fc-size" id="tfSize"></div>
+            </div>
+            <button type="button" class="fc-remove" id="tfRemove" aria-label="Remove file">&times;</button>
+          </div>
+        </div>
+        <div class="field full">
           <label for="campusInvolvement">Campus Involvement &amp; Leadership <em>*</em></label>
           <textarea id="campusInvolvement" name="campusInvolvement" required maxlength="2000" placeholder="Organizations, leadership roles, and how you serve your community..."></textarea>
         </div>
@@ -813,46 +828,58 @@ const dz = $id('dropzone');
 ['dragleave', 'drop'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove('drag'); }));
 dz.addEventListener('drop', e => pickFile(e.dataTransfer.files[0]));
 
-/* ── Proof of service hours (signed PDF or photo) ── */
-let proofFile = null;
+/* ── Small documents: signed service-hours proof + unofficial transcript ── */
+function docPicker({ dropId, chipId, nameId, sizeId, removeId, fileId, word }) {
+  const state = { file: null };
+  const drop = $id(dropId), chip = $id(chipId), input = $id(fileId);
 
-function pickProof(file) {
-  if (!file) return;
-  const okType = /\.(pdf|jpe?g|png|webp|heic)$/i.test(file.name) ||
-    ['application/pdf', 'image/jpeg', 'image/png', 'image/webp', 'image/heic'].includes(file.type);
-  if (!okType) { alert('Please attach your proof as a PDF or a photo (JPG/PNG).'); return; }
-  if (file.size > 20 * 1024 * 1024) {
-    alert('Proof files can be up to 20 MB. A photo or scan of the signed form is perfect.');
-    return;
+  function pick(file) {
+    if (!file) return;
+    const okType = /\.(pdf|jpe?g|png|webp|heic)$/i.test(file.name) ||
+      ['application/pdf', 'image/jpeg', 'image/png', 'image/webp', 'image/heic'].includes(file.type);
+    if (!okType) { alert(`Please attach your ${word} as a PDF or a photo (JPG/PNG).`); return; }
+    if (file.size > 20 * 1024 * 1024) {
+      alert(`${word[0].toUpperCase() + word.slice(1)} files can be up to 20 MB. A photo or scan is perfect.`);
+      return;
+    }
+    state.file = file;
+    $id(nameId).textContent = file.name;
+    $id(sizeId).textContent = prettySize(file.size);
+    chip.classList.remove('hidden');
+    drop.classList.add('hidden');
   }
-  proofFile = file;
-  $id('pfName').textContent = file.name;
-  $id('pfSize').textContent = prettySize(file.size);
-  $id('proofChip').classList.remove('hidden');
-  $id('proofDrop').classList.add('hidden');
+
+  input.addEventListener('change', e => pick(e.target.files[0]));
+  $id(removeId).addEventListener('click', () => {
+    state.file = null;
+    input.value = '';
+    chip.classList.add('hidden');
+    drop.classList.remove('hidden');
+  });
+  ['dragover', 'dragenter'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('drag'); }));
+  ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('drag'); }));
+  drop.addEventListener('drop', e => pick(e.dataTransfer.files[0]));
+  return state;
 }
 
-$id('proofFile').addEventListener('change', e => pickProof(e.target.files[0]));
-$id('pfRemove').addEventListener('click', () => {
-  proofFile = null;
-  $id('proofFile').value = '';
-  $id('proofChip').classList.add('hidden');
-  $id('proofDrop').classList.remove('hidden');
+const proofState = docPicker({
+  dropId: 'proofDrop', chipId: 'proofChip', nameId: 'pfName', sizeId: 'pfSize',
+  removeId: 'pfRemove', fileId: 'proofFile', word: 'proof'
 });
-const pdz = $id('proofDrop');
-['dragover', 'dragenter'].forEach(ev => pdz.addEventListener(ev, e => { e.preventDefault(); pdz.classList.add('drag'); }));
-['dragleave', 'drop'].forEach(ev => pdz.addEventListener(ev, e => { e.preventDefault(); pdz.classList.remove('drag'); }));
-pdz.addEventListener('drop', e => pickProof(e.dataTransfer.files[0]));
+const transcriptState = docPicker({
+  dropId: 'transcriptDrop', chipId: 'transcriptChip', nameId: 'tfName', sizeId: 'tfSize',
+  removeId: 'tfRemove', fileId: 'transcriptFile', word: 'transcript'
+});
 
-/** Upload the signed proof in one request. Returns the proof key. */
-async function uploadProof(file) {
-  const resp = await fetch(apiBase + '/api/scholarship/upload/proof?name=' + encodeURIComponent(file.name), {
+/** Upload a small document (proof or transcript) in one request. Returns its key. */
+async function uploadDoc(file, kind) {
+  const resp = await fetch(apiBase + '/api/scholarship/upload/proof?kind=' + kind + '&name=' + encodeURIComponent(file.name), {
     method: 'POST',
     headers: file.type ? { 'Content-Type': file.type } : {},
     body: file
   });
   const data = await resp.json().catch(() => ({}));
-  if (!resp.ok) throw new Error(data.error || 'Could not upload your proof — please try again.');
+  if (!resp.ok) throw new Error(data.error || `Could not upload your ${kind} — please try again.`);
   return data.proofKey;
 }
 
@@ -922,8 +949,13 @@ form.addEventListener('submit', async (e) => {
     msg.classList.add('err');
     return;
   }
-  if (!proofFile) {
+  if (!proofState.file) {
     msg.textContent = 'Please attach proof of your community service hours (signed by school faculty or your supervisor).';
+    msg.classList.add('err');
+    return;
+  }
+  if (!transcriptState.file) {
+    msg.textContent = 'Please attach your unofficial transcript.';
     msg.classList.add('err');
     return;
   }
@@ -948,8 +980,12 @@ form.addEventListener('submit', async (e) => {
   btn.disabled = true;
   try {
     btn.textContent = 'Uploading Proof…';
-    payload.proofKey = await uploadProof(proofFile);
-    payload.proofName = proofFile.name;
+    payload.proofKey = await uploadDoc(proofState.file, 'proof');
+    payload.proofName = proofState.file.name;
+
+    btn.textContent = 'Uploading Transcript…';
+    payload.transcriptKey = await uploadDoc(transcriptState.file, 'transcript');
+    payload.transcriptName = transcriptState.file.name;
 
     if (videoMode === 'upload') {
       btn.textContent = 'Uploading Video…';

@@ -494,7 +494,9 @@ const VIDEO_KEY_RE = /^videos\/[\w.-]{8,80}$/;
 const PROOF_EXT = { 'application/pdf': 'pdf', 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/heic': 'heic' };
 const MAX_PROOF_BYTES = 20 * 1024 * 1024; // 20 MB
 const PROOF_KEY_RE = /^proofs\/[\w.-]{8,80}$/;
-const FILE_KEY_RE = /^(videos|proofs)\/[\w.-]{8,80}$/;
+const TRANSCRIPT_KEY_RE = /^transcripts\/[\w.-]{8,80}$/;
+const FILE_KEY_RE = /^(videos|proofs|transcripts)\/[\w.-]{8,80}$/;
+const DOC_PREFIX = { proof: 'proofs', transcript: 'transcripts' };
 
 function pastDeadline(env) {
   const deadline = Date.parse(env.SCHOLARSHIP_DEADLINE || '2026-11-24T04:59:59Z');
@@ -564,6 +566,8 @@ async function scholarshipApply(request, env, cors) {
   const videoName = s(body.videoName, 200);
   const proofKey = s(body.proofKey, 120);
   const proofName = s(body.proofName, 200);
+  const transcriptKey = s(body.transcriptKey, 120);
+  const transcriptName = s(body.transcriptName, 200);
 
   if (!firstName || !lastName) return json({ error: 'Please enter your full name.' }, 400, cors);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: 'Please enter a valid email address.' }, 400, cors);
@@ -599,6 +603,15 @@ async function scholarshipApply(request, env, cors) {
     return json({ error: 'Your proof upload didn’t finish — please attach it again.' }, 400, cors);
   }
 
+  // Unofficial transcript is required (verifies the 3.0+ GPA).
+  if (!TRANSCRIPT_KEY_RE.test(transcriptKey)) {
+    return json({ error: 'Please upload your unofficial transcript.' }, 400, cors);
+  }
+  const transcriptHead = await env.VIDEOS.head(transcriptKey);
+  if (!transcriptHead) {
+    return json({ error: 'Your transcript upload didn’t finish — please attach it again.' }, 400, cors);
+  }
+
   // The video: either a file they uploaded to us (videoKey) or a pasted link.
   let embed = null;
   if (videoKey) {
@@ -626,8 +639,9 @@ async function scholarshipApply(request, env, cors) {
          (first_name, last_name, email, phone, school, major, classification,
           grad_term, gpa, service_hours, supervisor_name, supervisor_email,
           supervisor_phone, campus_involvement, video_url, video_embed,
-          video_key, video_name, proof_key, proof_name, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          video_key, video_name, proof_key, proof_name, transcript_key,
+          transcript_name, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
        ON CONFLICT(email) DO UPDATE SET
          first_name = excluded.first_name,  last_name = excluded.last_name,
          phone = excluded.phone,            school = excluded.school,
@@ -641,13 +655,16 @@ async function scholarshipApply(request, env, cors) {
          video_url = excluded.video_url,    video_embed = excluded.video_embed,
          video_key = excluded.video_key,    video_name = excluded.video_name,
          proof_key = excluded.proof_key,    proof_name = excluded.proof_name,
+         transcript_key = excluded.transcript_key,
+         transcript_name = excluded.transcript_name,
          updated_at = ?`
     ).bind(firstName, lastName, email, phone || null, school, major || null,
            classification || null, gradTerm || null, gpa, serviceHours,
            supervisorName, supervisorEmail, supervisorPhone,
            involvement || null, videoKey ? null : videoUrl, embed,
            videoKey || null, videoKey ? (videoName || null) : null,
-           proofKey, proofName || null, now, now).run();
+           proofKey, proofName || null, transcriptKey, transcriptName || null,
+           now, now).run();
   } catch {
     return json({ error: 'Could not save your application. Please try again.' }, 500, cors);
   }
@@ -780,8 +797,9 @@ async function uploadComplete(request, env, cors) {
   }
 }
 
-/** POST ?name=<fileName>, body = file bytes -> { ok, proofKey }.
- *  Signed service-hours proof: PDF or photo, small enough for one request. */
+/** POST ?name=<fileName>[&kind=proof|transcript], body = file bytes -> { ok, proofKey }.
+ *  Small documents (signed service-hours proof, unofficial transcript):
+ *  PDF or photo, small enough for one request. */
 async function uploadProof(request, url, env, cors) {
   if (!env.VIDEOS) return json({ error: 'Uploads not configured' }, 500, cors);
   if (pastDeadline(env)) {
@@ -789,6 +807,9 @@ async function uploadProof(request, url, env, cors) {
   }
 
   const fileName = (url.searchParams.get('name') || '').slice(0, 200);
+  const prefix = DOC_PREFIX[url.searchParams.get('kind') || 'proof'];
+  if (!prefix) return json({ error: 'Invalid request' }, 400, cors);
+  const docWord = prefix === 'transcripts' ? 'transcript' : 'proof';
   const contentType = (request.headers.get('Content-Type') || '').toLowerCase().split(';')[0].trim();
 
   let ext = PROOF_EXT[contentType];
@@ -797,17 +818,17 @@ async function uploadProof(request, url, env, cors) {
     ext = m && (m[1] === 'jpeg' ? 'jpg' : m[1]);
   }
   if (!ext) {
-    return json({ error: 'Please upload your proof as a PDF or a photo (JPG/PNG).' }, 400, cors);
+    return json({ error: `Please upload your ${docWord} as a PDF or a photo (JPG/PNG).` }, 400, cors);
   }
 
   let data;
   try { data = await request.arrayBuffer(); } catch { return json({ error: 'Invalid request' }, 400, cors); }
   if (!data.byteLength) return json({ error: 'That file looks empty — please try again.' }, 400, cors);
   if (data.byteLength > MAX_PROOF_BYTES) {
-    return json({ error: 'Proof files can be up to 20 MB. A photo or scan of the signed form is perfect.' }, 400, cors);
+    return json({ error: `${docWord === 'transcript' ? 'Transcript' : 'Proof'} files can be up to 20 MB. A photo or scan is perfect.` }, 400, cors);
   }
 
-  const key = `proofs/${Date.now()}-${randomToken().slice(0, 12)}.${ext}`;
+  const key = `${prefix}/${Date.now()}-${randomToken().slice(0, 12)}.${ext}`;
   await env.VIDEOS.put(key, data, {
     httpMetadata: { contentType: PROOF_EXT[contentType] ? contentType : 'application/octet-stream' }
   });
@@ -877,7 +898,8 @@ async function scholarshipEntries(request, env, cors) {
     `SELECT id, first_name, last_name, email, phone, school, major, classification,
             grad_term, gpa, service_hours, supervisor_name, supervisor_email,
             supervisor_phone, campus_involvement, video_url, video_embed,
-            video_key, video_name, proof_key, proof_name, created_at, updated_at
+            video_key, video_name, proof_key, proof_name, transcript_key,
+            transcript_name, created_at, updated_at
      FROM scholarship_applications ORDER BY created_at DESC`
   ).all();
 
@@ -908,6 +930,7 @@ async function scholarshipEntries(request, env, cors) {
       videoUrl: a.video_url || '', videoEmbed: a.video_embed || '',
       videoKey: a.video_key || '', videoName: a.video_name || '',
       proofKey: a.proof_key || '', proofName: a.proof_name || '',
+      transcriptKey: a.transcript_key || '', transcriptName: a.transcript_name || '',
       createdAt: a.created_at, updatedAt: a.updated_at || '',
       reviews: byApp.get(a.id) || []
     }))
