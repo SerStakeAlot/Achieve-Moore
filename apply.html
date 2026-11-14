@@ -740,6 +740,10 @@
           <input type="checkbox" id="agreeInstagram" required>
           <label for="agreeInstagram">I understand that if I am selected as a Top 4 finalist, my video will be posted on the Achieve M.O.O.R.E Instagram, and that likes, comments and shares count toward the final selection.</label>
         </div>
+        <div class="field full agree-row">
+          <input type="checkbox" id="agreeGala" required>
+          <label for="agreeGala">I am available to attend the <strong>Hands of Time Gala on December 5, 2026</strong>, where the Grand Scholar is revealed live. The winner must be present to receive the award.</label>
+        </div>
       </div>
       <button type="submit" class="submit-btn" id="submitBtn">Submit Application</button>
       <div class="form-msg" id="formMsg" role="status"></div>
@@ -982,6 +986,7 @@ form.addEventListener('submit', async (e) => {
     major: document.getElementById('major').value,
     classification: document.getElementById('classification').value,
     gradTerm: document.getElementById('gradTerm').value,
+    galaAvailability: document.getElementById('agreeGala').checked ? 'Yes' : '',
     gpa: document.getElementById('gpa').value,
     serviceHours: document.getElementById('serviceHours').value,
     supervisorName: document.getElementById('supervisorName').value,

@@ -559,6 +559,7 @@ async function scholarshipApply(request, env, cors) {
   const major = s(body.major, 120);
   const classification = s(body.classification, 30);
   const gradTerm = s(body.gradTerm, 30);
+  const galaAvailability = s(body.galaAvailability, 10);
   const gpa = s(body.gpa, 10);
   const serviceHours = s(body.serviceHours, 10);
   const supervisorName = s(body.supervisorName, 120);
@@ -584,6 +585,11 @@ async function scholarshipApply(request, env, cors) {
   const hoursNum = Number(serviceHours);
   if (!Number.isFinite(hoursNum) || hoursNum < 200) {
     return json({ error: '200+ community service hours are required to apply.' }, 400, cors);
+  }
+
+  // The winner must attend the Hands of Time Gala, so this confirmation is required.
+  if (galaAvailability !== 'Yes') {
+    return json({ error: 'Please confirm you can attend the Hands of Time Gala on December 5, 2026 — the Grand Scholar is revealed live and must be present.' }, 400, cors);
   }
 
   // Supervisor who signed off the hours — the board verifies with this person,
@@ -641,16 +647,17 @@ async function scholarshipApply(request, env, cors) {
     await env.DB.prepare(
       `INSERT INTO scholarship_applications
          (first_name, last_name, email, phone, school, major, classification,
-          grad_term, gpa, service_hours, supervisor_name, supervisor_email,
-          supervisor_phone, campus_involvement, video_url, video_embed,
-          video_key, video_name, proof_key, proof_name, transcript_key,
-          transcript_name, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          grad_term, gala_available, gpa, service_hours, supervisor_name,
+          supervisor_email, supervisor_phone, campus_involvement, video_url,
+          video_embed, video_key, video_name, proof_key, proof_name,
+          transcript_key, transcript_name, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
        ON CONFLICT(email) DO UPDATE SET
          first_name = excluded.first_name,  last_name = excluded.last_name,
          phone = excluded.phone,            school = excluded.school,
          major = excluded.major,            classification = excluded.classification,
          grad_term = excluded.grad_term,    gpa = excluded.gpa,
+         gala_available = excluded.gala_available,
          service_hours = excluded.service_hours,
          supervisor_name = excluded.supervisor_name,
          supervisor_email = excluded.supervisor_email,
@@ -663,8 +670,8 @@ async function scholarshipApply(request, env, cors) {
          transcript_name = excluded.transcript_name,
          updated_at = ?`
     ).bind(firstName, lastName, email, phone || null, school, major || null,
-           classification || null, gradTerm || null, gpa, serviceHours,
-           supervisorName, supervisorEmail, supervisorPhone,
+           classification || null, gradTerm || null, galaAvailability, gpa,
+           serviceHours, supervisorName, supervisorEmail, supervisorPhone,
            involvement || null, videoKey ? null : videoUrl, embed,
            videoKey || null, videoKey ? (videoName || null) : null,
            proofKey, proofName || null, transcriptKey, transcriptName || null,
@@ -916,10 +923,10 @@ async function scholarshipEntries(request, env, cors) {
 
   const { results: apps } = await env.DB.prepare(
     `SELECT id, first_name, last_name, email, phone, school, major, classification,
-            grad_term, gpa, service_hours, supervisor_name, supervisor_email,
-            supervisor_phone, campus_involvement, video_url, video_embed,
-            video_key, video_name, proof_key, proof_name, transcript_key,
-            transcript_name, created_at, updated_at
+            grad_term, gala_available, gpa, service_hours, supervisor_name,
+            supervisor_email, supervisor_phone, campus_involvement, video_url,
+            video_embed, video_key, video_name, proof_key, proof_name,
+            transcript_key, transcript_name, created_at, updated_at
      FROM scholarship_applications ORDER BY created_at DESC`
   ).all();
 
@@ -942,6 +949,7 @@ async function scholarshipEntries(request, env, cors) {
       email: a.email, phone: a.phone || '',
       school: a.school, major: a.major || '',
       classification: a.classification || '', gradTerm: a.grad_term || '',
+      galaAvailable: a.gala_available || '',
       gpa: a.gpa, serviceHours: a.service_hours,
       supervisorName: a.supervisor_name || '',
       supervisorEmail: a.supervisor_email || '',

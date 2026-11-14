@@ -59,6 +59,7 @@ CREATE TABLE IF NOT EXISTS scholarship_applications (
   major              TEXT,
   classification     TEXT,
   grad_term          TEXT,
+  gala_available     TEXT, -- "Yes"/"No": can they attend the Hands of Time Gala on Dec 5, 2026?
   gpa                TEXT,
   service_hours      TEXT,
   supervisor_name    TEXT,

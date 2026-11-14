@@ -479,6 +479,7 @@ function entryCard(e) {
       <div><b>GPA</b>${escapeHtml(e.gpa || '—')}</div>
       <div><b>Service Hours</b>${escapeHtml(e.serviceHours || '—')}</div>
       <div><b>Expected Grad</b>${escapeHtml(e.gradTerm || '—')}</div>
+      <div><b>Gala Dec 5</b>${escapeHtml(e.galaAvailable || '—')}</div>
       <div><b>Submitted</b>${submitted}${e.updatedAt ? ' (updated)' : ''}</div>
     </div>
     <div class="entry-involve"><b style="display:block;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(26,26,26,0.4);margin-bottom:3px;">Campus Involvement</b><span class="inv-text">${escapeHtml(short)}</span>${involvement.length > 180 ? ' <button class="more-btn">Read more</button>' : ''}</div>
