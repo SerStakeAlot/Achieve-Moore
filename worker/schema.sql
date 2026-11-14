@@ -44,3 +44,39 @@ CREATE TABLE IF NOT EXISTS stripe_events (
   event_id   TEXT PRIMARY KEY,
   created_at TEXT NOT NULL
 );
+
+-- ── $10,000 Scholarship ─────────────────────────────────────────────────────
+
+-- One row per applicant. Re-submitting with the same email updates the row
+-- (lets students fix mistakes before the deadline).
+CREATE TABLE IF NOT EXISTS scholarship_applications (
+  id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+  first_name         TEXT NOT NULL,
+  last_name          TEXT NOT NULL,
+  email              TEXT NOT NULL UNIQUE,
+  phone              TEXT,
+  school             TEXT NOT NULL,
+  major              TEXT,
+  classification     TEXT,
+  grad_term          TEXT,
+  gpa                TEXT,
+  service_hours      TEXT,
+  campus_involvement TEXT,
+  video_url          TEXT,
+  video_embed        TEXT,
+  video_key          TEXT,
+  video_name         TEXT,
+  created_at         TEXT NOT NULL,
+  updated_at         TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_sch_apps_school ON scholarship_applications (school);
+
+-- Board scoring: one row per (application, reviewer). Saving again overwrites.
+CREATE TABLE IF NOT EXISTS scholarship_reviews (
+  application_id INTEGER NOT NULL,
+  reviewer       TEXT NOT NULL,
+  score          INTEGER,
+  note           TEXT,
+  updated_at     TEXT NOT NULL,
+  PRIMARY KEY (application_id, reviewer)
+);

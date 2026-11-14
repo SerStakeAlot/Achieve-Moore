@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scholarship Entries — Board Review</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c8920a;
+    --gold-light: #b8830a;
+    --maroon: #6b0f1a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: #faf8f5;
+    color: #1a1a1a;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: #1a1a1a;
+    padding: 20px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 18px; flex-wrap: wrap;
+  }
+  .brand { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+  .brand img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+  .brand-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px; font-weight: 600; color: var(--gold); line-height: 1.15;
+  }
+  .brand-text span {
+    display: block; font-size: 9px; font-family: 'Montserrat', sans-serif;
+    font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase;
+    color: rgba(245,243,240,0.55);
+  }
+  .reviewer-box { display: flex; align-items: center; gap: 10px; }
+  .reviewer-box label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(245,243,240,0.6);
+  }
+  .reviewer-box input {
+    font-family: 'Montserrat', sans-serif; font-size: 13px;
+    padding: 9px 14px; border-radius: 6px; outline: none;
+    border: 1px solid rgba(200,146,10,0.5);
+    background: rgba(255,255,255,0.08); color: #f5f3f0;
+    width: 180px;
+  }
+  .reviewer-box input:focus { border-color: var(--gold); }
+
+  main { flex: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 36px 28px 80px; }
+
+  /* ── GATE ── */
+  .gate {
+    max-width: 440px; margin: 70px auto;
+    background: #fff; border: 1px solid rgba(200,146,10,0.45);
+    box-shadow: 0 18px 50px rgba(0,0,0,0.08);
+    padding: 44px 38px; text-align: center;
+  }
+  .gate h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+  .gate p { font-size: 13px; color: rgba(26,26,26,0.6); line-height: 1.6; margin-bottom: 24px; }
+  .gate input {
+    width: 100%; font-family: 'Montserrat', sans-serif; font-size: 15px;
+    padding: 13px 16px; border: 1px solid rgba(26,26,26,0.2); border-radius: 6px;
+    outline: none; text-align: center; letter-spacing: 0.1em;
+  }
+  .gate input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(200,146,10,0.14); }
+  .gate button {
+    width: 100%; margin-top: 16px;
+    background: var(--gold); color: #fff; border: none; border-radius: 999px;
+    padding: 14px; font-family: 'Montserrat', sans-serif;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .gate button:hover { background: var(--gold-light); }
+  .gate .gate-msg { margin-top: 14px; font-size: 13px; color: var(--maroon); font-weight: 600; min-height: 18px; }
+
+  /* ── TOOLBAR ── */
+  .page-title { text-align: center; margin-bottom: 8px; }
+  .page-title h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(30px, 4vw, 42px); font-weight: 700; }
+  .page-title h1 .gold { color: var(--gold); }
+  .page-title p { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(26,26,26,0.45); margin-top: 4px; }
+
+  .stats-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin: 26px 0 8px; }
+  .stat {
+    background: #fff; border: 1px solid rgba(26,26,26,0.1);
+    padding: 12px 22px; text-align: center; min-width: 110px;
+  }
+  .stat .n { font-family: 'Cormorant Garamond', serif; font-size: 27px; font-weight: 700; color: var(--gold); line-height: 1; }
+  .stat .l { font-size: 9.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(26,26,26,0.5); margin-top: 5px; }
+
+  .toolbar {
+    display: flex; gap: 12px; align-items: center; justify-content: center;
+    flex-wrap: wrap; margin: 22px 0 30px;
+  }
+  .toolbar select, .toolbar input[type="search"] {
+    font-family: 'Montserrat', sans-serif; font-size: 13px;
+    padding: 10px 14px; border: 1px solid rgba(26,26,26,0.18); border-radius: 6px;
+    background: #fff; outline: none;
+  }
+  .toolbar select:focus, .toolbar input:focus { border-color: var(--gold); }
+  .toolbar input[type="search"] { width: 220px; }
+  .refresh-btn {
+    font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    background: transparent; border: 1.5px solid var(--gold); color: var(--gold);
+    border-radius: 999px; padding: 10px 20px; cursor: pointer; transition: all 0.2s;
+  }
+  .refresh-btn:hover { background: var(--gold); color: #fff; }
+
+  /* ── ENTRY CARDS ── */
+  .entries { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 26px; }
+  .entry {
+    background: #fff; border: 1px solid rgba(26,26,26,0.1);
+    box-shadow: 0 8px 26px rgba(0,0,0,0.05);
+    display: flex; flex-direction: column;
+  }
+  .entry-video { position: relative; background: #111; aspect-ratio: 16 / 10; }
+  .entry-video iframe, .entry-video video { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .entry-video video { object-fit: contain; }
+  .entry-video .no-embed {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 10px;
+    color: rgba(255,255,255,0.75); font-size: 13px; text-align: center; padding: 16px;
+  }
+  .entry-video .no-embed a { color: var(--gold); font-weight: 700; }
+  .video-link-row { padding: 8px 20px 0; display: flex; gap: 14px; flex-wrap: wrap; }
+  .video-link-row a { font-size: 11px; color: rgba(26,26,26,0.45); text-decoration: none; }
+  .video-link-row a:hover { color: var(--gold); }
+  .video-link-row a.dl { color: var(--gold); font-weight: 700; }
+
+  .entry-body { padding: 14px 20px 20px; display: flex; flex-direction: column; flex: 1; }
+  .entry-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .entry-name { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 700; line-height: 1.15; }
+  .school-badge {
+    flex: 0 0 auto; font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gold);
+    border: 1px solid rgba(200,146,10,0.5); border-radius: 999px;
+    padding: 5px 12px; margin-top: 4px; white-space: nowrap;
+  }
+  .entry-meta {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px;
+    margin: 14px 0 12px; font-size: 12.5px;
+  }
+  .entry-meta div { color: rgba(26,26,26,0.75); }
+  .entry-meta b { display: block; font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,26,26,0.4); margin-bottom: 2px; }
+  .entry-involve { font-size: 12.5px; line-height: 1.6; color: rgba(26,26,26,0.7); }
+  .entry-involve .more-btn {
+    background: none; border: none; color: var(--gold); font-weight: 700;
+    font-size: 12px; cursor: pointer; padding: 0; font-family: inherit;
+  }
+  .entry-contact { font-size: 11.5px; color: rgba(26,26,26,0.5); margin-top: 10px; }
+  .entry-contact a { color: inherit; }
+  .entry-date { font-size: 10.5px; color: rgba(26,26,26,0.35); margin-top: 4px; }
+
+  /* Review panel */
+  .review-panel {
+    margin-top: auto; border-top: 1px solid rgba(200,146,10,0.3);
+    padding-top: 14px; margin-top: 16px;
+  }
+  .avg-line { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+  .avg-line .avg { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 700; color: var(--gold); }
+  .avg-line .cnt { font-size: 11px; color: rgba(26,26,26,0.45); }
+  .score-row { display: flex; gap: 6px; align-items: center; margin-bottom: 10px; }
+  .score-row .lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(26,26,26,0.5); margin-right: 4px; }
+  .score-btn {
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1.5px solid rgba(200,146,10,0.5); background: #fff;
+    font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 700;
+    color: rgba(26,26,26,0.6); cursor: pointer; transition: all 0.15s;
+  }
+  .score-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .score-btn.sel { background: var(--gold); border-color: var(--gold); color: #fff; }
+  .review-panel textarea {
+    width: 100%; font-family: 'Montserrat', sans-serif; font-size: 12.5px;
+    padding: 10px 12px; border: 1px solid rgba(26,26,26,0.15); border-radius: 6px;
+    resize: vertical; min-height: 54px; outline: none; line-height: 1.5;
+  }
+  .review-panel textarea:focus { border-color: var(--gold); }
+  .save-row { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+  .save-btn {
+    background: #1a1a1a; color: var(--gold); border: none; border-radius: 999px;
+    font-family: 'Montserrat', sans-serif; font-size: 10.5px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 10px 22px; cursor: pointer; transition: background 0.2s;
+  }
+  .save-btn:hover { background: #333; }
+  .save-btn:disabled { opacity: 0.6; cursor: wait; }
+  .save-msg { font-size: 11.5px; min-height: 15px; }
+  .save-msg.ok { color: #2d7a33; font-weight: 600; }
+  .save-msg.err { color: var(--maroon); font-weight: 600; }
+
+  .others { margin-top: 12px; }
+  .others summary {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(26,26,26,0.5); cursor: pointer;
+  }
+  .other-review { font-size: 12px; padding: 8px 0 2px; border-bottom: 1px dashed rgba(26,26,26,0.1); line-height: 1.55; }
+  .other-review:last-child { border-bottom: none; }
+  .other-review .who { font-weight: 700; }
+  .other-review .sc { color: var(--gold); font-weight: 700; }
+  .other-review .nt { color: rgba(26,26,26,0.65); }
+
+  .empty-state { text-align: center; padding: 80px 20px; color: rgba(26,26,26,0.5); }
+  .empty-state h2 { font-family: 'Cormorant Garamond', serif; font-size: 30px; color: #1a1a1a; margin-bottom: 8px; }
+  .hidden { display: none !important; }
+
+  .signout {
+    background: none; border: none; cursor: pointer;
+    font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(245,243,240,0.45); transition: color 0.2s;
+  }
+  .signout:hover { color: var(--gold); }
+
+  footer {
+    background: #1a1a1a; text-align: center; padding: 22px;
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(245,243,240,0.4);
+  }
+
+  @media (max-width: 640px) {
+    header { padding: 16px 18px; }
+    main { padding: 24px 16px 60px; }
+    .entries { grid-template-columns: 1fr; }
+    .reviewer-box input { width: 140px; }
+    .toolbar input[type="search"] { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="/home">
+    <img src="assets/clock_transparent.png" alt="Achieve M.O.O.R.E" />
+    <div class="brand-text">
+      Achieve M.O.O.R.E
+      <span>Board Review</span>
+    </div>
+  </a>
+  <div class="reviewer-box hidden" id="reviewerBox">
+    <label for="reviewerName">Reviewing as</label>
+    <input type="text" id="reviewerName" placeholder="Your name" maxlength="80">
+    <button class="signout" id="signOut">Sign out</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ACCESS GATE -->
+  <div class="gate" id="gate">
+    <h1>Board Members Only</h1>
+    <p>Enter the board access code to view and score the $10,000 scholarship entries.</p>
+    <input type="password" id="gateKey" placeholder="Access code" autocomplete="current-password">
+    <button id="gateBtn">View Entries</button>
+    <div class="gate-msg" id="gateMsg" role="status"></div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="hidden" id="dash">
+    <div class="page-title">
+      <h1>$10,000 <span class="gold">Scholarship Entries</span></h1>
+      <p>Applications due Nov 23 &middot; Finalists announced Nov 25 &middot; Winner revealed Dec 5</p>
+    </div>
+
+    <div class="stats-row" id="statsRow"></div>
+
+    <div class="toolbar">
+      <input type="search" id="searchBox" placeholder="Search name or major…">
+      <select id="schoolFilter">
+        <option value="">All Schools</option>
+        <option>Clark Atlanta University</option>
+        <option>Morehouse College</option>
+        <option>Morris Brown College</option>
+        <option>Spelman College</option>
+      </select>
+      <select id="sortBy">
+        <option value="newest">Newest First</option>
+        <option value="oldest">Oldest First</option>
+        <option value="score">Highest Avg Score</option>
+        <option value="name">Name A–Z</option>
+      </select>
+      <button class="refresh-btn" id="refreshBtn">Refresh</button>
+    </div>
+
+    <div class="entries" id="entries"></div>
+    <div class="empty-state hidden" id="emptyState">
+      <h2>No entries yet</h2>
+      <p>Applications will appear here the moment students submit them.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>Achieve M.O.O.R.E Foundation &mdash; Confidential: for board members only</footer>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────
+// CONFIG — same Worker that powers gala checkout & seating.
+// ─────────────────────────────────────────────────────────────────────────
+const apiBase = 'https://gala-checkout.achievemoore.workers.dev';
+
+const $ = id => document.getElementById(id);
+const KEY_STORE = 'amf_board_key';
+const NAME_STORE = 'amf_board_reviewer';
+
+let boardKey = '';
+let allEntries = [];
+
+function escapeHtml(s) {
+  return (s || '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+function schoolShort(s) {
+  return { 'Clark Atlanta University': 'Clark Atlanta', 'Morehouse College': 'Morehouse',
+           'Morris Brown College': 'Morris Brown', 'Spelman College': 'Spelman' }[s] || s;
+}
+
+function avgScore(e) {
+  const scores = e.reviews.map(r => r.score).filter(n => Number.isFinite(n) && n != null);
+  if (!scores.length) return null;
+  return scores.reduce((a, b) => a + b, 0) / scores.length;
+}
+
+/* ── Access gate ── */
+async function tryKey(key, silent) {
+  const resp = await fetch(apiBase + '/api/scholarship/entries', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ key })
+  });
+  const data = await resp.json().catch(() => ({}));
+  if (!resp.ok) {
+    if (!silent) $('gateMsg').textContent = data.error === 'Unauthorized'
+      ? 'That code isn’t right — double-check and try again.'
+      : (data.error || 'Could not load entries. Please try again.');
+    if (data.error === 'Unauthorized') localStorage.removeItem(KEY_STORE);
+    return false;
+  }
+  boardKey = key;
+  localStorage.setItem(KEY_STORE, key);
+  allEntries = data.entries || [];
+  $('gate').classList.add('hidden');
+  $('dash').classList.remove('hidden');
+  $('reviewerBox').classList.remove('hidden');
+  render();
+  return true;
+}
+
+$('gateBtn').addEventListener('click', () => {
+  const key = $('gateKey').value.trim();
+  if (key) tryKey(key, false);
+});
+$('gateKey').addEventListener('keydown', e => { if (e.key === 'Enter') $('gateBtn').click(); });
+
+$('signOut').addEventListener('click', () => {
+  localStorage.removeItem(KEY_STORE);
+  location.reload();
+});
+
+/* ── Reviewer identity ── */
+$('reviewerName').value = localStorage.getItem(NAME_STORE) || '';
+$('reviewerName').addEventListener('input', () => {
+  localStorage.setItem(NAME_STORE, $('reviewerName').value.trim());
+});
+
+/* ── Refresh / filters ── */
+async function refresh() {
+  if (!boardKey) return;
+  const resp = await fetch(apiBase + '/api/scholarship/entries', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ key: boardKey })
+  });
+  const data = await resp.json().catch(() => ({}));
+  if (resp.ok) { allEntries = data.entries || []; render(); }
+}
+$('refreshBtn').addEventListener('click', refresh);
+$('schoolFilter').addEventListener('change', render);
+$('sortBy').addEventListener('change', render);
+$('searchBox').addEventListener('input', render);
+
+/* ── Rendering ── */
+function render() {
+  renderStats();
+
+  const school = $('schoolFilter').value;
+  const q = $('searchBox').value.trim().toLowerCase();
+  const sort = $('sortBy').value;
+
+  let list = allEntries.slice();
+  if (school) list = list.filter(e => e.school === school);
+  if (q) list = list.filter(e =>
+    (e.firstName + ' ' + e.lastName).toLowerCase().includes(q) ||
+    (e.major || '').toLowerCase().includes(q)
+  );
+
+  if (sort === 'newest') list.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  if (sort === 'oldest') list.sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+  if (sort === 'name') list.sort((a, b) => (a.lastName + a.firstName).localeCompare(b.lastName + b.firstName));
+  if (sort === 'score') list.sort((a, b) => (avgScore(b) ?? -1) - (avgScore(a) ?? -1));
+
+  const wrap = $('entries');
+  wrap.innerHTML = '';
+  $('emptyState').classList.toggle('hidden', list.length > 0);
+  list.forEach(e => wrap.appendChild(entryCard(e)));
+}
+
+function renderStats() {
+  const bySchool = {};
+  for (const e of allEntries) bySchool[e.school] = (bySchool[e.school] || 0) + 1;
+  const scored = allEntries.filter(e => avgScore(e) != null).length;
+
+  const stats = [
+    { n: allEntries.length, l: 'Total Entries' },
+    ...Object.entries(bySchool).map(([s, n]) => ({ n, l: schoolShort(s) })),
+    { n: scored, l: 'Scored' }
+  ];
+  $('statsRow').innerHTML = stats.map(s =>
+    `<div class="stat"><div class="n">${s.n}</div><div class="l">${escapeHtml(String(s.l))}</div></div>`
+  ).join('');
+}
+
+function entryCard(e) {
+  const card = document.createElement('div');
+  card.className = 'entry';
+
+  // Video: direct upload (hosted by us) > embeddable link > plain link
+  const vid = document.createElement('div');
+  vid.className = 'entry-video';
+  const linkRow = document.createElement('div');
+  linkRow.className = 'video-link-row';
+
+  if (e.videoKey) {
+    const src = `${apiBase}/api/scholarship/video?key=${encodeURIComponent(e.videoKey)}&k=${encodeURIComponent(boardKey)}`;
+    vid.innerHTML = `<video controls preload="metadata" src="${escapeHtml(src)}" title="Video by ${escapeHtml(e.firstName)} ${escapeHtml(e.lastName)}"></video>`;
+    linkRow.innerHTML = `<a class="dl" href="${escapeHtml(src)}&dl=1">⬇ Download original${e.videoName ? ' (' + escapeHtml(e.videoName) + ')' : ''} — for Instagram</a>`;
+  } else if (e.videoEmbed) {
+    vid.innerHTML = `<iframe src="${escapeHtml(e.videoEmbed)}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen title="Video by ${escapeHtml(e.firstName)} ${escapeHtml(e.lastName)}"></iframe>`;
+    linkRow.innerHTML = `<a href="${escapeHtml(e.videoUrl)}" target="_blank" rel="noopener">Open original video link ↗</a>`;
+  } else {
+    vid.innerHTML = `<div class="no-embed"><span>Video can&rsquo;t be embedded</span><a href="${escapeHtml(e.videoUrl)}" target="_blank" rel="noopener">Open video in new tab ↗</a></div>`;
+    linkRow.innerHTML = `<a href="${escapeHtml(e.videoUrl)}" target="_blank" rel="noopener">Open original video link ↗</a>`;
+  }
+  card.appendChild(vid);
+  card.appendChild(linkRow);
+
+  // Body
+  const body = document.createElement('div');
+  body.className = 'entry-body';
+
+  const submitted = new Date(e.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const involvement = e.campusInvolvement || '';
+  const short = involvement.length > 180 ? involvement.slice(0, 180) + '…' : involvement;
+
+  body.innerHTML = `
+    <div class="entry-head">
+      <div class="entry-name">${escapeHtml(e.firstName)} ${escapeHtml(e.lastName)}</div>
+      <div class="school-badge">${escapeHtml(schoolShort(e.school))}</div>
+    </div>
+    <div class="entry-meta">
+      <div><b>Major</b>${escapeHtml(e.major || '—')}</div>
+      <div><b>Classification</b>${escapeHtml(e.classification || '—')}</div>
+      <div><b>GPA</b>${escapeHtml(e.gpa || '—')}</div>
+      <div><b>Service Hours</b>${escapeHtml(e.serviceHours || '—')}</div>
+      <div><b>Expected Grad</b>${escapeHtml(e.gradTerm || '—')}</div>
+      <div><b>Submitted</b>${submitted}${e.updatedAt ? ' (updated)' : ''}</div>
+    </div>
+    <div class="entry-involve"><b style="display:block;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(26,26,26,0.4);margin-bottom:3px;">Campus Involvement</b><span class="inv-text">${escapeHtml(short)}</span>${involvement.length > 180 ? ' <button class="more-btn">Read more</button>' : ''}</div>
+    <div class="entry-contact"><a href="mailto:${escapeHtml(e.email)}">${escapeHtml(e.email)}</a>${e.phone ? ' · ' + escapeHtml(e.phone) : ''}</div>
+  `;
+
+  if (involvement.length > 180) {
+    const moreBtn = body.querySelector('.more-btn');
+    moreBtn.addEventListener('click', () => {
+      body.querySelector('.inv-text').textContent = involvement;
+      moreBtn.remove();
+    });
+  }
+
+  // Review panel
+  const panel = document.createElement('div');
+  panel.className = 'review-panel';
+  const avg = avgScore(e);
+  const myName = () => $('reviewerName').value.trim();
+  const mine = e.reviews.find(r => r.reviewer.toLowerCase() === myName().toLowerCase());
+  const others = e.reviews.filter(r => !mine || r !== mine);
+
+  panel.innerHTML = `
+    <div class="avg-line">
+      <span class="avg">${avg != null ? avg.toFixed(1) : '—'}</span>
+      <span class="cnt">${e.reviews.length ? `avg of ${e.reviews.length} board score${e.reviews.length === 1 ? '' : 's'}` : 'no scores yet'}</span>
+    </div>
+    <div class="score-row">
+      <span class="lbl">My score</span>
+      ${[1,2,3,4,5].map(n => `<button class="score-btn${mine && mine.score === n ? ' sel' : ''}" data-score="${n}">${n}</button>`).join('')}
+    </div>
+    <textarea class="note-box" placeholder="Notes for the board (optional)…">${escapeHtml(mine?.note || '')}</textarea>
+    <div class="save-row">
+      <button class="save-btn">Save Review</button>
+      <span class="save-msg" role="status"></span>
+    </div>
+    ${others.length ? `<details class="others"><summary>Board reviews (${e.reviews.length})</summary>${e.reviews.map(r =>
+      `<div class="other-review"><span class="who">${escapeHtml(r.reviewer)}</span> — <span class="sc">${r.score != null ? r.score + '/5' : 'no score'}</span>${r.note ? `<div class="nt">${escapeHtml(r.note)}</div>` : ''}</div>`
+    ).join('')}</details>` : ''}
+  `;
+
+  let picked = mine?.score ?? null;
+  panel.querySelectorAll('.score-btn').forEach(b => {
+    b.addEventListener('click', () => {
+      picked = Number(b.dataset.score);
+      panel.querySelectorAll('.score-btn').forEach(x => x.classList.toggle('sel', Number(x.dataset.score) === picked));
+    });
+  });
+
+  const saveBtn = panel.querySelector('.save-btn');
+  const saveMsg = panel.querySelector('.save-msg');
+  saveBtn.addEventListener('click', async () => {
+    const reviewer = myName();
+    saveMsg.className = 'save-msg';
+    if (!reviewer) {
+      saveMsg.textContent = 'Enter your name at the top right first.';
+      saveMsg.classList.add('err');
+      $('reviewerName').focus();
+      return;
+    }
+    saveBtn.disabled = true;
+    try {
+      const resp = await fetch(apiBase + '/api/scholarship/review', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          key: boardKey, applicationId: e.id, reviewer,
+          score: picked, note: panel.querySelector('.note-box').value
+        })
+      });
+      const data = await resp.json().catch(() => ({}));
+      if (!resp.ok) throw new Error(data.error || 'Could not save');
+      saveMsg.textContent = 'Saved ✓';
+      saveMsg.classList.add('ok');
+      refresh();
+    } catch (err) {
+      saveMsg.textContent = err.message;
+      saveMsg.classList.add('err');
+    } finally {
+      saveBtn.disabled = false;
+    }
+  });
+
+  body.appendChild(panel);
+  card.appendChild(body);
+  return card;
+}
+
+/* ── Boot: support ?k=CODE links and remembered keys ── */
+(function boot() {
+  const urlKey = new URLSearchParams(location.search).get('k');
+  if (urlKey) {
+    history.replaceState(null, '', location.pathname); // keep the code out of the address bar
+    tryKey(urlKey, true);
+    return;
+  }
+  const saved = localStorage.getItem(KEY_STORE);
+  if (saved) tryKey(saved, true);
+})();
+</script>
+
+</body>
+</html>

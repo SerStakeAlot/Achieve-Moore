@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>$10,000 Scholarship Application — Achieve M.O.O.R.E Foundation</title>
+<meta name="description" content="Apply for the Achieve M.O.O.R.E Foundation $10,000 for 10 Years Scholarship. Open to AUC students at Clark Atlanta, Morehouse, Morris Brown and Spelman. Applications due November 23.">
+<meta property="og:title" content="$10,000 for 10 Years — Scholarship Application">
+<meta property="og:description" content="A $10,000 scholarship for AUC students. 3.0+ GPA, 200+ service hours, and a 90-second video. Applications due November 23.">
+<meta property="og:image" content="https://achievemoorefoundation.org/assets/og-logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c8920a;
+    --gold-light: #b8830a;
+    --maroon: #6b0f1a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: #ffffff;
+    color: #1a1a1a;
+    overflow-x: hidden;
+    display: flex; flex-direction: column; min-height: 100vh;
+  }
+
+  /* ── NAV (matches index.html) ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 72px;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+  .nav-logo img {
+    width: 50px; height: 50px; border-radius: 50%;
+    border: none; object-fit: cover;
+  }
+  .nav-logo-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px; font-weight: 600;
+    color: var(--gold); letter-spacing: 0.06em; line-height: 1.1;
+  }
+  .nav-logo-text span {
+    display: block; font-size: 10px;
+    font-family: 'Montserrat', sans-serif; font-weight: 300;
+    letter-spacing: 0.24em; color: rgba(200,146,10,0.7); text-transform: uppercase;
+  }
+  .nav-links { display: flex; gap: 34px; list-style: none; }
+  .nav-links a {
+    text-decoration: none; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(26,26,26,0.7); transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+  .nav-item-dropdown { position: relative; }
+  .nav-item-dropdown::after {
+    content: ''; position: absolute; top: 100%; left: 0; right: 0; height: 18px;
+  }
+  .nav-sub {
+    list-style: none;
+    position: absolute; top: calc(100% + 14px); left: 50%;
+    transform: translateX(-50%) translateY(6px);
+    background: rgba(255,255,255,0.98);
+    border: 1px solid rgba(200,146,10,0.3);
+    border-radius: 8px;
+    box-shadow: 0 14px 34px rgba(0,0,0,0.14);
+    padding: 10px 0;
+    min-width: 170px;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    z-index: 120;
+  }
+  .nav-item-dropdown:hover .nav-sub,
+  .nav-item-dropdown:focus-within .nav-sub {
+    opacity: 1; visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  .nav-sub li { padding: 0; }
+  .nav-sub a { display: block; padding: 10px 22px; white-space: nowrap; text-align: center; }
+  .nav-donate {
+    background: transparent; border: 1.5px solid var(--gold);
+    color: var(--gold); padding: 10px 26px; font-size: 11px;
+    font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.25s; text-decoration: none;
+  }
+  .nav-donate:hover { background: var(--gold); color: #ffffff; }
+
+  /* HAMBURGER */
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center;
+    gap: 5px; background: none; border: none; cursor: pointer;
+    padding: 8px; z-index: 110;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: #1a1a1a; border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+  .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+  /* ── PAGE HERO ── */
+  .page-hero {
+    position: relative;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center; text-align: center;
+    padding: 130px 40px 46px;
+    background: rgba(245,243,240,0.6);
+    border-bottom: 1px solid rgba(200,146,10,0.15);
+  }
+  .page-hero-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.42em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .page-hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(38px, 7vw, 72px); font-weight: 700;
+    line-height: 1; color: #1a1a1a; margin-bottom: 8px;
+    opacity: 0; animation: fadeUp 0.9s 0.4s forwards;
+  }
+  .page-hero-title .gold { color: var(--gold); }
+  .page-hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(16px, 2.5vw, 21px); font-weight: 400;
+    letter-spacing: 0.1em; color: rgba(26,26,26,0.55);
+    max-width: 640px; margin-top: 14px;
+    opacity: 0; animation: fadeUp 0.9s 0.6s forwards;
+  }
+  .gold-divider { width: 50px; height: 1px; background: var(--gold); margin: 24px auto 0; opacity: 0.55; }
+
+  /* ── SHARED SECTION LAYOUT ── */
+  .section {
+    max-width: 1040px; margin: 0 auto;
+    padding: 56px 32px; width: 100%;
+  }
+  .section-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.42em;
+    text-transform: uppercase; color: var(--gold);
+    text-align: center; margin-bottom: 14px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4.5vw, 44px); font-weight: 700;
+    text-align: center; margin-bottom: 36px;
+  }
+
+  /* Prize strip */
+  .prize-cards { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; }
+  .prize-card {
+    flex: 1 1 260px; max-width: 320px;
+    border: 1px solid rgba(200,146,10,0.4);
+    background: rgba(250,247,240,0.7);
+    padding: 28px 24px; text-align: center;
+  }
+  .prize-card .pc-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.3em;
+    text-transform: uppercase; color: rgba(26,26,26,0.5); margin-bottom: 10px;
+  }
+  .prize-card .pc-big {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 34px; font-weight: 700; color: #1a1a1a; line-height: 1.1;
+  }
+  .prize-card .pc-sub { font-size: 12.5px; color: rgba(26,26,26,0.6); margin-top: 8px; line-height: 1.5; }
+
+  /* Eligibility */
+  .elig-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+  .elig-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    border: 1px solid rgba(26,26,26,0.12);
+    padding: 20px 22px; background: #fff;
+  }
+  .elig-icon {
+    flex: 0 0 auto; width: 42px; height: 42px; border-radius: 50%;
+    background: #1a1a1a; color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .elig-item h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .elig-item p { font-size: 13px; color: rgba(26,26,26,0.6); line-height: 1.5; }
+  .elig-note {
+    margin-top: 18px; background: #1a1a1a; color: #f5f3f0;
+    padding: 16px 22px; font-size: 13px; line-height: 1.6; text-align: center;
+  }
+  .elig-note strong { color: var(--gold); }
+
+  /* Video guide */
+  .video-guide {
+    border: 1px solid rgba(200,146,10,0.4);
+    background: rgba(250,247,240,0.7);
+    padding: 34px 30px;
+  }
+  .vg-step { display: flex; gap: 18px; align-items: flex-start; padding: 13px 0; border-bottom: 1px dashed rgba(26,26,26,0.12); }
+  .vg-step:last-of-type { border-bottom: none; }
+  .vg-num {
+    flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%;
+    background: #1a1a1a; color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+  .vg-step h4 { font-size: 14px; font-weight: 700; }
+  .vg-step h4 .vg-time { color: var(--gold); font-weight: 700; margin-left: 6px; font-size: 12px; }
+  .vg-step p { font-size: 13px; color: rgba(26,26,26,0.65); line-height: 1.55; margin-top: 3px; }
+  .vg-checks {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 8px 24px; margin-top: 22px; padding-top: 20px;
+    border-top: 1px solid rgba(200,146,10,0.35);
+  }
+  .vg-checks span { font-size: 12.5px; color: rgba(26,26,26,0.7); }
+  .vg-checks span::before { content: '✓  '; color: var(--gold); font-weight: 700; }
+  .vg-star {
+    margin-top: 20px; font-size: 13px; line-height: 1.6;
+    background: #fff; border: 1px solid rgba(200,146,10,0.4); padding: 14px 18px;
+  }
+  .vg-star::before { content: '★ '; color: var(--gold); }
+
+  /* Dates */
+  .dates-row { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; }
+  .date-card { flex: 1 1 200px; max-width: 280px; text-align: center; padding: 22px 16px; border: 1px solid rgba(26,26,26,0.12); }
+  .date-card .dc-date { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 700; color: var(--gold); }
+  .date-card .dc-what { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(26,26,26,0.6); margin-top: 6px; }
+
+  /* ── FORM ── */
+  .form-wrap {
+    max-width: 760px; margin: 0 auto;
+    border: 1px solid rgba(200,146,10,0.45);
+    background: #fff;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.07);
+    padding: 44px 40px 40px;
+  }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 20px; }
+  .field { display: flex; flex-direction: column; }
+  .field.full { grid-column: 1 / -1; }
+  .field label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: rgba(26,26,26,0.65);
+    margin-bottom: 7px;
+  }
+  .field label em { color: var(--gold); font-style: normal; }
+  .field input, .field select, .field textarea {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px; color: #1a1a1a;
+    padding: 12px 14px;
+    border: 1px solid rgba(26,26,26,0.2); border-radius: 6px;
+    background: #fff; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(200,146,10,0.14);
+  }
+  .field textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
+  .field .hint { font-size: 11.5px; color: rgba(26,26,26,0.45); margin-top: 6px; line-height: 1.5; }
+
+  /* Video: upload or link */
+  .video-mode { display: flex; gap: 0; margin-bottom: 12px; border: 1px solid rgba(200,146,10,0.5); border-radius: 999px; overflow: hidden; width: max-content; max-width: 100%; }
+  .video-mode button {
+    font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    background: #fff; color: rgba(26,26,26,0.55); border: none;
+    padding: 10px 20px; cursor: pointer; transition: all 0.2s;
+  }
+  .video-mode button.sel { background: var(--gold); color: #fff; }
+  .dropzone {
+    border: 2px dashed rgba(200,146,10,0.55); border-radius: 10px;
+    background: rgba(250,247,240,0.6);
+    padding: 26px 20px; text-align: center; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .dropzone:hover, .dropzone.drag { border-color: var(--gold); background: rgba(200,146,10,0.08); }
+  .dropzone .dz-icon { font-size: 26px; color: var(--gold); margin-bottom: 6px; }
+  .dropzone .dz-main { font-size: 13.5px; font-weight: 600; }
+  .dropzone .dz-sub { font-size: 11.5px; color: rgba(26,26,26,0.5); margin-top: 4px; }
+  .dropzone input[type="file"] { display: none; }
+  .file-chip {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    border: 1px solid rgba(200,146,10,0.5); border-radius: 8px;
+    background: #fff; padding: 12px 16px; margin-top: 10px;
+  }
+  .file-chip .fc-name { font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-chip .fc-size { font-size: 11px; color: rgba(26,26,26,0.5); }
+  .file-chip .fc-remove {
+    background: none; border: none; cursor: pointer; font-size: 16px;
+    color: rgba(26,26,26,0.4); padding: 2px 6px;
+  }
+  .file-chip .fc-remove:hover { color: var(--maroon); }
+  .upload-progress { margin-top: 10px; }
+  .upload-progress .bar-track { height: 8px; border-radius: 999px; background: rgba(26,26,26,0.1); overflow: hidden; }
+  .upload-progress .bar-fill { height: 100%; width: 0%; background: var(--gold); border-radius: 999px; transition: width 0.25s; }
+  .upload-progress .bar-label { font-size: 11.5px; color: rgba(26,26,26,0.55); margin-top: 6px; text-align: center; }
+  .agree-row { display: flex; gap: 12px; align-items: flex-start; margin-top: 4px; }
+  .agree-row input[type="checkbox"] {
+    flex: 0 0 auto; width: 17px; height: 17px; margin-top: 2px;
+    accent-color: var(--gold); cursor: pointer;
+  }
+  .agree-row label {
+    font-size: 12.5px; font-weight: 400; letter-spacing: 0;
+    text-transform: none; color: rgba(26,26,26,0.7);
+    line-height: 1.6; cursor: pointer; margin: 0;
+  }
+  .submit-btn {
+    width: 100%; margin-top: 28px;
+    background: var(--gold); color: #fff; border: none;
+    padding: 16px 20px; font-family: 'Montserrat', sans-serif;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.2em;
+    text-transform: uppercase; cursor: pointer; border-radius: 999px;
+    transition: background 0.25s, transform 0.15s, box-shadow 0.25s;
+  }
+  .submit-btn:hover { background: var(--gold-light); box-shadow: 0 8px 24px rgba(200,146,10,0.35); transform: translateY(-1px); }
+  .submit-btn:disabled { opacity: 0.6; cursor: wait; transform: none; box-shadow: none; }
+  .form-msg { margin-top: 16px; font-size: 13.5px; line-height: 1.6; text-align: center; min-height: 20px; }
+  .form-msg.err { color: var(--maroon); font-weight: 600; }
+
+  /* Success state */
+  .success-card { text-align: center; padding: 30px 10px 6px; }
+  .success-card .big-check {
+    width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 24px;
+    background: rgba(200,146,10,0.12); border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; color: var(--gold);
+  }
+  .success-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 700; margin-bottom: 12px; }
+  .success-card p { font-size: 14.5px; color: rgba(26,26,26,0.65); line-height: 1.7; max-width: 480px; margin: 0 auto 10px; }
+  .hidden { display: none !important; }
+
+  /* Deadline banner */
+  .deadline-strip {
+    background: #1a1a1a; color: #f5f3f0; text-align: center;
+    padding: 13px 20px; font-size: 12.5px; letter-spacing: 0.08em;
+  }
+  .deadline-strip strong { color: var(--gold); }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 10;
+    background: rgba(245,243,240,0.98);
+    border-top: 1px solid rgba(200,146,10,0.2);
+    padding: 60px 40px 36px; text-align: center;
+    margin-top: auto;
+  }
+  .footer-logo img { width: 58px; height: 58px; border-radius: 50%; margin-bottom: 18px; opacity: 0.8; }
+  .footer-tagline {
+    font-family: 'Cormorant Garamond', serif; font-size: 17px;
+    color: rgba(26,26,26,0.45); margin-bottom: 30px; letter-spacing: 0.05em;
+  }
+  .footer-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+  .footer-btn {
+    background: rgba(255,255,255,0.9); border: 1px solid rgba(200,146,10,0.45);
+    color: rgba(200,146,10,0.75); padding: 9px 22px; font-size: 13px;
+    font-weight: 700; letter-spacing: 0.1em;
+    text-decoration: none; border-radius: 999px;
+    transition: border-color 0.25s, box-shadow 0.25s, color 0.25s;
+  }
+  .footer-btn:hover { border-color: var(--gold); color: var(--gold); box-shadow: 0 4px 14px rgba(200,146,10,0.25); }
+  .footer-social { display: flex; gap: 22px; justify-content: center; margin-bottom: 28px; }
+  .footer-social a {
+    color: rgba(26,26,26,0.45); text-decoration: none; font-size: 13px;
+    font-weight: 700; letter-spacing: 0.1em; transition: color 0.2s;
+  }
+  .footer-social a:hover { color: var(--gold); }
+  .footer-nonprofit { font-size: 11px; color: rgba(26,26,26,0.45); letter-spacing: 0.05em; margin-bottom: 10px; }
+  .footer-bottom { font-size: 10px; color: rgba(26,26,26,0.3); letter-spacing: 0.1em; }
+  .footer-bottom a { color: rgba(200,146,10,0.7); text-decoration: underline; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(26px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .hamburger { display: flex; }
+    .nav-links {
+      position: fixed; top: 72px; right: 0;
+      flex-direction: column; gap: 0;
+      background: rgba(255,255,255,0.98);
+      width: 240px; height: calc(100vh - 72px);
+      padding: 24px 28px;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      border-left: 1px solid rgba(0,0,0,0.08);
+      z-index: 105;
+    }
+    .nav-links.open { transform: translateX(0); }
+    .nav-links li { padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+    .nav-links a { font-size: 13px; letter-spacing: 0.18em; }
+    .nav-item-dropdown::after { display: none; }
+    .nav-sub {
+      position: static; transform: none;
+      opacity: 1; visibility: visible;
+      background: transparent; border: none; box-shadow: none;
+      padding: 10px 0 0 16px; min-width: 0;
+    }
+    .nav-sub li { padding: 6px 0; border-bottom: none; }
+    .nav-sub a { font-size: 11px; }
+    .nav-donate { display: none; }
+    .nav-logo-text { font-size: 17px; }
+    .nav-logo-text span { font-size: 9px; }
+    .nav-logo img { width: 40px; height: 40px; }
+
+    .page-hero { padding: 104px 24px 36px; }
+    .section { padding: 40px 20px; }
+    .form-wrap { padding: 30px 20px 28px; }
+    .form-grid { grid-template-columns: 1fr; }
+    footer { padding: 40px 20px 28px; }
+    .footer-tagline { font-size: 15px; }
+  }
+
+  .nav-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 104;
+  }
+  .nav-overlay.open { display: block; background: rgba(0,0,0,0.3); }
+
+  .mobile-donate { display: none; }
+  @media (max-width: 768px) {
+    .mobile-donate { display: block; }
+    .mobile-donate a {
+      color: var(--gold) !important;
+      font-size: 13px !important;
+      letter-spacing: 0.18em !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="/home" class="nav-logo">
+    <img src="assets/clock_transparent.png" alt="Achieve M.O.O.R.E" />
+    <div class="nav-logo-text">
+      Achieve M.O.O.R.E
+      <span>Est. 2016</span>
+    </div>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/home#mission">Mission</a></li>
+    <li class="nav-item-dropdown">
+      <a href="/gala">Hands of Time Gala</a>
+      <ul class="nav-sub">
+        <li><a href="/gala#honorees">Honorees</a></li>
+        <li><a href="/gala#sponsors">Sponsors</a></li>
+        <li><a href="/gala#tickets">Buy Tickets</a></li>
+      </ul>
+    </li>
+    <li><a href="/apply" class="active">Scholarship</a></li>
+    <li><a href="/board">Meet the Board</a></li>
+    <li><a href="/newsletter">A.M News</a></li>
+    <li><a href="/about">About Us</a></li>
+    <li class="mobile-donate"><a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener">Donate</a></li>
+  </ul>
+  <div class="nav-overlay" id="navOverlay"></div>
+  <a href="https://www.paypal.com/ncp/payment/9DM9LFFLN476S" target="_blank" rel="noopener" class="nav-donate">Donate</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <p class="page-hero-label">The Achieve M.O.O.R.E Foundation Scholarship</p>
+  <h1 class="page-hero-title">$10,000 <span class="gold">for 10 Years</span></h1>
+  <p class="page-hero-subtitle">One Grand Scholar. Four finalists at the Hands of Time Gala. Your story, in 90 seconds.</p>
+  <div class="gold-divider"></div>
+</section>
+
+<div class="deadline-strip">Applications close <strong>Sunday, November 23</strong> at 11:59 PM ET &mdash; finalists announced November 25 &mdash; winner revealed live at the gala December 5.</div>
+
+<!-- PRIZES -->
+<section class="section">
+  <div class="prize-cards">
+    <div class="prize-card">
+      <div class="pc-label">Grand Scholar</div>
+      <div class="pc-big">$10,000</div>
+      <div class="pc-sub">toward Fall 2027 tuition</div>
+    </div>
+    <div class="prize-card">
+      <div class="pc-label">Finalists</div>
+      <div class="pc-big">Top 4</div>
+      <div class="pc-sub">invited to the gala</div>
+    </div>
+    <div class="prize-card">
+      <div class="pc-label">Winner Announced</div>
+      <div class="pc-big" style="font-size:24px; padding-top:5px;">Live at the<br>Hands of Time Gala</div>
+      <div class="pc-sub">December 5, 2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- ELIGIBILITY -->
+<section class="section" style="padding-top:10px;">
+  <p class="section-label">Who Can Apply</p>
+  <h2 class="section-title">Eligibility</h2>
+  <div class="elig-grid">
+    <div class="elig-item">
+      <div class="elig-icon">&#127963;</div>
+      <div>
+        <h4>Enrolled at an institution in the AUC</h4>
+        <p>Clark Atlanta &middot; Morehouse &middot; Morris Brown &middot; Spelman</p>
+      </div>
+    </div>
+    <div class="elig-item">
+      <div class="elig-icon">&#127891;</div>
+      <div>
+        <h4>3.0+ cumulative GPA</h4>
+        <p>Academic excellence</p>
+      </div>
+    </div>
+    <div class="elig-item">
+      <div class="elig-icon">&#10084;</div>
+      <div>
+        <h4>200+ community service hours</h4>
+        <p>Plus active campus involvement</p>
+      </div>
+    </div>
+    <div class="elig-item">
+      <div class="elig-icon">&#127909;</div>
+      <div>
+        <h4>A 90-second video</h4>
+        <p>Instructions below</p>
+      </div>
+    </div>
+  </div>
+  <div class="elig-note"><strong>Awarded for the Fall 2027 semester.</strong> You must be enrolled at an AUC institution in Fall 2027. Students graduating in Spring 2027 or earlier are not eligible.</div>
+</section>
+
+<!-- VIDEO GUIDE -->
+<section class="section" style="padding-top:10px;">
+  <p class="section-label">Cover these five parts, in order</p>
+  <h2 class="section-title">Your 90-Second Video</h2>
+  <div class="video-guide">
+    <div class="vg-step">
+      <div class="vg-num">1</div>
+      <div><h4>Introduce Yourself <span class="vg-time">0&ndash;10s</span></h4>
+      <p>Your name, school and major, and a line that grabs our attention</p></div>
+    </div>
+    <div class="vg-step">
+      <div class="vg-num">2</div>
+      <div><h4>Your Story <span class="vg-time">10&ndash;35s</span></h4>
+      <p>A challenge you have overcome and what it taught you</p></div>
+    </div>
+    <div class="vg-step">
+      <div class="vg-num">3</div>
+      <div><h4>Your Why <span class="vg-time">35&ndash;55s</span></h4>
+      <p>What motivates you, and why the Achieve MOORE mission speaks to you</p></div>
+    </div>
+    <div class="vg-step">
+      <div class="vg-num">4</div>
+      <div><h4>Your Service <span class="vg-time">55&ndash;75s</span></h4>
+      <p>How you give back to your community and lead on campus</p></div>
+    </div>
+    <div class="vg-step">
+      <div class="vg-num">5</div>
+      <div><h4>Your Vision <span class="vg-time">75&ndash;90s</span></h4>
+      <p>If you could solve one problem in the world, what would it be and why? Close with <strong>&ldquo;My time is now.&rdquo;</strong></p></div>
+    </div>
+    <div class="vg-checks">
+      <span>90 seconds max, filmed vertically (9:16)</span>
+      <span>Edited, with royalty-free background music</span>
+      <span>Phone-filmed videos are welcome</span>
+      <span>Upload the file right here, or share a YouTube/Drive link</span>
+    </div>
+    <div class="vg-star">The top 4 finalists&rsquo; videos will be posted on our Instagram. Likes, comments and shares count toward the final selection.</div>
+  </div>
+</section>
+
+<!-- KEY DATES -->
+<section class="section" style="padding-top:10px;">
+  <div class="dates-row">
+    <div class="date-card"><div class="dc-date">Nov 23</div><div class="dc-what">Applications Due</div></div>
+    <div class="date-card"><div class="dc-date">Nov 25</div><div class="dc-what">Finalists Announced</div></div>
+    <div class="date-card"><div class="dc-date">Dec 5</div><div class="dc-what">Winner Revealed</div></div>
+  </div>
+</section>
+
+<!-- APPLICATION FORM -->
+<section class="section" id="apply-form" style="padding-top:16px; padding-bottom:90px;">
+  <p class="section-label">How to Apply</p>
+  <h2 class="section-title">Submit Your Application</h2>
+
+  <div class="form-wrap">
+    <form id="scholarshipForm" novalidate>
+      <div class="form-grid">
+        <div class="field">
+          <label for="firstName">First Name <em>*</em></label>
+          <input type="text" id="firstName" name="firstName" autocomplete="given-name" required maxlength="80">
+        </div>
+        <div class="field">
+          <label for="lastName">Last Name <em>*</em></label>
+          <input type="text" id="lastName" name="lastName" autocomplete="family-name" required maxlength="80">
+        </div>
+        <div class="field">
+          <label for="email">Email <em>*</em></label>
+          <input type="email" id="email" name="email" autocomplete="email" required maxlength="254">
+          <div class="hint">We&rsquo;ll send your confirmation here. Re-submitting with the same email updates your application.</div>
+        </div>
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" autocomplete="tel" maxlength="32">
+        </div>
+        <div class="field">
+          <label for="school">AUC Institution <em>*</em></label>
+          <select id="school" name="school" required>
+            <option value="" disabled selected>Select your school</option>
+            <option>Clark Atlanta University</option>
+            <option>Morehouse College</option>
+            <option>Morris Brown College</option>
+            <option>Spelman College</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="major">Major <em>*</em></label>
+          <input type="text" id="major" name="major" required maxlength="120">
+        </div>
+        <div class="field">
+          <label for="classification">Classification <em>*</em></label>
+          <select id="classification" name="classification" required>
+            <option value="" disabled selected>Select one</option>
+            <option>Freshman</option>
+            <option>Sophomore</option>
+            <option>Junior</option>
+            <option>Senior</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="gradTerm">Expected Graduation <em>*</em></label>
+          <select id="gradTerm" name="gradTerm" required>
+            <option value="" disabled selected>Select a term</option>
+            <option>Fall 2027</option>
+            <option>Spring 2028</option>
+            <option>Fall 2028</option>
+            <option>Spring 2029</option>
+            <option>Fall 2029</option>
+            <option>Spring 2030</option>
+            <option>Later than Spring 2030</option>
+          </select>
+          <div class="hint">You must still be enrolled in Fall 2027 &mdash; the award goes toward that semester&rsquo;s tuition.</div>
+        </div>
+        <div class="field">
+          <label for="gpa">Cumulative GPA <em>*</em></label>
+          <input type="number" id="gpa" name="gpa" required min="3.0" max="4.0" step="0.01" placeholder="e.g. 3.45">
+        </div>
+        <div class="field">
+          <label for="serviceHours">Community Service Hours <em>*</em></label>
+          <input type="number" id="serviceHours" name="serviceHours" required min="200" step="1" placeholder="200 or more">
+        </div>
+        <div class="field full">
+          <label for="campusInvolvement">Campus Involvement &amp; Leadership <em>*</em></label>
+          <textarea id="campusInvolvement" name="campusInvolvement" required maxlength="2000" placeholder="Organizations, leadership roles, and how you serve your community..."></textarea>
+        </div>
+        <div class="field full">
+          <label>Your 90-Second Video <em>*</em></label>
+          <div class="video-mode">
+            <button type="button" id="modeUpload" class="sel">Upload File</button>
+            <button type="button" id="modeLink">Paste a Link</button>
+          </div>
+
+          <!-- Upload mode -->
+          <div id="uploadPane">
+            <label class="dropzone" id="dropzone">
+              <div class="dz-icon">&#127909;</div>
+              <div class="dz-main">Tap to choose your video</div>
+              <div class="dz-sub">MP4 or MOV, up to 512 MB &mdash; filmed vertically (9:16)</div>
+              <input type="file" id="videoFile" accept="video/mp4,video/quicktime,video/x-m4v,video/webm,.mp4,.mov,.m4v,.webm">
+            </label>
+            <div class="file-chip hidden" id="fileChip">
+              <div>
+                <div class="fc-name" id="fcName"></div>
+                <div class="fc-size" id="fcSize"></div>
+              </div>
+              <button type="button" class="fc-remove" id="fcRemove" aria-label="Remove file">&times;</button>
+            </div>
+            <div class="upload-progress hidden" id="uploadProgress">
+              <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
+              <div class="bar-label" id="barLabel">Uploading&hellip;</div>
+            </div>
+          </div>
+
+          <!-- Link mode -->
+          <div id="linkPane" class="hidden">
+            <input type="url" id="videoUrl" name="videoUrl" maxlength="500" placeholder="https://youtu.be/... or https://drive.google.com/file/d/...">
+            <div class="hint">Upload your video to <strong>YouTube as Unlisted</strong> or to <strong>Google Drive</strong> (set sharing to &ldquo;Anyone with the link can view&rdquo;), then paste the link here.</div>
+          </div>
+        </div>
+        <div class="field full agree-row">
+          <input type="checkbox" id="agreeEligible" required>
+          <label for="agreeEligible">I confirm that I meet the eligibility requirements above and will be enrolled at an AUC institution in Fall 2027.</label>
+        </div>
+        <div class="field full agree-row">
+          <input type="checkbox" id="agreeInstagram" required>
+          <label for="agreeInstagram">I understand that if I am selected as a Top 4 finalist, my video will be posted on the Achieve M.O.O.R.E Instagram, and that likes, comments and shares count toward the final selection.</label>
+        </div>
+      </div>
+      <button type="submit" class="submit-btn" id="submitBtn">Submit Application</button>
+      <div class="form-msg" id="formMsg" role="status"></div>
+    </form>
+
+    <div class="success-card hidden" id="successCard">
+      <div class="big-check">&#10003;</div>
+      <h3>Application Received</h3>
+      <p>Thank you for sharing your story with us. A confirmation is on its way to your email.</p>
+      <p><strong>Top 4 finalists</strong> will be announced on <strong>November 25</strong>, and the Grand Scholar is revealed live at the Hands of Time Gala on <strong>December 5, 2026</strong>.</p>
+      <p style="margin-top:18px; font-family:'Cormorant Garamond',serif; font-size:21px; color:var(--gold);">Your time is now.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <img src="assets/clock_transparent.png" alt="Achieve M.O.O.R.E" />
+  </div>
+  <p class="footer-tagline">The goal is not only to succeed, but as you succeed, bring others with you.</p>
+  <div class="footer-ctas">
+    <a href="/newsletter" class="footer-btn">A.M News</a>
+  </div>
+  <div class="footer-social">
+    <a class="instagram-orb" href="https://www.instagram.com/achievemoore/" target="_blank" rel="noopener" aria-label="Achieve M.O.O.R.E on Instagram"><canvas aria-hidden="true"></canvas><span data-text="Instagram">Instagram</span></a>
+    <a class="linkedin-orb" href="https://www.linkedin.com/company/achieve-moore-foundation-inc" target="_blank" rel="noopener" aria-label="Achieve M.O.O.R.E on LinkedIn"><canvas aria-hidden="true"></canvas><span data-text="LinkedIn">LinkedIn</span></a>
+  </div>
+  <script src="assets/linkedin-orb.js" defer></script>
+  <script src="assets/gala-countdown.js" defer></script>
+  <p class="footer-nonprofit">Achieve M.O.O.R.E Foundation INC. 501(c)(3) Non Profit Organization</p>
+  <p class="footer-bottom">&copy; 2016 Achieve M.O.O.R.E &mdash; <a href="#">Terms and Conditions</a></p>
+</footer>
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────
+// CONFIG — same Worker that powers gala checkout & seating.
+// ─────────────────────────────────────────────────────────────────────────
+const apiBase = 'https://gala-checkout.achievemoore.workers.dev';
+
+const form = document.getElementById('scholarshipForm');
+const msg = document.getElementById('formMsg');
+const btn = document.getElementById('submitBtn');
+
+/* ── Video: upload-a-file vs paste-a-link ── */
+const $id = s => document.getElementById(s);
+let videoMode = 'upload';
+let chosenFile = null;
+
+function setMode(mode) {
+  videoMode = mode;
+  $id('modeUpload').classList.toggle('sel', mode === 'upload');
+  $id('modeLink').classList.toggle('sel', mode === 'link');
+  $id('uploadPane').classList.toggle('hidden', mode !== 'upload');
+  $id('linkPane').classList.toggle('hidden', mode !== 'link');
+}
+$id('modeUpload').addEventListener('click', () => setMode('upload'));
+$id('modeLink').addEventListener('click', () => setMode('link'));
+
+function prettySize(bytes) {
+  return bytes >= 1024 * 1024 ? (bytes / (1024 * 1024)).toFixed(1) + ' MB' : Math.ceil(bytes / 1024) + ' KB';
+}
+
+function pickFile(file) {
+  if (!file) return;
+  const okType = /\.(mp4|mov|m4v|webm)$/i.test(file.name) ||
+    ['video/mp4', 'video/quicktime', 'video/x-m4v', 'video/webm'].includes(file.type);
+  if (!okType) { alert('Please choose an MP4 or MOV video file.'); return; }
+  if (file.size > 512 * 1024 * 1024) {
+    alert('Videos can be up to 512 MB. Try exporting at 1080p — it will look great and upload faster.');
+    return;
+  }
+  chosenFile = file;
+  $id('fcName').textContent = file.name;
+  $id('fcSize').textContent = prettySize(file.size);
+  $id('fileChip').classList.remove('hidden');
+  $id('dropzone').classList.add('hidden');
+}
+
+$id('videoFile').addEventListener('change', e => pickFile(e.target.files[0]));
+$id('fcRemove').addEventListener('click', () => {
+  chosenFile = null;
+  $id('videoFile').value = '';
+  $id('fileChip').classList.add('hidden');
+  $id('dropzone').classList.remove('hidden');
+});
+const dz = $id('dropzone');
+['dragover', 'dragenter'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add('drag'); }));
+['dragleave', 'drop'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove('drag'); }));
+dz.addEventListener('drop', e => pickFile(e.dataTransfer.files[0]));
+
+/** Upload the chosen file to our storage in chunks. Returns the video key. */
+async function uploadVideo(file) {
+  const progress = $id('uploadProgress');
+  const fill = $id('barFill');
+  const label = $id('barLabel');
+  progress.classList.remove('hidden');
+  fill.style.width = '0%';
+  label.textContent = 'Starting upload…';
+
+  const startResp = await fetch(apiBase + '/api/scholarship/upload/start', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fileName: file.name, fileSize: file.size, contentType: file.type })
+  });
+  const start = await startResp.json().catch(() => ({}));
+  if (!startResp.ok) throw new Error(start.error || 'Could not start the upload.');
+
+  const parts = [];
+  let sent = 0;
+  for (let offset = 0, partNo = 1; offset < file.size; offset += start.partSize, partNo++) {
+    const chunk = file.slice(offset, offset + start.partSize);
+    const qs = `key=${encodeURIComponent(start.key)}&uploadId=${encodeURIComponent(start.uploadId)}&part=${partNo}`;
+    let resp, data;
+    // One automatic retry per chunk — phone connections hiccup.
+    for (let attempt = 0; attempt < 2; attempt++) {
+      resp = await fetch(apiBase + '/api/scholarship/upload/part?' + qs, { method: 'POST', body: chunk });
+      data = await resp.json().catch(() => ({}));
+      if (resp.ok) break;
+    }
+    if (!resp.ok) throw new Error(data.error || 'Upload interrupted — please try again.');
+    parts.push(data);
+    sent += chunk.size;
+    const pct = Math.round((sent / file.size) * 100);
+    fill.style.width = pct + '%';
+    label.textContent = 'Uploading your video… ' + pct + '%';
+  }
+
+  const doneResp = await fetch(apiBase + '/api/scholarship/upload/complete', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ key: start.key, uploadId: start.uploadId, parts })
+  });
+  const done = await doneResp.json().catch(() => ({}));
+  if (!doneResp.ok) throw new Error(done.error || 'Upload could not be completed.');
+
+  label.textContent = 'Video uploaded ✓';
+  return done.videoKey;
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  msg.textContent = '';
+  msg.classList.remove('err');
+
+  if (!form.reportValidity()) return;
+
+  if (videoMode === 'upload' && !chosenFile) {
+    msg.textContent = 'Please choose your 90-second video file (or switch to “Paste a Link”).';
+    msg.classList.add('err');
+    return;
+  }
+  if (videoMode === 'link' && !document.getElementById('videoUrl').value.trim()) {
+    msg.textContent = 'Please paste the link to your 90-second video.';
+    msg.classList.add('err');
+    return;
+  }
+
+  const payload = {
+    firstName: document.getElementById('firstName').value,
+    lastName: document.getElementById('lastName').value,
+    email: document.getElementById('email').value,
+    phone: document.getElementById('phone').value,
+    school: document.getElementById('school').value,
+    major: document.getElementById('major').value,
+    classification: document.getElementById('classification').value,
+    gradTerm: document.getElementById('gradTerm').value,
+    gpa: document.getElementById('gpa').value,
+    serviceHours: document.getElementById('serviceHours').value,
+    campusInvolvement: document.getElementById('campusInvolvement').value
+  };
+
+  btn.disabled = true;
+  try {
+    if (videoMode === 'upload') {
+      btn.textContent = 'Uploading Video…';
+      payload.videoKey = await uploadVideo(chosenFile);
+      payload.videoName = chosenFile.name;
+    } else {
+      payload.videoUrl = document.getElementById('videoUrl').value;
+    }
+
+    btn.textContent = 'Submitting…';
+    const resp = await fetch(apiBase + '/api/scholarship/apply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await resp.json().catch(() => ({}));
+    if (!resp.ok) throw new Error(data.error || 'Something went wrong. Please try again.');
+
+    form.classList.add('hidden');
+    document.getElementById('successCard').classList.remove('hidden');
+    document.getElementById('successCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } catch (err) {
+    msg.textContent = err.message || 'Something went wrong. Please try again.';
+    msg.classList.add('err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Submit Application';
+  }
+});
+</script>
+
+<script>
+// Hamburger menu toggle
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('navLinks');
+const navOverlay = document.getElementById('navOverlay');
+
+function toggleMenu() {
+  hamburger.classList.toggle('active');
+  navLinks.classList.toggle('open');
+  navOverlay.classList.toggle('open');
+  document.body.style.overflow = navLinks.classList.contains('open') ? 'hidden' : '';
+}
+
+hamburger.addEventListener('click', toggleMenu);
+navOverlay.addEventListener('click', toggleMenu);
+
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    if (navLinks.classList.contains('open')) toggleMenu();
+  });
+});
+</script>
+
+</body>
+</html>

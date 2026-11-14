@@ -18,6 +18,9 @@ webhook records every ticket purchase and emails the buyer a magic
 - `POST /api/seats/release` → un-pick one of your own seats
 - `POST /api/seats/resend` → re-send the magic link to a buyer's email
 - `GET  /api/seats/admin?key=ADMIN_KEY` → full seat chart w/ emails (for place cards)
+- `POST /api/scholarship/apply` → submit a $10K scholarship application
+- `POST /api/scholarship/entries` → `{ key }` → all entries + board reviews (BOARD_KEY)
+- `POST /api/scholarship/review` → `{ key, applicationId, reviewer, score, note }`
 - `GET  /health` → `ok`
 
 ## One-time setup
@@ -118,6 +121,67 @@ curl "https://gala-checkout.<your-subdomain>.workers.dev/api/seats/admin?key=YOU
 npx wrangler d1 execute gala-waitlist --remote --command \
   "SELECT seat_id, email, guest_name FROM seats ORDER BY seat_id;"
 ```
+
+## $10,000 Scholarship setup
+
+`apply.html` (the public application at `/apply`) and `scholarship-review.html`
+(the private board dashboard at `/scholarship-review`) both talk to this Worker.
+
+Applicants submit their 90-second video one of two ways:
+
+- **Direct upload (default)** — the file goes straight into the
+  `scholarship-videos` R2 bucket (chunked, up to 512 MB). The board page plays
+  these in place and has a **Download original** button — that's the file you
+  post to Instagram for the Top 4.
+- **Paste a link** — a YouTube (unlisted) or Google Drive link; the Worker
+  normalizes it into an embeddable player URL.
+
+Re-submitting with the same email updates the application (handy for fixing
+mistakes before the deadline). Submissions are rejected after
+`SCHOLARSHIP_DEADLINE` in `wrangler.toml` (currently Nov 23, 2026, 11:59 PM ET).
+
+1. **Create the R2 bucket for videos** (free tier: 10 GB storage, no
+   download/egress fees):
+   ```bash
+   npx wrangler r2 bucket create scholarship-videos
+   ```
+
+2. **Apply the updated schema** (adds `scholarship_applications`,
+   `scholarship_reviews`):
+   ```bash
+   npx wrangler d1 execute gala-waitlist --file=./schema.sql --remote
+   ```
+
+3. **Board access code** — pick a passphrase the board will share
+   (e.g. `moore-time-2026`) and store it:
+   ```bash
+   npx wrangler secret put BOARD_KEY
+   ```
+
+4. Redeploy: `npx wrangler deploy`
+
+5. **Share with the board** — send them either the page
+   `https://achievemoorefoundation.org/scholarship-review` plus the code, or a
+   one-click link that fills it in automatically:
+   `https://achievemoorefoundation.org/scholarship-review?k=THE_CODE`
+   (the code is removed from the address bar after it loads and remembered in
+   the browser).
+
+On the dashboard each board member types their name once, then scores every
+entry 1–5 with optional notes. Everyone sees the running average per entry and
+each other's notes, and can filter by school, search, and sort by average
+score — which makes picking the Top 4 straightforward.
+
+Export everything from D1 anytime:
+
+```bash
+npx wrangler d1 execute gala-waitlist --remote --command \
+  "SELECT first_name, last_name, email, school, gpa, service_hours, video_url \
+   FROM scholarship_applications ORDER BY created_at;"
+```
+
+If applicant confirmation emails should come from a different address than the
+gala's (e.g. `scholarship@...`), change `EMAIL_FROM` — it's shared by both.
 
 ## Connect the website
 

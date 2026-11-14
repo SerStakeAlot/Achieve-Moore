@@ -18,11 +18,16 @@ TICKET_NAME = "Hands of Time Gala — Individual Ticket"
 SITE_URL = "https://achievemoorefoundation.org"
 EMAIL_FROM = "Achieve M.O.O.R.E <gala@achievemoorefoundation.org>"
 
+# $10K scholarship application cutoff (Nov 23, 2026, 11:59 PM Eastern).
+SCHOLARSHIP_DEADLINE = "2026-11-24T04:59:59Z"
+
 # Secrets to set (never stored here):
 #   npx wrangler secret put STRIPE_SECRET_KEY      (sk_live_... from Stripe)
 #   npx wrangler secret put STRIPE_WEBHOOK_SECRET  (whsec_... from the webhook endpoint)
 #   npx wrangler secret put RESEND_API_KEY         (re_... from resend.com)
 #   npx wrangler secret put ADMIN_KEY              (any long random string, for /api/seats/admin)
+#   npx wrangler secret put BOARD_KEY              (access code shared with board members
+#                                                   for the scholarship review dashboard)
 
 # D1 database for the early-bird waitlist (notify-me form).
 # Create it once with:  npx wrangler d1 create gala-waitlist
@@ -31,3 +36,10 @@ EMAIL_FROM = "Achieve M.O.O.R.E <gala@achievemoorefoundation.org>"
 binding = "DB"
 database_name = "gala-waitlist"
 database_id = "06ca729c-40ff-4928-894d-d97890a87022"
+
+# R2 bucket for scholarship video uploads (applicants upload their 90-second
+# video straight from the apply page; the board downloads originals for
+# Instagram). Create it once with:  npx wrangler r2 bucket create scholarship-videos
+[[r2_buckets]]
+binding = "VIDEOS"
+bucket_name = "scholarship-videos"
