@@ -511,7 +511,7 @@
     <div class="elig-item">
       <div>
         <h4>200+ community service hours</h4>
-        <p>Plus active campus involvement</p>
+        <p>Plus active campus involvement &mdash; signed proof required</p>
       </div>
     </div>
     <div class="elig-item">
@@ -643,6 +643,21 @@
         <div class="field">
           <label for="serviceHours">Community Service Hours <em>*</em></label>
           <input type="number" id="serviceHours" name="serviceHours" required min="200" step="1" placeholder="200 or more">
+        </div>
+        <div class="field full">
+          <label>Proof of Service Hours <em>*</em></label>
+          <label class="dropzone" id="proofDrop" style="padding:18px 20px;">
+            <div class="dz-main">Tap to attach your signed proof</div>
+            <div class="dz-sub">PDF or photo (JPG/PNG), up to 20 MB &mdash; must be signed off by school faculty or your supervisor</div>
+            <input type="file" id="proofFile" accept="application/pdf,image/jpeg,image/png,image/webp,image/heic,.pdf,.jpg,.jpeg,.png,.webp,.heic">
+          </label>
+          <div class="file-chip hidden" id="proofChip">
+            <div>
+              <div class="fc-name" id="pfName"></div>
+              <div class="fc-size" id="pfSize"></div>
+            </div>
+            <button type="button" class="fc-remove" id="pfRemove" aria-label="Remove file">&times;</button>
+          </div>
         </div>
         <div class="field full">
           <label for="campusInvolvement">Campus Involvement &amp; Leadership <em>*</em></label>
@@ -781,6 +796,49 @@ const dz = $id('dropzone');
 ['dragleave', 'drop'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove('drag'); }));
 dz.addEventListener('drop', e => pickFile(e.dataTransfer.files[0]));
 
+/* ── Proof of service hours (signed PDF or photo) ── */
+let proofFile = null;
+
+function pickProof(file) {
+  if (!file) return;
+  const okType = /\.(pdf|jpe?g|png|webp|heic)$/i.test(file.name) ||
+    ['application/pdf', 'image/jpeg', 'image/png', 'image/webp', 'image/heic'].includes(file.type);
+  if (!okType) { alert('Please attach your proof as a PDF or a photo (JPG/PNG).'); return; }
+  if (file.size > 20 * 1024 * 1024) {
+    alert('Proof files can be up to 20 MB. A photo or scan of the signed form is perfect.');
+    return;
+  }
+  proofFile = file;
+  $id('pfName').textContent = file.name;
+  $id('pfSize').textContent = prettySize(file.size);
+  $id('proofChip').classList.remove('hidden');
+  $id('proofDrop').classList.add('hidden');
+}
+
+$id('proofFile').addEventListener('change', e => pickProof(e.target.files[0]));
+$id('pfRemove').addEventListener('click', () => {
+  proofFile = null;
+  $id('proofFile').value = '';
+  $id('proofChip').classList.add('hidden');
+  $id('proofDrop').classList.remove('hidden');
+});
+const pdz = $id('proofDrop');
+['dragover', 'dragenter'].forEach(ev => pdz.addEventListener(ev, e => { e.preventDefault(); pdz.classList.add('drag'); }));
+['dragleave', 'drop'].forEach(ev => pdz.addEventListener(ev, e => { e.preventDefault(); pdz.classList.remove('drag'); }));
+pdz.addEventListener('drop', e => pickProof(e.dataTransfer.files[0]));
+
+/** Upload the signed proof in one request. Returns the proof key. */
+async function uploadProof(file) {
+  const resp = await fetch(apiBase + '/api/scholarship/upload/proof?name=' + encodeURIComponent(file.name), {
+    method: 'POST',
+    headers: file.type ? { 'Content-Type': file.type } : {},
+    body: file
+  });
+  const data = await resp.json().catch(() => ({}));
+  if (!resp.ok) throw new Error(data.error || 'Could not upload your proof — please try again.');
+  return data.proofKey;
+}
+
 /** Upload the chosen file to our storage in chunks. Returns the video key. */
 async function uploadVideo(file) {
   const progress = $id('uploadProgress');
@@ -847,6 +905,11 @@ form.addEventListener('submit', async (e) => {
     msg.classList.add('err');
     return;
   }
+  if (!proofFile) {
+    msg.textContent = 'Please attach proof of your community service hours (signed by school faculty or your supervisor).';
+    msg.classList.add('err');
+    return;
+  }
 
   const payload = {
     firstName: document.getElementById('firstName').value,
@@ -864,6 +927,10 @@ form.addEventListener('submit', async (e) => {
 
   btn.disabled = true;
   try {
+    btn.textContent = 'Uploading Proof…';
+    payload.proofKey = await uploadProof(proofFile);
+    payload.proofName = proofFile.name;
+
     if (videoMode === 'upload') {
       btn.textContent = 'Uploading Video…';
       payload.videoKey = await uploadVideo(chosenFile);

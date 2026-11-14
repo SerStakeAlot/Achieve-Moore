@@ -156,6 +156,10 @@
   }
   .entry-contact { font-size: 11.5px; color: rgba(26,26,26,0.5); margin-top: 10px; }
   .entry-contact a { color: inherit; }
+  .proof-row { margin-top: 8px; }
+  .proof-row a { font-size: 12px; font-weight: 700; color: var(--gold); text-decoration: none; }
+  .proof-row a:hover { text-decoration: underline; }
+  .proof-row .no-proof { font-size: 11.5px; color: var(--maroon); font-weight: 600; }
   .entry-date { font-size: 10.5px; color: rgba(26,26,26,0.35); margin-top: 4px; }
 
   /* Review panel */
@@ -475,6 +479,9 @@ function entryCard(e) {
     </div>
     <div class="entry-involve"><b style="display:block;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(26,26,26,0.4);margin-bottom:3px;">Campus Involvement</b><span class="inv-text">${escapeHtml(short)}</span>${involvement.length > 180 ? ' <button class="more-btn">Read more</button>' : ''}</div>
     <div class="entry-contact"><a href="mailto:${escapeHtml(e.email)}">${escapeHtml(e.email)}</a>${e.phone ? ' · ' + escapeHtml(e.phone) : ''}</div>
+    <div class="proof-row">${e.proofKey
+      ? `<a href="${apiBase}/api/scholarship/video?key=${encodeURIComponent(e.proofKey)}&k=${encodeURIComponent(boardKey)}" target="_blank" rel="noopener">View signed service-hours proof ↗</a>`
+      : '<span class="no-proof">No service-hours proof on file</span>'}</div>
   `;
 
   if (involvement.length > 180) {

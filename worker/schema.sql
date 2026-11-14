@@ -66,6 +66,8 @@ CREATE TABLE IF NOT EXISTS scholarship_applications (
   video_embed        TEXT,
   video_key          TEXT,
   video_name         TEXT,
+  proof_key          TEXT,
+  proof_name         TEXT,
   created_at         TEXT NOT NULL,
   updated_at         TEXT
 );

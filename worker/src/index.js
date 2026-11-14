@@ -99,6 +99,10 @@ export default {
       return uploadComplete(request, env, cors);
     }
 
+    if (request.method === 'POST' && url.pathname === '/api/scholarship/upload/proof') {
+      return uploadProof(request, url, env, cors);
+    }
+
     if (request.method === 'GET' && url.pathname === '/api/scholarship/video') {
       return serveVideo(request, url, env, cors);
     }
@@ -486,6 +490,12 @@ const UPLOAD_PART_SIZE = 8 * 1024 * 1024;  // 8 MB chunks (R2 multipart min is 5
 const MAX_PART_BYTES = 32 * 1024 * 1024;
 const VIDEO_KEY_RE = /^videos\/[\w.-]{8,80}$/;
 
+// Signed proof of community service hours (PDF or photo, one request).
+const PROOF_EXT = { 'application/pdf': 'pdf', 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/heic': 'heic' };
+const MAX_PROOF_BYTES = 20 * 1024 * 1024; // 20 MB
+const PROOF_KEY_RE = /^proofs\/[\w.-]{8,80}$/;
+const FILE_KEY_RE = /^(videos|proofs)\/[\w.-]{8,80}$/;
+
 function pastDeadline(env) {
   const deadline = Date.parse(env.SCHOLARSHIP_DEADLINE || '2026-11-24T04:59:59Z');
   return !Number.isNaN(deadline) && Date.now() > deadline;
@@ -549,6 +559,8 @@ async function scholarshipApply(request, env, cors) {
   const videoUrl = s(body.videoUrl, 500);
   const videoKey = s(body.videoKey, 120);
   const videoName = s(body.videoName, 200);
+  const proofKey = s(body.proofKey, 120);
+  const proofName = s(body.proofName, 200);
 
   if (!firstName || !lastName) return json({ error: 'Please enter your full name.' }, 400, cors);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: 'Please enter a valid email address.' }, 400, cors);
@@ -561,6 +573,15 @@ async function scholarshipApply(request, env, cors) {
   const hoursNum = Number(serviceHours);
   if (!Number.isFinite(hoursNum) || hoursNum < 200) {
     return json({ error: '200+ community service hours are required to apply.' }, 400, cors);
+  }
+
+  // Signed proof of service hours is required.
+  if (!PROOF_KEY_RE.test(proofKey) || !env.VIDEOS) {
+    return json({ error: 'Please upload proof of your community service hours (signed by school faculty or your supervisor).' }, 400, cors);
+  }
+  const proofHead = await env.VIDEOS.head(proofKey);
+  if (!proofHead) {
+    return json({ error: 'Your proof upload didn’t finish — please attach it again.' }, 400, cors);
   }
 
   // The video: either a file they uploaded to us (videoKey) or a pasted link.
@@ -589,8 +610,8 @@ async function scholarshipApply(request, env, cors) {
       `INSERT INTO scholarship_applications
          (first_name, last_name, email, phone, school, major, classification,
           grad_term, gpa, service_hours, campus_involvement, video_url, video_embed,
-          video_key, video_name, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          video_key, video_name, proof_key, proof_name, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
        ON CONFLICT(email) DO UPDATE SET
          first_name = excluded.first_name,  last_name = excluded.last_name,
          phone = excluded.phone,            school = excluded.school,
@@ -600,11 +621,13 @@ async function scholarshipApply(request, env, cors) {
          campus_involvement = excluded.campus_involvement,
          video_url = excluded.video_url,    video_embed = excluded.video_embed,
          video_key = excluded.video_key,    video_name = excluded.video_name,
+         proof_key = excluded.proof_key,    proof_name = excluded.proof_name,
          updated_at = ?`
     ).bind(firstName, lastName, email, phone || null, school, major || null,
            classification || null, gradTerm || null, gpa, serviceHours,
            involvement || null, videoKey ? null : videoUrl, embed,
-           videoKey || null, videoKey ? (videoName || null) : null, now, now).run();
+           videoKey || null, videoKey ? (videoName || null) : null,
+           proofKey, proofName || null, now, now).run();
   } catch {
     return json({ error: 'Could not save your application. Please try again.' }, 500, cors);
   }
@@ -737,6 +760,40 @@ async function uploadComplete(request, env, cors) {
   }
 }
 
+/** POST ?name=<fileName>, body = file bytes -> { ok, proofKey }.
+ *  Signed service-hours proof: PDF or photo, small enough for one request. */
+async function uploadProof(request, url, env, cors) {
+  if (!env.VIDEOS) return json({ error: 'Uploads not configured' }, 500, cors);
+  if (pastDeadline(env)) {
+    return json({ error: 'The application window has closed.' }, 400, cors);
+  }
+
+  const fileName = (url.searchParams.get('name') || '').slice(0, 200);
+  const contentType = (request.headers.get('Content-Type') || '').toLowerCase().split(';')[0].trim();
+
+  let ext = PROOF_EXT[contentType];
+  if (!ext) {
+    const m = fileName.toLowerCase().match(/\.(pdf|jpe?g|png|webp|heic)$/);
+    ext = m && (m[1] === 'jpeg' ? 'jpg' : m[1]);
+  }
+  if (!ext) {
+    return json({ error: 'Please upload your proof as a PDF or a photo (JPG/PNG).' }, 400, cors);
+  }
+
+  let data;
+  try { data = await request.arrayBuffer(); } catch { return json({ error: 'Invalid request' }, 400, cors); }
+  if (!data.byteLength) return json({ error: 'That file looks empty — please try again.' }, 400, cors);
+  if (data.byteLength > MAX_PROOF_BYTES) {
+    return json({ error: 'Proof files can be up to 20 MB. A photo or scan of the signed form is perfect.' }, 400, cors);
+  }
+
+  const key = `proofs/${Date.now()}-${randomToken().slice(0, 12)}.${ext}`;
+  await env.VIDEOS.put(key, data, {
+    httpMetadata: { contentType: PROOF_EXT[contentType] ? contentType : 'application/octet-stream' }
+  });
+  return json({ ok: true, proofKey: key }, 200, cors);
+}
+
 /** GET ?key=videos/...&k=BOARD_KEY[&dl=1] -> stream the video (board only). */
 async function serveVideo(request, url, env, cors) {
   if (!env.VIDEOS || !env.BOARD_KEY) return json({ error: 'Not configured' }, 500, cors);
@@ -745,7 +802,7 @@ async function serveVideo(request, url, env, cors) {
   if (!timingSafeEqual(k, env.BOARD_KEY)) return json({ error: 'Unauthorized' }, 401, cors);
 
   const key = url.searchParams.get('key') || '';
-  if (!VIDEO_KEY_RE.test(key)) return json({ error: 'Not found' }, 404, cors);
+  if (!FILE_KEY_RE.test(key)) return json({ error: 'Not found' }, 404, cors);
 
   // Range support so <video> can seek (and Safari will play at all).
   const rangeHeader = request.headers.get('Range') || '';
@@ -764,7 +821,7 @@ async function serveVideo(request, url, env, cors) {
 
   const headers = {
     ...cors,
-    'Content-Type': obj.httpMetadata?.contentType || 'video/mp4',
+    'Content-Type': obj.httpMetadata?.contentType || 'application/octet-stream',
     'Accept-Ranges': 'bytes',
     'Cache-Control': 'private, max-age=3600'
   };
@@ -799,7 +856,7 @@ async function scholarshipEntries(request, env, cors) {
   const { results: apps } = await env.DB.prepare(
     `SELECT id, first_name, last_name, email, phone, school, major, classification,
             grad_term, gpa, service_hours, campus_involvement, video_url, video_embed,
-            video_key, video_name, created_at, updated_at
+            video_key, video_name, proof_key, proof_name, created_at, updated_at
      FROM scholarship_applications ORDER BY created_at DESC`
   ).all();
 
@@ -826,6 +883,7 @@ async function scholarshipEntries(request, env, cors) {
       campusInvolvement: a.campus_involvement || '',
       videoUrl: a.video_url || '', videoEmbed: a.video_embed || '',
       videoKey: a.video_key || '', videoName: a.video_name || '',
+      proofKey: a.proof_key || '', proofName: a.proof_name || '',
       createdAt: a.created_at, updatedAt: a.updated_at || '',
       reviews: byApp.get(a.id) || []
     }))
