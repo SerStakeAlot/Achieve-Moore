@@ -870,16 +870,26 @@ const transcriptState = docPicker({
   removeId: 'tfRemove', fileId: 'transcriptFile', word: 'transcript'
 });
 
-/** Upload a small document (proof or transcript) in one request. Returns its key. */
-async function uploadDoc(file, kind) {
-  const resp = await fetch(apiBase + '/api/scholarship/upload/proof?kind=' + kind + '&name=' + encodeURIComponent(file.name), {
-    method: 'POST',
-    headers: file.type ? { 'Content-Type': file.type } : {},
-    body: file
+/** Upload a small document (proof or transcript) in one request, with progress. */
+function uploadDoc(file, kind, onProgress) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', apiBase + '/api/scholarship/upload/proof?kind=' + kind + '&name=' + encodeURIComponent(file.name));
+    if (file.type) xhr.setRequestHeader('Content-Type', file.type);
+    xhr.upload.onprogress = e => {
+      if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100));
+    };
+    xhr.onload = () => {
+      let data = {};
+      try { data = JSON.parse(xhr.responseText); } catch {}
+      if (xhr.status >= 200 && xhr.status < 300) resolve(data.proofKey);
+      else reject(new Error(data.error || `Could not upload your ${kind} — please try again.`));
+    };
+    xhr.onerror = () => reject(new Error(`Could not upload your ${kind} — check your connection and try again.`));
+    xhr.ontimeout = () => reject(new Error(`Your ${kind} upload timed out — check your connection and try again.`));
+    xhr.timeout = 10 * 60 * 1000;
+    xhr.send(file);
   });
-  const data = await resp.json().catch(() => ({}));
-  if (!resp.ok) throw new Error(data.error || `Could not upload your ${kind} — please try again.`);
-  return data.proofKey;
 }
 
 /** Upload the chosen file to our storage in chunks. Returns the video key. */
@@ -979,11 +989,11 @@ form.addEventListener('submit', async (e) => {
   btn.disabled = true;
   try {
     btn.textContent = 'Uploading Proof…';
-    payload.proofKey = await uploadDoc(proofState.file, 'proof');
+    payload.proofKey = await uploadDoc(proofState.file, 'proof', p => { btn.textContent = `Uploading Proof… ${p}%`; });
     payload.proofName = proofState.file.name;
 
     btn.textContent = 'Uploading Transcript…';
-    payload.transcriptKey = await uploadDoc(transcriptState.file, 'transcript');
+    payload.transcriptKey = await uploadDoc(transcriptState.file, 'transcript', p => { btn.textContent = `Uploading Transcript… ${p}%`; });
     payload.transcriptName = transcriptState.file.name;
 
     if (videoMode === 'upload') {
