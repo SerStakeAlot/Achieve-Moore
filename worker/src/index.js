@@ -107,6 +107,10 @@ export default {
       return serveVideo(request, url, env, cors);
     }
 
+    if (request.method === 'GET' && url.pathname === '/api/scholarship/files') {
+      return listFiles(url, env, cors);
+    }
+
     if (request.method === 'POST' && url.pathname === '/api/scholarship/entries') {
       return scholarshipEntries(request, env, cors);
     }
@@ -880,6 +884,22 @@ async function serveVideo(request, url, env, cors) {
 
   headers['Content-Length'] = String(obj.size);
   return new Response(obj.body, { status: 200, headers });
+}
+
+/** GET ?k=BOARD_KEY -> every stored file key + size (storage housekeeping). */
+async function listFiles(url, env, cors) {
+  if (!env.VIDEOS || !env.BOARD_KEY) return json({ error: 'Not configured' }, 500, cors);
+  const k = url.searchParams.get('k') || '';
+  if (!timingSafeEqual(k, env.BOARD_KEY)) return json({ error: 'Unauthorized' }, 401, cors);
+
+  const files = [];
+  let cursor;
+  do {
+    const page = await env.VIDEOS.list({ cursor, limit: 500 });
+    for (const o of page.objects) files.push({ key: o.key, size: o.size, uploaded: o.uploaded });
+    cursor = page.truncated ? page.cursor : undefined;
+  } while (cursor);
+  return json({ files }, 200, cors);
 }
 
 /** Board access: the shared BOARD_KEY secret guards entries + reviews. */
