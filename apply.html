@@ -644,11 +644,24 @@
           <label for="serviceHours">Community Service Hours <em>*</em></label>
           <input type="number" id="serviceHours" name="serviceHours" required min="200" step="1" placeholder="200 or more">
         </div>
+        <div class="field">
+          <label for="supervisorName">Hours Supervisor &mdash; Name <em>*</em></label>
+          <input type="text" id="supervisorName" name="supervisorName" required maxlength="120" placeholder="Faculty member or supervisor">
+          <div class="hint">The school faculty member or supervisor who signs off your service hours.</div>
+        </div>
+        <div class="field">
+          <label for="supervisorEmail">Hours Supervisor &mdash; Email <em>*</em></label>
+          <input type="email" id="supervisorEmail" name="supervisorEmail" required maxlength="254">
+        </div>
+        <div class="field">
+          <label for="supervisorPhone">Hours Supervisor &mdash; Phone <em>*</em></label>
+          <input type="tel" id="supervisorPhone" name="supervisorPhone" required maxlength="32">
+        </div>
         <div class="field full">
           <label>Proof of Service Hours <em>*</em></label>
           <label class="dropzone" id="proofDrop" style="padding:18px 20px;">
             <div class="dz-main">Tap to attach your signed proof</div>
-            <div class="dz-sub">PDF or photo (JPG/PNG), up to 20 MB &mdash; must be signed off by school faculty or your supervisor</div>
+            <div class="dz-sub">PDF or photo (JPG/PNG), up to 20 MB &mdash; must be signed off by the supervisor named above, and their email and phone must match the person signing</div>
             <input type="file" id="proofFile" accept="application/pdf,image/jpeg,image/png,image/webp,image/heic,.pdf,.jpg,.jpeg,.png,.webp,.heic">
           </label>
           <div class="file-chip hidden" id="proofChip">
@@ -700,6 +713,10 @@
         <div class="field full agree-row">
           <input type="checkbox" id="agreeEligible" required>
           <label for="agreeEligible">I confirm that I meet the eligibility requirements above and will be enrolled at an AUC institution in Fall 2027.</label>
+        </div>
+        <div class="field full agree-row">
+          <input type="checkbox" id="agreeSupervisor" required>
+          <label for="agreeSupervisor">I confirm the proof I attached is signed by the supervisor I listed above, and that the email and phone number I provided belong to that same person. The foundation may contact them to verify my hours.</label>
         </div>
         <div class="field full agree-row">
           <input type="checkbox" id="agreeInstagram" required>
@@ -922,6 +939,9 @@ form.addEventListener('submit', async (e) => {
     gradTerm: document.getElementById('gradTerm').value,
     gpa: document.getElementById('gpa').value,
     serviceHours: document.getElementById('serviceHours').value,
+    supervisorName: document.getElementById('supervisorName').value,
+    supervisorEmail: document.getElementById('supervisorEmail').value,
+    supervisorPhone: document.getElementById('supervisorPhone').value,
     campusInvolvement: document.getElementById('campusInvolvement').value
   };
 

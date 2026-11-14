@@ -482,6 +482,7 @@ function entryCard(e) {
     <div class="proof-row">${e.proofKey
       ? `<a href="${apiBase}/api/scholarship/video?key=${encodeURIComponent(e.proofKey)}&k=${encodeURIComponent(boardKey)}" target="_blank" rel="noopener">View signed service-hours proof ↗</a>`
       : '<span class="no-proof">No service-hours proof on file</span>'}</div>
+    ${e.supervisorName ? `<div class="entry-contact">Hours signed off by <strong>${escapeHtml(e.supervisorName)}</strong> — <a href="mailto:${escapeHtml(e.supervisorEmail)}">${escapeHtml(e.supervisorEmail)}</a>${e.supervisorPhone ? ' · ' + escapeHtml(e.supervisorPhone) : ''}</div>` : ''}
   `;
 
   if (involvement.length > 180) {

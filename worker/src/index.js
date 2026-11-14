@@ -555,6 +555,9 @@ async function scholarshipApply(request, env, cors) {
   const gradTerm = s(body.gradTerm, 30);
   const gpa = s(body.gpa, 10);
   const serviceHours = s(body.serviceHours, 10);
+  const supervisorName = s(body.supervisorName, 120);
+  const supervisorEmail = s(body.supervisorEmail, 254).toLowerCase();
+  const supervisorPhone = s(body.supervisorPhone, 32);
   const involvement = s(body.campusInvolvement, 2000);
   const videoUrl = s(body.videoUrl, 500);
   const videoKey = s(body.videoKey, 120);
@@ -573,6 +576,18 @@ async function scholarshipApply(request, env, cors) {
   const hoursNum = Number(serviceHours);
   if (!Number.isFinite(hoursNum) || hoursNum < 200) {
     return json({ error: '200+ community service hours are required to apply.' }, 400, cors);
+  }
+
+  // Supervisor who signed off the hours — the board verifies with this person,
+  // so their contact details must accompany the signed proof.
+  if (!supervisorName) {
+    return json({ error: 'Please enter the name of the faculty member or supervisor who signed off your hours.' }, 400, cors);
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(supervisorEmail)) {
+    return json({ error: 'Please enter a valid email address for your hours supervisor.' }, 400, cors);
+  }
+  if (supervisorPhone.replace(/\D/g, '').length < 10) {
+    return json({ error: 'Please enter a phone number for your hours supervisor.' }, 400, cors);
   }
 
   // Signed proof of service hours is required.
@@ -609,15 +624,19 @@ async function scholarshipApply(request, env, cors) {
     await env.DB.prepare(
       `INSERT INTO scholarship_applications
          (first_name, last_name, email, phone, school, major, classification,
-          grad_term, gpa, service_hours, campus_involvement, video_url, video_embed,
+          grad_term, gpa, service_hours, supervisor_name, supervisor_email,
+          supervisor_phone, campus_involvement, video_url, video_embed,
           video_key, video_name, proof_key, proof_name, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
        ON CONFLICT(email) DO UPDATE SET
          first_name = excluded.first_name,  last_name = excluded.last_name,
          phone = excluded.phone,            school = excluded.school,
          major = excluded.major,            classification = excluded.classification,
          grad_term = excluded.grad_term,    gpa = excluded.gpa,
          service_hours = excluded.service_hours,
+         supervisor_name = excluded.supervisor_name,
+         supervisor_email = excluded.supervisor_email,
+         supervisor_phone = excluded.supervisor_phone,
          campus_involvement = excluded.campus_involvement,
          video_url = excluded.video_url,    video_embed = excluded.video_embed,
          video_key = excluded.video_key,    video_name = excluded.video_name,
@@ -625,6 +644,7 @@ async function scholarshipApply(request, env, cors) {
          updated_at = ?`
     ).bind(firstName, lastName, email, phone || null, school, major || null,
            classification || null, gradTerm || null, gpa, serviceHours,
+           supervisorName, supervisorEmail, supervisorPhone,
            involvement || null, videoKey ? null : videoUrl, embed,
            videoKey || null, videoKey ? (videoName || null) : null,
            proofKey, proofName || null, now, now).run();
@@ -855,7 +875,8 @@ async function scholarshipEntries(request, env, cors) {
 
   const { results: apps } = await env.DB.prepare(
     `SELECT id, first_name, last_name, email, phone, school, major, classification,
-            grad_term, gpa, service_hours, campus_involvement, video_url, video_embed,
+            grad_term, gpa, service_hours, supervisor_name, supervisor_email,
+            supervisor_phone, campus_involvement, video_url, video_embed,
             video_key, video_name, proof_key, proof_name, created_at, updated_at
      FROM scholarship_applications ORDER BY created_at DESC`
   ).all();
@@ -880,6 +901,9 @@ async function scholarshipEntries(request, env, cors) {
       school: a.school, major: a.major || '',
       classification: a.classification || '', gradTerm: a.grad_term || '',
       gpa: a.gpa, serviceHours: a.service_hours,
+      supervisorName: a.supervisor_name || '',
+      supervisorEmail: a.supervisor_email || '',
+      supervisorPhone: a.supervisor_phone || '',
       campusInvolvement: a.campus_involvement || '',
       videoUrl: a.video_url || '', videoEmbed: a.video_embed || '',
       videoKey: a.video_key || '', videoName: a.video_name || '',
