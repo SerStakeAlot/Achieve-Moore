@@ -241,7 +241,7 @@
   .field label em { color: var(--gold); font-style: normal; }
   .field input, .field select, .field textarea {
     font-family: 'Montserrat', sans-serif;
-    font-size: 14px; color: #1a1a1a;
+    font-size: 16px; color: #1a1a1a;
     padding: 12px 14px;
     border: 1px solid rgba(26,26,26,0.2); border-radius: 6px;
     background: #fff; outline: none;
@@ -405,6 +405,10 @@
     .section { padding: 40px 20px; }
     .form-wrap { padding: 30px 20px 28px; }
     .form-grid { grid-template-columns: 1fr; }
+    .video-mode { width: 100%; display: flex; }
+    .video-mode button { flex: 1; padding: 12px 10px; }
+    .dropzone { padding: 22px 14px; }
+    .submit-btn { padding: 17px 20px; }
     footer { padding: 40px 20px 28px; }
     .footer-tagline { font-size: 15px; }
   }
@@ -637,11 +641,11 @@
         </div>
         <div class="field">
           <label for="gpa">Cumulative GPA <em>*</em></label>
-          <input type="number" id="gpa" name="gpa" required min="3.0" max="4.0" step="0.01" placeholder="e.g. 3.45">
+          <input type="number" id="gpa" name="gpa" required min="3.0" max="4.0" step="0.01" inputmode="decimal" placeholder="e.g. 3.45">
         </div>
         <div class="field">
           <label for="serviceHours">Community Service Hours <em>*</em></label>
-          <input type="number" id="serviceHours" name="serviceHours" required min="200" step="1" placeholder="200 or more">
+          <input type="number" id="serviceHours" name="serviceHours" required min="200" step="1" inputmode="numeric" placeholder="200 or more">
         </div>
         <div class="field">
           <label for="supervisorName">Hours Supervisor &mdash; Name <em>*</em></label>

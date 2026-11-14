@@ -232,8 +232,12 @@
     header { padding: 16px 18px; }
     main { padding: 24px 16px 60px; }
     .entries { grid-template-columns: 1fr; }
-    .reviewer-box input { width: 140px; }
+    .reviewer-box input { width: 140px; font-size: 16px; }
     .toolbar input[type="search"] { width: 100%; }
+    .toolbar select, .toolbar input[type="search"] { font-size: 16px; }
+    .gate input { font-size: 16px; }
+    .review-panel textarea { font-size: 16px; }
+    .score-btn { width: 42px; height: 42px; font-size: 15px; }
   }
 </style>
 </head>
@@ -444,7 +448,7 @@ function entryCard(e) {
 
   if (e.videoKey) {
     const src = `${apiBase}/api/scholarship/video?key=${encodeURIComponent(e.videoKey)}&k=${encodeURIComponent(boardKey)}`;
-    vid.innerHTML = `<video controls preload="metadata" src="${escapeHtml(src)}" title="Video by ${escapeHtml(e.firstName)} ${escapeHtml(e.lastName)}"></video>`;
+    vid.innerHTML = `<video controls playsinline preload="metadata" src="${escapeHtml(src)}" title="Video by ${escapeHtml(e.firstName)} ${escapeHtml(e.lastName)}"></video>`;
     linkRow.innerHTML = `<a class="dl" href="${escapeHtml(src)}&dl=1">⬇ Download original${e.videoName ? ' (' + escapeHtml(e.videoName) + ')' : ''} — for Instagram</a>`;
   } else if (e.videoEmbed) {
     vid.innerHTML = `<iframe src="${escapeHtml(e.videoEmbed)}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen title="Video by ${escapeHtml(e.firstName)} ${escapeHtml(e.lastName)}"></iframe>`;
