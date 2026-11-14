@@ -146,10 +146,16 @@ mistakes before the deadline). Submissions are rejected after
    npx wrangler r2 bucket create scholarship-videos
    ```
 
-2. **Apply the updated schema** (adds `scholarship_applications`,
-   `scholarship_reviews`):
+2. **Apply the schema** (creates `scholarship_applications`,
+   `scholarship_reviews`, and related tables):
    ```bash
    npx wrangler d1 execute gala-waitlist --file=./schema.sql --remote
+   ```
+
+   For an existing database, apply the one-time Instagram-handle migration
+   before deploying the Worker:
+   ```bash
+   npx wrangler d1 execute gala-waitlist --file=./migrations/0001_add_instagram_handle.sql --remote
    ```
 
 3. **Board access code** — pick a passphrase the board will share

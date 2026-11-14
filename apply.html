@@ -603,6 +603,11 @@
           <input type="tel" id="phone" name="phone" autocomplete="tel" maxlength="32">
         </div>
         <div class="field">
+          <label for="instagramHandle">Instagram Handle <em>*</em></label>
+          <input type="text" id="instagramHandle" name="instagramHandle" required maxlength="31" pattern="@?[A-Za-z0-9._]{1,30}" placeholder="@yourhandle" autocomplete="off">
+          <div class="hint">Enter your Instagram username, with or without the @. Do not enter a profile link.</div>
+        </div>
+        <div class="field">
           <label for="school">AUC Institution <em>*</em></label>
           <select id="school" name="school" required>
             <option value="" disabled selected>Select your school</option>
@@ -982,6 +987,7 @@ form.addEventListener('submit', async (e) => {
     lastName: document.getElementById('lastName').value,
     email: document.getElementById('email').value,
     phone: document.getElementById('phone').value,
+    instagramHandle: document.getElementById('instagramHandle').value,
     school: document.getElementById('school').value,
     major: document.getElementById('major').value,
     classification: document.getElementById('classification').value,

@@ -555,6 +555,7 @@ async function scholarshipApply(request, env, cors) {
   const lastName = s(body.lastName, 80);
   const email = s(body.email, 254).toLowerCase();
   const phone = s(body.phone, 32);
+  const instagramHandle = s(body.instagramHandle, 31).replace(/^@/, '');
   const school = s(body.school, 60);
   const major = s(body.major, 120);
   const classification = s(body.classification, 30);
@@ -576,6 +577,9 @@ async function scholarshipApply(request, env, cors) {
 
   if (!firstName || !lastName) return json({ error: 'Please enter your full name.' }, 400, cors);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: 'Please enter a valid email address.' }, 400, cors);
+  if (!/^[A-Za-z0-9._]{1,30}$/.test(instagramHandle)) {
+    return json({ error: 'Please enter a valid Instagram username (without a profile link).' }, 400, cors);
+  }
   if (!AUC_SCHOOLS.includes(school)) return json({ error: 'Please select your AUC institution.' }, 400, cors);
 
   const gpaNum = Number(gpa);
@@ -646,15 +650,16 @@ async function scholarshipApply(request, env, cors) {
   try {
     await env.DB.prepare(
       `INSERT INTO scholarship_applications
-         (first_name, last_name, email, phone, school, major, classification,
+         (first_name, last_name, email, phone, instagram_handle, school, major, classification,
           grad_term, gala_available, gpa, service_hours, supervisor_name,
           supervisor_email, supervisor_phone, campus_involvement, video_url,
           video_embed, video_key, video_name, proof_key, proof_name,
           transcript_key, transcript_name, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
        ON CONFLICT(email) DO UPDATE SET
          first_name = excluded.first_name,  last_name = excluded.last_name,
-         phone = excluded.phone,            school = excluded.school,
+         phone = excluded.phone,            instagram_handle = excluded.instagram_handle,
+         school = excluded.school,
          major = excluded.major,            classification = excluded.classification,
          grad_term = excluded.grad_term,    gpa = excluded.gpa,
          gala_available = excluded.gala_available,
@@ -669,7 +674,7 @@ async function scholarshipApply(request, env, cors) {
          transcript_key = excluded.transcript_key,
          transcript_name = excluded.transcript_name,
          updated_at = ?`
-    ).bind(firstName, lastName, email, phone || null, school, major || null,
+    ).bind(firstName, lastName, email, phone || null, instagramHandle, school, major || null,
            classification || null, gradTerm || null, galaAvailability, gpa,
            serviceHours, supervisorName, supervisorEmail, supervisorPhone,
            involvement || null, videoKey ? null : videoUrl, embed,
@@ -922,7 +927,7 @@ async function scholarshipEntries(request, env, cors) {
   if (!boardAuthorized(body, env)) return json({ error: 'Unauthorized' }, 401, cors);
 
   const { results: apps } = await env.DB.prepare(
-    `SELECT id, first_name, last_name, email, phone, school, major, classification,
+    `SELECT id, first_name, last_name, email, phone, instagram_handle, school, major, classification,
             grad_term, gala_available, gpa, service_hours, supervisor_name,
             supervisor_email, supervisor_phone, campus_involvement, video_url,
             video_embed, video_key, video_name, proof_key, proof_name,
@@ -947,6 +952,7 @@ async function scholarshipEntries(request, env, cors) {
       id: a.id,
       firstName: a.first_name, lastName: a.last_name,
       email: a.email, phone: a.phone || '',
+      instagramHandle: a.instagram_handle || '',
       school: a.school, major: a.major || '',
       classification: a.classification || '', gradTerm: a.grad_term || '',
       galaAvailable: a.gala_available || '',

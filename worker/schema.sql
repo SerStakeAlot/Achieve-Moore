@@ -55,6 +55,7 @@ CREATE TABLE IF NOT EXISTS scholarship_applications (
   last_name          TEXT NOT NULL,
   email              TEXT NOT NULL UNIQUE,
   phone              TEXT,
+  instagram_handle   TEXT NOT NULL DEFAULT '',
   school             TEXT NOT NULL,
   major              TEXT,
   classification     TEXT,
