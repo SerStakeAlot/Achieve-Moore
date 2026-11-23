@@ -55,31 +55,6 @@
 
   main { flex: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 36px 28px 80px; }
 
-  /* ── GATE ── */
-  .gate {
-    max-width: 440px; margin: 70px auto;
-    background: #fff; border: 1px solid rgba(200,146,10,0.45);
-    box-shadow: 0 18px 50px rgba(0,0,0,0.08);
-    padding: 44px 38px; text-align: center;
-  }
-  .gate h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 700; margin-bottom: 8px; }
-  .gate p { font-size: 13px; color: rgba(26,26,26,0.6); line-height: 1.6; margin-bottom: 24px; }
-  .gate input {
-    width: 100%; font-family: 'Montserrat', sans-serif; font-size: 15px;
-    padding: 13px 16px; border: 1px solid rgba(26,26,26,0.2); border-radius: 6px;
-    outline: none; text-align: center; letter-spacing: 0.1em;
-  }
-  .gate input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(200,146,10,0.14); }
-  .gate button {
-    width: 100%; margin-top: 16px;
-    background: var(--gold); color: #fff; border: none; border-radius: 999px;
-    padding: 14px; font-family: 'Montserrat', sans-serif;
-    font-size: 12px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
-    cursor: pointer; transition: background 0.2s;
-  }
-  .gate button:hover { background: var(--gold-light); }
-  .gate .gate-msg { margin-top: 14px; font-size: 13px; color: var(--maroon); font-weight: 600; min-height: 18px; }
-
   /* ── TOOLBAR ── */
   .page-title { text-align: center; margin-bottom: 8px; }
   .page-title h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(30px, 4vw, 42px); font-weight: 700; }
@@ -214,14 +189,6 @@
   .empty-state h2 { font-family: 'Cormorant Garamond', serif; font-size: 30px; color: #1a1a1a; margin-bottom: 8px; }
   .hidden { display: none !important; }
 
-  .signout {
-    background: none; border: none; cursor: pointer;
-    font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700;
-    letter-spacing: 0.16em; text-transform: uppercase;
-    color: rgba(245,243,240,0.45); transition: color 0.2s;
-  }
-  .signout:hover { color: var(--gold); }
-
   footer {
     background: #1a1a1a; text-align: center; padding: 22px;
     font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
@@ -235,7 +202,6 @@
     .reviewer-box input { width: 140px; font-size: 16px; }
     .toolbar input[type="search"] { width: 100%; }
     .toolbar select, .toolbar input[type="search"] { font-size: 16px; }
-    .gate input { font-size: 16px; }
     .review-panel textarea { font-size: 16px; }
     .score-btn { width: 42px; height: 42px; font-size: 15px; }
   }
@@ -251,26 +217,16 @@
       <span>Board Review</span>
     </div>
   </a>
-  <div class="reviewer-box hidden" id="reviewerBox">
+  <div class="reviewer-box">
     <label for="reviewerName">Reviewing as</label>
     <input type="text" id="reviewerName" placeholder="Your name" maxlength="80">
-    <button class="signout" id="signOut">Sign out</button>
   </div>
 </header>
 
 <main>
 
-  <!-- ACCESS GATE -->
-  <div class="gate" id="gate">
-    <h1>Board Members Only</h1>
-    <p>Enter the board access code to view and score the $10,000 scholarship entries.</p>
-    <input type="password" id="gateKey" placeholder="Access code" autocomplete="current-password">
-    <button id="gateBtn">View Entries</button>
-    <div class="gate-msg" id="gateMsg" role="status"></div>
-  </div>
-
   <!-- DASHBOARD -->
-  <div class="hidden" id="dash">
+  <div id="dash">
     <div class="page-title">
       <h1>$10,000 <span class="gold">Scholarship Entries</span></h1>
       <p>Applications due Nov 23 &middot; Finalists announced Nov 25 &middot; Winner revealed Dec 5</p>
@@ -296,6 +252,7 @@
       <button class="refresh-btn" id="refreshBtn">Refresh</button>
     </div>
 
+    <p id="loadMsg" role="status">Loading entries&hellip;</p>
     <div class="entries" id="entries"></div>
     <div class="empty-state hidden" id="emptyState">
       <h2>No entries yet</h2>
@@ -305,7 +262,7 @@
 
 </main>
 
-<footer>Achieve M.O.O.R.E Foundation &mdash; Confidential: for board members only</footer>
+<footer>Achieve M.O.O.R.E Foundation &mdash; Board Review</footer>
 
 <script>
 // ─────────────────────────────────────────────────────────────────────────
@@ -314,10 +271,8 @@
 const apiBase = 'https://gala-checkout.achievemoore.workers.dev';
 
 const $ = id => document.getElementById(id);
-const KEY_STORE = 'amf_board_key';
 const NAME_STORE = 'amf_board_reviewer';
 
-let boardKey = '';
 let allEntries = [];
 
 function escapeHtml(s) {
@@ -337,42 +292,6 @@ function avgScore(e) {
   return scores.reduce((a, b) => a + b, 0) / scores.length;
 }
 
-/* ── Access gate ── */
-async function tryKey(key, silent) {
-  const resp = await fetch(apiBase + '/api/scholarship/entries', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ key })
-  });
-  const data = await resp.json().catch(() => ({}));
-  if (!resp.ok) {
-    if (!silent) $('gateMsg').textContent = data.error === 'Unauthorized'
-      ? 'That code isn’t right — double-check and try again.'
-      : (data.error || 'Could not load entries. Please try again.');
-    if (data.error === 'Unauthorized') localStorage.removeItem(KEY_STORE);
-    return false;
-  }
-  boardKey = key;
-  localStorage.setItem(KEY_STORE, key);
-  allEntries = data.entries || [];
-  $('gate').classList.add('hidden');
-  $('dash').classList.remove('hidden');
-  $('reviewerBox').classList.remove('hidden');
-  render();
-  return true;
-}
-
-$('gateBtn').addEventListener('click', () => {
-  const key = $('gateKey').value.trim();
-  if (key) tryKey(key, false);
-});
-$('gateKey').addEventListener('keydown', e => { if (e.key === 'Enter') $('gateBtn').click(); });
-
-$('signOut').addEventListener('click', () => {
-  localStorage.removeItem(KEY_STORE);
-  location.reload();
-});
-
 /* ── Reviewer identity ── */
 $('reviewerName').value = localStorage.getItem(NAME_STORE) || '';
 $('reviewerName').addEventListener('input', () => {
@@ -381,14 +300,16 @@ $('reviewerName').addEventListener('input', () => {
 
 /* ── Refresh / filters ── */
 async function refresh() {
-  if (!boardKey) return;
-  const resp = await fetch(apiBase + '/api/scholarship/entries', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ key: boardKey })
-  });
-  const data = await resp.json().catch(() => ({}));
-  if (resp.ok) { allEntries = data.entries || []; render(); }
+  try {
+    const resp = await fetch(apiBase + '/api/scholarship/entries', { method: 'POST' });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.error || 'Could not load entries. Please try again.');
+    allEntries = data.entries;
+    $('loadMsg').textContent = '';
+    render();
+  } catch (err) {
+    $('loadMsg').textContent = err.message || 'Could not load entries. Please try again.';
+  }
 }
 $('refreshBtn').addEventListener('click', refresh);
 $('schoolFilter').addEventListener('change', render);
@@ -447,7 +368,7 @@ function entryCard(e) {
   linkRow.className = 'video-link-row';
 
   if (e.videoKey) {
-    const src = `${apiBase}/api/scholarship/video?key=${encodeURIComponent(e.videoKey)}&k=${encodeURIComponent(boardKey)}`;
+    const src = `${apiBase}/api/scholarship/video?key=${encodeURIComponent(e.videoKey)}`;
     vid.innerHTML = `<video controls playsinline preload="metadata" src="${escapeHtml(src)}" title="Video by ${escapeHtml(e.firstName)} ${escapeHtml(e.lastName)}"></video>`;
     linkRow.innerHTML = `<a class="dl" href="${escapeHtml(src)}&dl=1">⬇ Download original${e.videoName ? ' (' + escapeHtml(e.videoName) + ')' : ''} — for Instagram</a>`;
   } else if (e.videoEmbed) {
@@ -485,11 +406,9 @@ function entryCard(e) {
     </div>
     <div class="entry-involve"><b style="display:block;font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(26,26,26,0.4);margin-bottom:3px;">Campus Involvement</b><span class="inv-text">${escapeHtml(short)}</span>${involvement.length > 180 ? ' <button class="more-btn">Read more</button>' : ''}</div>
     <div class="entry-contact"><a href="mailto:${escapeHtml(e.email)}">${escapeHtml(e.email)}</a>${e.phone ? ' · ' + escapeHtml(e.phone) : ''}</div>
-    <div class="proof-row">${e.proofKey
-      ? `<a href="${apiBase}/api/scholarship/video?key=${encodeURIComponent(e.proofKey)}&k=${encodeURIComponent(boardKey)}" target="_blank" rel="noopener">View signed service-hours proof ↗</a>`
-      : '<span class="no-proof">No service-hours proof on file</span>'}</div>
+    ${e.proofKey ? `<div class="proof-row"><a href="${apiBase}/api/scholarship/video?key=${encodeURIComponent(e.proofKey)}" target="_blank" rel="noopener">View service-hours proof ↗</a></div>` : ''}
     <div class="proof-row">${e.transcriptKey
-      ? `<a href="${apiBase}/api/scholarship/video?key=${encodeURIComponent(e.transcriptKey)}&k=${encodeURIComponent(boardKey)}" target="_blank" rel="noopener">View unofficial transcript ↗</a>`
+      ? `<a href="${apiBase}/api/scholarship/video?key=${encodeURIComponent(e.transcriptKey)}" target="_blank" rel="noopener">View unofficial transcript ↗</a>`
       : '<span class="no-proof">No transcript on file</span>'}</div>
     ${e.supervisorName ? `<div class="entry-contact">Hours signed off by <strong>${escapeHtml(e.supervisorName)}</strong> — <a href="mailto:${escapeHtml(e.supervisorEmail)}">${escapeHtml(e.supervisorEmail)}</a>${e.supervisorPhone ? ' · ' + escapeHtml(e.supervisorPhone) : ''}</div>` : ''}
   `;
@@ -554,7 +473,7 @@ function entryCard(e) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          key: boardKey, applicationId: e.id, reviewer,
+          applicationId: e.id, reviewer,
           score: picked, note: panel.querySelector('.note-box').value
         })
       });
@@ -576,17 +495,13 @@ function entryCard(e) {
   return card;
 }
 
-/* ── Boot: support ?k=CODE links and remembered keys ── */
-(function boot() {
-  const urlKey = new URLSearchParams(location.search).get('k');
-  if (urlKey) {
-    history.replaceState(null, '', location.pathname); // keep the code out of the address bar
-    tryKey(urlKey, true);
-    return;
-  }
-  const saved = localStorage.getItem(KEY_STORE);
-  if (saved) tryKey(saved, true);
-})();
+localStorage.removeItem('amf_board_key');
+const url = new URL(location.href);
+if (url.searchParams.has('k')) {
+  url.searchParams.delete('k');
+  history.replaceState(null, '', url.pathname + url.search + url.hash);
+}
+refresh();
 </script>
 
 </body>

@@ -6,7 +6,7 @@
 <title>$10,000 Scholarship Application — Achieve M.O.O.R.E Foundation</title>
 <meta name="description" content="Apply for the Achieve M.O.O.R.E Foundation $10,000 for 10 Years Scholarship. Open to AUC students at Clark Atlanta, Morehouse, Morris Brown and Spelman. Applications due November 23.">
 <meta property="og:title" content="$10,000 for 10 Years — Scholarship Application">
-<meta property="og:description" content="A $10,000 scholarship for AUC students. 3.0+ GPA, 200+ service hours, and a 90-second video. Applications due November 23.">
+<meta property="og:description" content="A $10,000 scholarship for AUC students. 3.0+ GPA, 100+ service hours, and a 90-second video. Applications due November 23.">
 <meta property="og:image" content="https://achievemoorefoundation.org/assets/og-logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 <style>
@@ -514,8 +514,8 @@
     </div>
     <div class="elig-item">
       <div>
-        <h4>200+ community service hours</h4>
-        <p>Plus active campus involvement &mdash; signed proof required</p>
+        <h4>100+ community service hours</h4>
+        <p>Plus active campus involvement</p>
       </div>
     </div>
     <div class="elig-item">
@@ -650,35 +650,7 @@
         </div>
         <div class="field">
           <label for="serviceHours">Community Service Hours <em>*</em></label>
-          <input type="number" id="serviceHours" name="serviceHours" required min="200" step="1" inputmode="numeric" placeholder="200 or more">
-        </div>
-        <div class="field">
-          <label for="supervisorName">Hours Supervisor &mdash; Name <em>*</em></label>
-          <input type="text" id="supervisorName" name="supervisorName" required maxlength="120" placeholder="Faculty member or supervisor">
-          <div class="hint">The school faculty member or supervisor who signs off your service hours.</div>
-        </div>
-        <div class="field">
-          <label for="supervisorEmail">Hours Supervisor &mdash; Email <em>*</em></label>
-          <input type="email" id="supervisorEmail" name="supervisorEmail" required maxlength="254">
-        </div>
-        <div class="field">
-          <label for="supervisorPhone">Hours Supervisor &mdash; Phone <em>*</em></label>
-          <input type="tel" id="supervisorPhone" name="supervisorPhone" required maxlength="32">
-        </div>
-        <div class="field full">
-          <label>Proof of Service Hours <em>*</em></label>
-          <label class="dropzone" id="proofDrop" style="padding:18px 20px;">
-            <div class="dz-main">Tap to attach your signed proof</div>
-            <div class="dz-sub">PDF or photo (JPG/PNG), up to 20 MB &mdash; must be signed off by the supervisor named above, and their email and phone must match the person signing</div>
-            <input type="file" id="proofFile" accept="application/pdf,image/jpeg,image/png,image/webp,image/heic,.pdf,.jpg,.jpeg,.png,.webp,.heic">
-          </label>
-          <div class="file-chip hidden" id="proofChip">
-            <div>
-              <div class="fc-name" id="pfName"></div>
-              <div class="fc-size" id="pfSize"></div>
-            </div>
-            <button type="button" class="fc-remove" id="pfRemove" aria-label="Remove file">&times;</button>
-          </div>
+          <input type="number" id="serviceHours" name="serviceHours" required min="100" step="1" inputmode="numeric" placeholder="100 or more">
         </div>
         <div class="field full">
           <label>Unofficial Transcript <em>*</em></label>
@@ -736,10 +708,6 @@
         <div class="field full agree-row">
           <input type="checkbox" id="agreeEligible" required>
           <label for="agreeEligible">I confirm that I meet the eligibility requirements above and will be enrolled at an AUC institution in Fall 2027.</label>
-        </div>
-        <div class="field full agree-row">
-          <input type="checkbox" id="agreeSupervisor" required>
-          <label for="agreeSupervisor">I confirm the proof I attached is signed by the supervisor I listed above, and that the email and phone number I provided belong to that same person. The foundation may contact them to verify my hours.</label>
         </div>
         <div class="field full agree-row">
           <input type="checkbox" id="agreeInstagram" required>
@@ -840,7 +808,7 @@ const dz = $id('dropzone');
 ['dragleave', 'drop'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove('drag'); }));
 dz.addEventListener('drop', e => pickFile(e.dataTransfer.files[0]));
 
-/* ── Small documents: signed service-hours proof + unofficial transcript ── */
+/* ── Unofficial transcript ── */
 function docPicker({ dropId, chipId, nameId, sizeId, removeId, fileId, word }) {
   const state = { file: null };
   const drop = $id(dropId), chip = $id(chipId), input = $id(fileId);
@@ -874,16 +842,12 @@ function docPicker({ dropId, chipId, nameId, sizeId, removeId, fileId, word }) {
   return state;
 }
 
-const proofState = docPicker({
-  dropId: 'proofDrop', chipId: 'proofChip', nameId: 'pfName', sizeId: 'pfSize',
-  removeId: 'pfRemove', fileId: 'proofFile', word: 'proof'
-});
 const transcriptState = docPicker({
   dropId: 'transcriptDrop', chipId: 'transcriptChip', nameId: 'tfName', sizeId: 'tfSize',
   removeId: 'tfRemove', fileId: 'transcriptFile', word: 'transcript'
 });
 
-/** Upload a small document (proof or transcript) in one request, with progress. */
+/** Upload a small document in one request, with progress. */
 function uploadDoc(file, kind, onProgress) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -971,11 +935,6 @@ form.addEventListener('submit', async (e) => {
     msg.classList.add('err');
     return;
   }
-  if (!proofState.file) {
-    msg.textContent = 'Please attach proof of your community service hours (signed by school faculty or your supervisor).';
-    msg.classList.add('err');
-    return;
-  }
   if (!transcriptState.file) {
     msg.textContent = 'Please attach your unofficial transcript.';
     msg.classList.add('err');
@@ -995,18 +954,11 @@ form.addEventListener('submit', async (e) => {
     galaAvailability: document.getElementById('agreeGala').checked ? 'Yes' : '',
     gpa: document.getElementById('gpa').value,
     serviceHours: document.getElementById('serviceHours').value,
-    supervisorName: document.getElementById('supervisorName').value,
-    supervisorEmail: document.getElementById('supervisorEmail').value,
-    supervisorPhone: document.getElementById('supervisorPhone').value,
     campusInvolvement: document.getElementById('campusInvolvement').value
   };
 
   btn.disabled = true;
   try {
-    btn.textContent = 'Uploading Proof…';
-    payload.proofKey = await uploadDoc(proofState.file, 'proof', p => { btn.textContent = `Uploading Proof… ${p}%`; });
-    payload.proofName = proofState.file.name;
-
     btn.textContent = 'Uploading Transcript…';
     payload.transcriptKey = await uploadDoc(transcriptState.file, 'transcript', p => { btn.textContent = `Uploading Transcript… ${p}%`; });
     payload.transcriptName = transcriptState.file.name;

@@ -26,8 +26,7 @@ SCHOLARSHIP_DEADLINE = "2026-11-24T04:59:59Z"
 #   npx wrangler secret put STRIPE_WEBHOOK_SECRET  (whsec_... from the webhook endpoint)
 #   npx wrangler secret put RESEND_API_KEY         (re_... from resend.com)
 #   npx wrangler secret put ADMIN_KEY              (any long random string, for /api/seats/admin)
-#   npx wrangler secret put BOARD_KEY              (access code shared with board members
-#                                                   for the scholarship review dashboard)
+#   npx wrangler secret put BOARD_KEY              (for /api/scholarship/files)
 
 # D1 database for the early-bird waitlist (notify-me form).
 # Create it once with:  npx wrangler d1 create gala-waitlist

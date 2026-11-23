@@ -20,9 +20,9 @@
  *   POST /api/scholarship/upload/start    -> begin a chunked video upload to R2
  *   POST /api/scholarship/upload/part     -> upload one chunk (body = bytes)
  *   POST /api/scholarship/upload/complete -> finish the upload -> { videoKey }
- *   GET  /api/scholarship/video?key&k     -> stream/download a video (board only)
- *   POST /api/scholarship/entries      -> { key } -> all entries + reviews (board only)
- *   POST /api/scholarship/review       -> { key, applicationId, reviewer, score, note }
+ *   GET  /api/scholarship/video?key       -> stream/download an uploaded file
+ *   POST /api/scholarship/entries      -> all entries + reviews
+ *   POST /api/scholarship/review       -> { applicationId, reviewer, score, note }
  *   GET  /health                       -> "ok"
  */
 
@@ -112,7 +112,7 @@ export default {
     }
 
     if (request.method === 'POST' && url.pathname === '/api/scholarship/entries') {
-      return scholarshipEntries(request, env, cors);
+        return scholarshipEntries(env, cors);
     }
 
     if (request.method === 'POST' && url.pathname === '/api/scholarship/review') {
@@ -494,7 +494,7 @@ const UPLOAD_PART_SIZE = 8 * 1024 * 1024;  // 8 MB chunks (R2 multipart min is 5
 const MAX_PART_BYTES = 32 * 1024 * 1024;
 const VIDEO_KEY_RE = /^videos\/[\w.-]{8,80}$/;
 
-// Signed proof of community service hours (PDF or photo, one request).
+// Small documents (PDF or photo, one request).
 const PROOF_EXT = { 'application/pdf': 'pdf', 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/heic': 'heic' };
 const MAX_PROOF_BYTES = 20 * 1024 * 1024; // 20 MB
 const PROOF_KEY_RE = /^proofs\/[\w.-]{8,80}$/;
@@ -587,8 +587,8 @@ async function scholarshipApply(request, env, cors) {
     return json({ error: 'A 3.0+ cumulative GPA is required to apply.' }, 400, cors);
   }
   const hoursNum = Number(serviceHours);
-  if (!Number.isFinite(hoursNum) || hoursNum < 200) {
-    return json({ error: '200+ community service hours are required to apply.' }, 400, cors);
+  if (!Number.isFinite(hoursNum) || hoursNum < 100) {
+    return json({ error: '100+ community service hours are required to apply.' }, 400, cors);
   }
 
   // The winner must attend the Hands of Time Gala, so this confirmation is required.
@@ -596,29 +596,18 @@ async function scholarshipApply(request, env, cors) {
     return json({ error: 'Please confirm you can attend the Hands of Time Gala on December 5, 2026 — the Grand Scholar is revealed live and must be present.' }, 400, cors);
   }
 
-  // Supervisor who signed off the hours — the board verifies with this person,
-  // so their contact details must accompany the signed proof.
-  if (!supervisorName) {
-    return json({ error: 'Please enter the name of the faculty member or supervisor who signed off your hours.' }, 400, cors);
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(supervisorEmail)) {
-    return json({ error: 'Please enter a valid email address for your hours supervisor.' }, 400, cors);
-  }
-  if (supervisorPhone.replace(/\D/g, '').length < 10) {
-    return json({ error: 'Please enter a phone number for your hours supervisor.' }, 400, cors);
-  }
-
-  // Signed proof of service hours is required.
-  if (!PROOF_KEY_RE.test(proofKey) || !env.VIDEOS) {
-    return json({ error: 'Please upload proof of your community service hours (signed by school faculty or your supervisor).' }, 400, cors);
-  }
-  const proofHead = await env.VIDEOS.head(proofKey);
-  if (!proofHead) {
-    return json({ error: 'Your proof upload didn’t finish — please attach it again.' }, 400, cors);
+  if (proofKey) {
+    if (!PROOF_KEY_RE.test(proofKey) || !env.VIDEOS) {
+      return json({ error: 'Service-hours proof upload not recognized — please try again.' }, 400, cors);
+    }
+    const proofHead = await env.VIDEOS.head(proofKey);
+    if (!proofHead) {
+      return json({ error: 'Your proof upload didn’t finish — please attach it again.' }, 400, cors);
+    }
   }
 
   // Unofficial transcript is required (verifies the 3.0+ GPA).
-  if (!TRANSCRIPT_KEY_RE.test(transcriptKey)) {
+  if (!TRANSCRIPT_KEY_RE.test(transcriptKey) || !env.VIDEOS) {
     return json({ error: 'Please upload your unofficial transcript.' }, 400, cors);
   }
   const transcriptHead = await env.VIDEOS.head(transcriptKey);
@@ -664,22 +653,23 @@ async function scholarshipApply(request, env, cors) {
          grad_term = excluded.grad_term,    gpa = excluded.gpa,
          gala_available = excluded.gala_available,
          service_hours = excluded.service_hours,
-         supervisor_name = excluded.supervisor_name,
-         supervisor_email = excluded.supervisor_email,
-         supervisor_phone = excluded.supervisor_phone,
+         supervisor_name = COALESCE(excluded.supervisor_name, supervisor_name),
+         supervisor_email = COALESCE(excluded.supervisor_email, supervisor_email),
+         supervisor_phone = COALESCE(excluded.supervisor_phone, supervisor_phone),
          campus_involvement = excluded.campus_involvement,
          video_url = excluded.video_url,    video_embed = excluded.video_embed,
          video_key = excluded.video_key,    video_name = excluded.video_name,
-         proof_key = excluded.proof_key,    proof_name = excluded.proof_name,
+         proof_key = COALESCE(excluded.proof_key, proof_key),
+         proof_name = CASE WHEN excluded.proof_key IS NOT NULL THEN excluded.proof_name ELSE proof_name END,
          transcript_key = excluded.transcript_key,
          transcript_name = excluded.transcript_name,
          updated_at = ?`
     ).bind(firstName, lastName, email, phone || null, instagramHandle, school, major || null,
            classification || null, gradTerm || null, galaAvailability, gpa,
-           serviceHours, supervisorName, supervisorEmail, supervisorPhone,
+           serviceHours, supervisorName || null, supervisorEmail || null, supervisorPhone || null,
            involvement || null, videoKey ? null : videoUrl, embed,
            videoKey || null, videoKey ? (videoName || null) : null,
-           proofKey, proofName || null, transcriptKey, transcriptName || null,
+           proofKey || null, proofKey ? (proofName || null) : null, transcriptKey, transcriptName || null,
            now, now).run();
   } catch {
     return json({ error: 'Could not save your application. Please try again.' }, 500, cors);
@@ -814,7 +804,7 @@ async function uploadComplete(request, env, cors) {
 }
 
 /** POST ?name=<fileName>[&kind=proof|transcript], body = file bytes -> { ok, proofKey }.
- *  Small documents (signed service-hours proof, unofficial transcript):
+ *  Small documents (service-hours proof, unofficial transcript):
  *  PDF or photo, small enough for one request. */
 async function uploadProof(request, url, env, cors) {
   if (!env.VIDEOS) return json({ error: 'Uploads not configured' }, 500, cors);
@@ -851,12 +841,9 @@ async function uploadProof(request, url, env, cors) {
   return json({ ok: true, proofKey: key }, 200, cors);
 }
 
-/** GET ?key=videos/...&k=BOARD_KEY[&dl=1] -> stream the video (board only). */
+/** GET ?key=videos/...[&dl=1] -> stream an uploaded file. */
 async function serveVideo(request, url, env, cors) {
-  if (!env.VIDEOS || !env.BOARD_KEY) return json({ error: 'Not configured' }, 500, cors);
-
-  const k = url.searchParams.get('k') || '';
-  if (!timingSafeEqual(k, env.BOARD_KEY)) return json({ error: 'Unauthorized' }, 401, cors);
+  if (!env.VIDEOS) return json({ error: 'Not configured' }, 500, cors);
 
   const key = url.searchParams.get('key') || '';
   if (!FILE_KEY_RE.test(key)) return json({ error: 'Not found' }, 404, cors);
@@ -914,17 +901,9 @@ async function listFiles(url, env, cors) {
   return json({ files }, 200, cors);
 }
 
-/** Board access: the shared BOARD_KEY secret guards entries + reviews. */
-function boardAuthorized(body, env) {
-  return !!env.BOARD_KEY && timingSafeEqual((body?.key || '').toString(), env.BOARD_KEY);
-}
-
-/** POST { key } -> every application with all board reviews attached. */
-async function scholarshipEntries(request, env, cors) {
-  if (!env.DB || !env.BOARD_KEY) return json({ error: 'Not configured' }, 500, cors);
-  let body;
-  try { body = await request.json(); } catch { return json({ error: 'Invalid request' }, 400, cors); }
-  if (!boardAuthorized(body, env)) return json({ error: 'Unauthorized' }, 401, cors);
+/** POST -> every application with all board reviews attached. */
+async function scholarshipEntries(env, cors) {
+  if (!env.DB) return json({ error: 'Not configured' }, 500, cors);
 
   const { results: apps } = await env.DB.prepare(
     `SELECT id, first_name, last_name, email, phone, instagram_handle, school, major, classification,
@@ -971,12 +950,11 @@ async function scholarshipEntries(request, env, cors) {
   }, 200, cors);
 }
 
-/** POST { key, applicationId, reviewer, score, note } -> upsert one review. */
+/** POST { applicationId, reviewer, score, note } -> upsert one review. */
 async function scholarshipReview(request, env, cors) {
-  if (!env.DB || !env.BOARD_KEY) return json({ error: 'Not configured' }, 500, cors);
+  if (!env.DB) return json({ error: 'Not configured' }, 500, cors);
   let body;
   try { body = await request.json(); } catch { return json({ error: 'Invalid request' }, 400, cors); }
-  if (!boardAuthorized(body, env)) return json({ error: 'Unauthorized' }, 401, cors);
 
   const appId = Number(body.applicationId);
   const reviewer = (body.reviewer || '').toString().trim().slice(0, 80);

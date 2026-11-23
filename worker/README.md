@@ -19,8 +19,8 @@ webhook records every ticket purchase and emails the buyer a magic
 - `POST /api/seats/resend` → re-send the magic link to a buyer's email
 - `GET  /api/seats/admin?key=ADMIN_KEY` → full seat chart w/ emails (for place cards)
 - `POST /api/scholarship/apply` → submit a $10K scholarship application
-- `POST /api/scholarship/entries` → `{ key }` → all entries + board reviews (BOARD_KEY)
-- `POST /api/scholarship/review` → `{ key, applicationId, reviewer, score, note }`
+- `POST /api/scholarship/entries` → all entries + board reviews (no authentication)
+- `POST /api/scholarship/review` → `{ applicationId, reviewer, score, note }` (no authentication)
 - `GET  /health` → `ok`
 
 ## One-time setup
@@ -125,7 +125,12 @@ npx wrangler d1 execute gala-waitlist --remote --command \
 ## $10,000 Scholarship setup
 
 `apply.html` (the public application at `/apply`) and `scholarship-review.html`
-(the private board dashboard at `/scholarship-review`) both talk to this Worker.
+(the board dashboard at `/scholarship-review`) both talk to this Worker.
+
+The board dashboard and its entries, review, and file endpoints have no access
+control. Anyone can view applicant information and documents or submit reviews;
+the link is not private. The storage housekeeping endpoint remains protected by
+`BOARD_KEY`.
 
 Applicants submit their 90-second video one of two ways:
 
@@ -135,6 +140,10 @@ Applicants submit their 90-second video one of two ways:
   post to Instagram for the Top 4.
 - **Paste a link** — a YouTube (unlisted) or Google Drive link; the Worker
   normalizes it into an embeddable player URL.
+
+Applicants report their service hours without uploading proof or providing a
+supervisor sign-off; hours are verified separately through the existing portal.
+The unofficial transcript is still required.
 
 Re-submitting with the same email updates the application (handy for fixing
 mistakes before the deadline). Submissions are rejected after
@@ -158,20 +167,10 @@ mistakes before the deadline). Submissions are rejected after
    npx wrangler d1 execute gala-waitlist --file=./migrations/0001_add_instagram_handle.sql --remote
    ```
 
-3. **Board access code** — pick a passphrase the board will share
-   (e.g. `moore-time-2026`) and store it:
-   ```bash
-   npx wrangler secret put BOARD_KEY
-   ```
+3. Redeploy: `npx wrangler deploy`
 
-4. Redeploy: `npx wrangler deploy`
-
-5. **Share with the board** — send them either the page
-   `https://achievemoorefoundation.org/scholarship-review` plus the code, or a
-   one-click link that fills it in automatically:
-   `https://achievemoorefoundation.org/scholarship-review?k=THE_CODE`
-   (the code is removed from the address bar after it loads and remembered in
-   the browser).
+4. **Share with the board** — send them
+   `https://achievemoorefoundation.org/scholarship-review`.
 
 On the dashboard each board member types their name once, then scores every
 entry 1–5 with optional notes. Everyone sees the running average per entry and
