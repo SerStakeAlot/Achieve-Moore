@@ -147,7 +147,7 @@ The unofficial transcript is still required.
 
 Re-submitting with the same email updates the application (handy for fixing
 mistakes before the deadline). Submissions are rejected after
-`SCHOLARSHIP_DEADLINE` in `wrangler.toml` (currently Nov 23, 2026, 11:59 PM ET).
+`SCHOLARSHIP_DEADLINE` in `wrangler.toml` (currently Nov 27, 2026, 11:59 PM ET).
 
 1. **Create the R2 bucket for videos** (free tier: 10 GB storage, no
    download/egress fees):

@@ -86,6 +86,23 @@ test('still requires 100 hours and a completed transcript upload', async () => {
   assert.equal((await post('/api/scholarship/apply', application, { ...env, VIDEOS: undefined })).status, 400);
 });
 
+test('scholarship deadlines include November 27 through 11:59 PM Eastern', async t => {
+  const { env } = setup();
+  const config = readFileSync(new URL('../wrangler.toml', import.meta.url), 'utf8');
+  const configuredDeadline = config.match(/^SCHOLARSHIP_DEADLINE\s*=\s*"([^"]+)"/m)?.[1];
+  assert.equal(configuredDeadline, '2026-11-28T04:59:59.999Z');
+  t.mock.method(Date, 'now', () => Date.parse('2026-11-28T04:59:59.999Z'));
+  for (const deadline of [configuredDeadline, undefined]) {
+    env.SCHOLARSHIP_DEADLINE = deadline;
+    Date.now.mock.mockImplementation(() => Date.parse('2026-11-28T04:59:59.999Z'));
+    assert.equal((await post('/api/scholarship/apply', application, env)).status, 200);
+    Date.now.mock.mockImplementation(() => Date.parse('2026-11-28T05:00:00.000Z'));
+    const response = await post('/api/scholarship/apply', application, env);
+    assert.equal(response.status, 400);
+    assert.match((await response.json()).error, /application window has closed/i);
+  }
+});
+
 test('board entries, reviews, and documents work without a code; file listing stays protected', async () => {
   const { env } = setup();
   assert.equal((await post('/api/scholarship/apply', application, env)).status, 200);

@@ -503,7 +503,7 @@ const FILE_KEY_RE = /^(videos|proofs|transcripts)\/[\w.-]{8,80}$/;
 const DOC_PREFIX = { proof: 'proofs', transcript: 'transcripts' };
 
 function pastDeadline(env) {
-  const deadline = Date.parse(env.SCHOLARSHIP_DEADLINE || '2026-11-24T04:59:59Z');
+  const deadline = Date.parse(env.SCHOLARSHIP_DEADLINE || '2026-11-28T04:59:59.999Z');
   return !Number.isNaN(deadline) && Date.now() > deadline;
 }
 
@@ -699,8 +699,8 @@ async function sendApplicationReceivedEmail(env, email, firstName) {
   <h1 style="color:#c8920a;font-weight:600;font-size:26px;margin:0 0 6px;">$10,000 for 10 Years</h1>
   <p style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#999;margin:0 0 24px;">The Achieve M.O.O.R.E Foundation Scholarship</p>
   <p style="font-size:15px;line-height:1.7;">${firstName ? `Dear ${escapeHtml(firstName)},` : 'Hello,'}</p>
-  <p style="font-size:15px;line-height:1.7;">We received your scholarship application — thank you for sharing your story with us. Our board reviews every entry, and the <strong>Top 4 finalists</strong> will be announced on <strong>November 25</strong> and invited to the Hands of Time Gala, where the Grand Scholar is revealed live on <strong>December 5, 2026</strong>.</p>
-  <p style="font-size:15px;line-height:1.7;">Need to fix something? Just re-submit the form with the same email before November 23 — your newest answers replace the old ones.</p>
+  <p style="font-size:15px;line-height:1.7;">We received your scholarship application — thank you for sharing your story with us. Our board reviews every entry, and the <strong>Top 4 finalists</strong> will be announced on <strong>November 30</strong> and invited to the Hands of Time Gala, where the Grand Scholar is revealed live on <strong>December 5, 2026</strong>.</p>
+  <p style="font-size:15px;line-height:1.7;">Need to fix something? Just re-submit the form with the same email by November 27 — your newest answers replace the old ones.</p>
   <p style="font-size:15px;line-height:1.7;">Your time is now.<br>— The Achieve M.O.O.R.E Foundation</p>
 </div>`
     })
